@@ -1,0 +1,49 @@
+
+    <div class="login-form">
+      <form
+        #f="ngForm"
+        (ngSubmit)="f.form.valid && login()"
+        autocomplete="on"
+        action=""
+        method="post"
+      >
+        <h2 class="text-center">Login</h2>
+        <div class="form-group">
+          <input
+            [(ngModel)]="userService.userData.email"
+            #email="ngModel"
+            name="email"
+            type="email"
+            class="form-control"
+            placeholder="Email"
+            required="required"
+          />
+        </div>
+        <div class="form-group">
+          <input
+            [(ngModel)]="userService.userData.password"
+            #password="ngModel"
+            name="password"
+            type="password"
+            class="form-control"
+            placeholder="Password"
+            required="required"
+          />
+        </div>
+        <div class="form-group">
+          <button
+            type="submit"
+            class="btn btn-primary btn-block"
+            [disabled]="f.invalid"
+          >
+            Log In
+          </button>
+        </div>
+      </form>
+      <p class="text-center">
+        <a href="javascript:;" routerLink="/register">Create an Account</a>
+      </p>
+      <p class="text-center">
+        <a href="javascript:;" (click)="onforgotPassword()">Forget Your Password?</a>
+      </p>
+    </div>
