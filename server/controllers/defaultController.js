@@ -3,7 +3,7 @@ const version = '0.2.0';
 
 function help(req, res) {
     res.status(200).send({
-        message: 'Welcome Back! API Version: ' + version + ' ;-)'
+        message: 'Welcome To FaceLook! API Version: ' + version + ' ;-)'
     });
 }
 
