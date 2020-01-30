@@ -15,12 +15,13 @@ async function register(req, res) {
         });
         let newUser = {
             id = 1,
-            
+
         }
     } catch (error) {
-        
-    }
-
+        return res.status(401).json({
+            message: "Auth failed"
+     });
+ }
 }
 
 async function login(req, res) {
