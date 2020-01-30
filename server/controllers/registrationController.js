@@ -3,7 +3,25 @@ const bcrypt = require("../services/bcryptService");
 const mailer = require("../services/mailService");
 const db = require("../repository/dbmaneger");
 
-function register(req, res) {}
+async function register(req, res) {
+    console.log("register call()");
+    try {
+        //check if user exist
+        await db.find(req.body.email).then(user => {
+             return res.status(401).json({
+                message:
+                "user already exist,try again"
+             });
+        });
+        let newUser = {
+            id = 1,
+            
+        }
+    } catch (error) {
+        
+    }
+
+}
 
 async function login(req, res) {
   console.log("login call()");
