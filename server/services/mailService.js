@@ -1,6 +1,6 @@
-var nodemailer = require("nodemailer");
+const nodemailer = require("nodemailer");
 
-var transporter = nodemailer.createTransport({
+let transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: "dudvil1@gmail.com",
@@ -8,12 +8,26 @@ var transporter = nodemailer.createTransport({
   }
 });
 
-function sendingMail(mailOptions){
-    console.log(mailOptions);
+function verifyAccountMail(mailOptions){
+    console.log("verifyAccountMail() call");
     transporter.sendMail({
-        to: mailOptions.mailTo, 
-        subject: mailOptions.subject,
-        html: mailOptions.html
+        to: mailOptions.email, 
+        subject: "verfiy account for FaceLook",
+        html:<p>please verify your account in http://localhost:4200/login/${mailOptions.id}</p> 
     });
 }
-module.exports = sendingMail;
+
+function forgotPasswordMail(mailOptions){
+  console.log("forgotPasswordMail() call");
+  transporter.sendMail({
+    to: mailOptions.email, 
+    subject: "verfiy account for FaceLook",
+    html:<p>your new password is ${Math.random().toString(36).substring(5)}</p> 
+});
+}
+
+
+module.exports = {
+  verifyAccountMail,
+  forgotPasswordMail
+}
