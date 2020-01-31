@@ -3,8 +3,6 @@ const bcrypt = require("../services/bcryptService");
 const mailer = require("../services/mailService");
 const db = require("../repository/dbmaneger");
 
-
-
 async function register(req, res) {
     console.log("register call()");
     try {
@@ -72,9 +70,29 @@ async function login(req, res) {
     }
 }
 
-function verifyAccount(req, res) { }
+async function verifyAccount(req, res) {
+    console.log("verifyAccount() call");
+    try {
+        await db.find(req.body.email).then(user => {
+            if (user.active === true) {
+                res.status(200).json({});
+            } else {
+                await db.verifyAccount(req.body.email).then(res => {
+                    res.status(200).json({
+                        message:
+                            "active account Successfully , you can log in now"
+                    });
+                })
+            }
+        })
+    } catch (error) {
+        return res.status(401).json({
+            message: "Auth failed"
+        });
+    }
+}
 
-function forgotPassword(req, res) { }
+async function forgotPassword(req, res) { }
 
 module.exports = {
     register,
