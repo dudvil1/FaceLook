@@ -1,9 +1,15 @@
 
 
-function find(){
+function find(){}
 
-}
+function verifyAccount(){}
+
+function addUser(user){}
+
+function changePassword(userEmail,newpassword)
 
 module.exports = {
-    find
+    find,
+    verifyAccount,
+    addUser
 }

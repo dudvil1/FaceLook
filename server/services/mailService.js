@@ -22,7 +22,7 @@ function forgotPasswordMail(mailOptions){
   transporter.sendMail({
     to: mailOptions.email, 
     subject: "verfiy account for FaceLook",
-    html:<p>your new password is ${Math.random().toString(36).substring(5)}</p> 
+    html:<p>your new password is ${mailOptions.password}</p> 
 });
 }
 

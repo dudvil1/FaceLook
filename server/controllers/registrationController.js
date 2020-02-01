@@ -4,22 +4,23 @@ const mailer = require("../services/mailService");
 const db = require("../repository/dbmaneger");
 
 async function register(req, res) {
-    console.log("register call()");
+    console.log("registration Controller: register call()");
     try {
         //check if user exist
         await db.find(req.body.email).then(user => {
-            return res.status(401).json({
-                message:
-                    "user already exist,try again"
-            });
+            if (user) {
+                return res.status(401).json({
+                    message:
+                        "user already exist,try again"
+                });
+            }
         });
         //create new user
-        let hashPassword = bcrypt.createHashPassword(req.body.password);
         let newUser = {
             id = 1,
             name = req.body.name,
             email = req.body.name,
-            password = hashPassword,
+            password =  bcrypt.createHashPassword(req.body.password),
             role = "user",
             active: false
         };
@@ -39,29 +40,31 @@ async function register(req, res) {
 }
 
 async function login(req, res) {
-    console.log("login call()");
+    console.log("registration Controller: login call()");
     try {
         //try find request user
         await db.find(req.body.email).then(user => {
-            //check the activation
-            if (user[0].active === false) {
-                return res.status(401).json({
-                    message:
-                        "You Didn`t Verify Your Account Yet,Please Check Your Mail Box And Verify It"
-                });
+            if (user) {
+                //check the activation
+                if (user.active === false) {
+                    return res.status(401).json({
+                        message:
+                            "You Didn`t Verify Your Account Yet,Please Check Your Mail Box And Verify It"
+                    });
+                }
+                //check password
+                if (bcrypt.checkPassword(req.body.password, user.password)) {
+                    let token = jwt.createtoken(user);
+                    return res.status(200).json({
+                        message: "Auth successful",
+                        user: user,
+                        token: token
+                    });
+                } else
+                    return res.status(401).json({
+                        message: "Auth failed, worng password"
+                    });
             }
-            //check password
-            if (bcrypt.checkPassword(req.body.password, user.password)) {
-                let token = jwt.createtoken(user);
-                return res.status(200).json({
-                    message: "Auth successful",
-                    user: user,
-                    token: token
-                });
-            } else
-                return res.status(401).json({
-                    message: "Auth failed, worng password"
-                });
         });
     } catch (error) {
         return res.status(401).json({
@@ -71,7 +74,7 @@ async function login(req, res) {
 }
 
 async function verifyAccount(req, res) {
-    console.log("verifyAccount() call");
+    console.log("registration Controller: verifyAccount() call");
     try {
         await db.find(req.body.email).then(user => {
             if (user.active === true) {
@@ -92,7 +95,35 @@ async function verifyAccount(req, res) {
     }
 }
 
-async function forgotPassword(req, res) { }
+async function forgotPassword(req, res) {
+    console.log("registration Controller: forgotPassword call()");
+    try {
+        await db.find(req.body.email).then(user => {
+            if (user) {
+                let NewPassword = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+                let hashNewPassword = NewPassword;
+                await db.changePassword(req.body.email, hashNewPassword).then(results => {
+                    if (results) {
+                        mailer.forgotPasswordMail(user,NewPassword);
+                        res.status(401).json({
+                            message:
+                                "Change Password!,Please Check your Email"
+                        });
+
+                    }else {
+                        res.status(401).json({
+                            message:"failed to change password,try again later"
+                        });
+                    }
+                });
+            }
+        });
+    } catch (error) {
+        return res.status(401).json({
+            message: "Auth failed"
+        });
+    }
+}
 
 module.exports = {
     register,
