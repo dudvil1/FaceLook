@@ -13,7 +13,7 @@ function verifyAccountMail(mailOptions){
     transporter.sendMail({
         to: mailOptions.email, 
         subject: "verfiy account for FaceLook",
-        html:<p>please verify your account in http://localhost:4200/login/${mailOptions.id}</p> 
+        html:`<p>please verify your account in http://localhost:4200/login/${mailOptions.id}</p>` 
     });
 }
 
@@ -22,7 +22,7 @@ function forgotPasswordMail(mailOptions){
   transporter.sendMail({
     to: mailOptions.email, 
     subject: "verfiy account for FaceLook",
-    html:<p>your new password is ${mailOptions.password}</p> 
+    html:`<p>your new password is ${mailOptions.password}</p>`
 });
 }
 

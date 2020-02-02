@@ -1,5 +1,15 @@
 const express = require("express");
 const app = express();
+const mongoose = require("mongoose");
+
+mongoose.connect(
+  `mongodb+srv://dudua:kfiH1cqKTmy90MjP@facelookclouster-epu8s.mongodb.net/test?retryWrites=true&w=majority`
+);
+var db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error"));
+db.once("open", () => {
+  console.log("db conncted!");
+});
 
 const registrationRoutes = require("./routes/registration");
 const defaultRoutes = require("./routes/default"); 

@@ -15,17 +15,8 @@ async function register(req, res) {
                 });
             }
         });
-        //create new user
-        let newUser = {
-            id = 1,
-            name = req.body.name,
-            email = req.body.name,
-            password =  bcrypt.createHashPassword(req.body.password),
-            role = "user",
-            active: false
-        };
-        //save new user send mail to verify
-        await db.addUser(newUser).then(resault => {
+        //create && save new user send mail to verify
+        await db.addUser(req.body).then(resault => {
             mailer.verifyAccountMail(newUser);
             return res.status(201).json({
                 message:
@@ -77,17 +68,17 @@ async function verifyAccount(req, res) {
     console.log("registration Controller: verifyAccount() call");
     try {
         await db.find(req.body.email).then(user => {
-            if (user.active === true) {
+            if (user.active) {
                 res.status(200).json({});
             } else {
-                await db.verifyAccount(req.body.email).then(res => {
+                 db.verifyAccount(req.body.email).then(res => {
                     res.status(200).json({
                         message:
                             "active account Successfully , you can log in now"
                     });
                 })
             }
-        })
+        });
     } catch (error) {
         return res.status(401).json({
             message: "Auth failed"
@@ -102,7 +93,7 @@ async function forgotPassword(req, res) {
             if (user) {
                 let NewPassword = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
                 let hashNewPassword = NewPassword;
-                await db.changePassword(req.body.email, hashNewPassword).then(results => {
+                  db.changePassword(req.body.email, hashNewPassword).then(results => {
                     if (results) {
                         mailer.forgotPasswordMail(user,NewPassword);
                         res.status(401).json({
