@@ -10,7 +10,7 @@ let transporter = nodemailer.createTransport({
 
 function verifyAccountMail(mailOptions) {
   console.log("verifyAccountMail() call");
-
+  
   transporter.sendMail({
     to: mailOptions.email,
     subject: "verfiy account for FaceLook",

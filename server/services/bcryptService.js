@@ -15,14 +15,7 @@ async function checkPassword(reqPassword, userPassword) {
   return await bcrypt.hashSync(password,10 , (err , hash)=>{
     if (err) return false;
     return hash;
-  })
-
-  // let a =  bcrypt.hash(password, 10 ,(err, hash) => {
-  //   if (err) return false;
-  //   console.log(hash);
-  //   return hash;
-  // });
-  return a;
+  });
 }
 
 module.exports = {

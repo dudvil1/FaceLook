@@ -1,19 +1,23 @@
 const User = require("../models/user");
 const mongoose = require("mongoose");
 const bcrypt = require("../services/bcryptService");
+const mailer = require("../services/mailService");
 
 async function find(userEmail) {
   console.log("dbManeger: find call()");
-
-  await User.find({ email: userEmail })
+   
+   let result;
+   await User.find({ email: userEmail })
     .exec()
     .then(user => {
-      if (user) return user;
-      else return null;
+      if (user) result = user;
+      else result = null;
     })
     .catch(err => {
       return err;
     });
+
+    return result;
 }
 
 async function verifyAccount(userEmail) {
@@ -34,7 +38,7 @@ async function verifyAccount(userEmail) {
 
 async function addUser(user) {
   console.log("dbManeger: addUser call()");
-  console.log("req user", user);
+
   let hashPassword = await bcrypt.createHashPassword(user.password);
 
   const newuser = new User({
