@@ -16,7 +16,8 @@ async function register(req, res) {
             }
         });
         //create && save new user send mail to verify
-        await db.addUser(req.body).then(resault => {
+        await db.addUser(req.body).then(result => {
+            console.log("after saved",result);
             mailer.verifyAccountMail(newUser);
             return res.status(201).json({
                 message:
