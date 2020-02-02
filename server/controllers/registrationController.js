@@ -37,7 +37,8 @@ async function login(req, res) {
         await db.find(req.body.email).then(user => {
             if (user) {
                 //check the activation
-                if (user.active === false) {
+                console.log("login",user);
+                if (!user.active) {
                     return res.status(401).json({
                         message:
                             "You Didn`t Verify Your Account Yet,Please Check Your Mail Box And Verify It"
