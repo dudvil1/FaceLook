@@ -8,26 +8,27 @@ let transporter = nodemailer.createTransport({
   }
 });
 
-function verifyAccountMail(mailOptions){
-    console.log("verifyAccountMail() call");
-    transporter.sendMail({
-        to: mailOptions.email, 
-        subject: "verfiy account for FaceLook",
-        html:`<p>please verify your account in http://localhost:4200/login/${mailOptions.id}</p>` 
-    });
-}
+function verifyAccountMail(mailOptions) {
+  console.log("verifyAccountMail() call");
 
-function forgotPasswordMail(mailOptions){
-  console.log("forgotPasswordMail() call");
   transporter.sendMail({
-    to: mailOptions.email, 
+    to: mailOptions.email,
     subject: "verfiy account for FaceLook",
-    html:`<p>your new password is ${mailOptions.password}</p>`
-});
+    html: `<p>please verify your account in http://localhost:4200/login/${mailOptions.id}</p>`
+  });
 }
 
+function forgotPasswordMail(mailOptions) {
+  console.log("forgotPasswordMail() call");
+
+  transporter.sendMail({
+    to: mailOptions.email,
+    subject: "verfiy account for FaceLook",
+    html: `<p>your new password is ${mailOptions.password}</p>`
+  });
+}
 
 module.exports = {
   verifyAccountMail,
   forgotPasswordMail
-}
+};

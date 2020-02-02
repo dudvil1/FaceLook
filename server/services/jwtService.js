@@ -3,6 +3,8 @@ var moment = require('moment');
 var secret = 'Secret_Key1-2-3.';
 
 exports.createtoken = function (user) {
+    console.log("jwtService: createToken call()");
+
     var payload = {
         sub: user._id,
         name: user.name,
