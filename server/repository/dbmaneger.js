@@ -3,11 +3,11 @@ const mongoose = require("mongoose");
 const bcrypt = require("../services/bcryptService");
 const mailer = require("../services/mailService");
 
-async function find(userEmail) {
+async function find(key) {
   console.log("dbManeger: find call()");
-   
-   let result;
-   await User.find({ email: userEmail })
+
+  let result; 
+  await User.findOne(key)
     .exec()
     .then(user => {
       if (user) result = user;
@@ -16,8 +16,8 @@ async function find(userEmail) {
     .catch(err => {
       return err;
     });
-
-    return result;
+  console.log("find", result);
+  return result;
 }
 
 async function verifyAccount(userEmail) {

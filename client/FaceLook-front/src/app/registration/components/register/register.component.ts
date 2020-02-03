@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router , ActivatedRoute} from '@angular/router';
 import { NgForm } from '@angular/forms';
 import {ToastrService} from 'ngx-toastr';
-import { ApiService } from "../../service/api-service.service";
+import { registrationApiService } from "../../service/api-service.service";
 import { UserService } from "../../service/user-service.service";
 
 
@@ -16,7 +16,7 @@ export class RegisterComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private api: ApiService,
+    private api: registrationApiService,
     public userService: UserService,
     private toastr: ToastrService
   ) { }
@@ -27,7 +27,7 @@ export class RegisterComponent implements OnInit {
 
   register(){
     console.log("register call()");
-    console.log(this.userService);
+
     //api call
    this.api.register(this.userService.userData).subscribe(
      res => {
@@ -35,9 +35,10 @@ export class RegisterComponent implements OnInit {
       this.toastr.success(res["message"], "Success")
      },
      error => {
-      this.toastr.error(error.error.message, "Error in signup.component.ts");
+      this.toastr.error(error.error.message, "Error in register");
     }
    )
   }
 
+  
 }

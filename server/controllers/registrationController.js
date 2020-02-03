@@ -7,7 +7,7 @@ async function register(req, res) {
     console.log("registration Controller: register call()");
     try {
         //check if user exist
-        await db.find(req.body.email).then(user => {
+        await db.find({email:req.body.email}).then(user => {
             if (user) {
                 return res.status(401).json({
                     message:
@@ -34,10 +34,9 @@ async function login(req, res) {
     console.log("registration Controller: login call()");
     try {
         //try find request user
-        await db.find(req.body.email).then(user => {
+        await db.find({email:req.body.email}).then(user => {
             if (user) {
                 //check the activation
-                console.log("login",user);
                 if (!user.active) {
                     return res.status(401).json({
                         message:
@@ -68,7 +67,7 @@ async function login(req, res) {
 async function verifyAccount(req, res) {
     console.log("registration Controller: verifyAccount() call");
     try {
-        await db.find(req.body.email).then(user => {
+        await db.find({_id:req.body.id}).then(user => {
             if (user.active) {
                 res.status(200).json({});
             } else {
@@ -90,7 +89,7 @@ async function verifyAccount(req, res) {
 async function forgotPassword(req, res) {
     console.log("registration Controller: forgotPassword call()");
     try {
-        await db.find(req.body.email).then(user => {
+        await db.find({email:req.body.email}).then(user => {
             if (user) {
                 let NewPassword = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
                 let hashNewPassword = NewPassword;

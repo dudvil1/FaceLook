@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ToastrService } from "ngx-toastr";
 import { Router, ActivatedRoute } from "@angular/router";
 import { NgForm } from "@angular/forms";
-import { ApiService } from "../../service/api-service.service";
+import { registrationApiService } from "../../service/api-service.service";
 import { UserService } from "../../service/user-service.service";
 
 @Component({
@@ -16,7 +16,7 @@ export class LogInComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private api: ApiService,
+    private api: registrationApiService,
     public userService: UserService,
     private toastr: ToastrService
   ) {}
@@ -41,12 +41,12 @@ export class LogInComponent implements OnInit {
 
           localStorage.setItem("user", data["user_type"]);
           localStorage.setItem("token", data["token"]);
-
+ 
           //give client message
           this.toastr.success(data["message"], "Success");
 
           //route to the feed
-          this.router.navigate(["/userTimes"]);
+          this.router.navigate(["/social"]);
         }
       },
       error => {
