@@ -4,6 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { FormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 /* import { HeaderInterceptor } from './interceptors/header-inceptor'; */
 
 
@@ -24,7 +25,8 @@ import { ForgetPasswordComponent } from './registration/components/forget-passwo
     FormsModule,
     ToastrModule.forRoot(),
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
   providers: [
    /*  {

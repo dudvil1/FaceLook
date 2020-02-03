@@ -27,6 +27,7 @@ export class RegisterComponent implements OnInit {
 
   register(){
     console.log("register call()");
+    console.log(this.userService);
     //api call
    this.api.register(this.userService.userData).subscribe(
      res => {
