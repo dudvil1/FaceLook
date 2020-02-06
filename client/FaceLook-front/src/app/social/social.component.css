@@ -1,8 +1,12 @@
+.main{
+  display: flex;
+  justify-content: space-between;
+}
+
+.filter{
+  width: 33%;
+}
+
 .map{
-  margin: 60%;
+  width: 63%;
 }
-
-.feed{
-  margin: 35%;
-}
-
