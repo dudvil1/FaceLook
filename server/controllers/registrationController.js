@@ -7,20 +7,20 @@ async function register(req, res) {
     console.log("registration Controller: register call()");
     try {
         //check if user exist
-        await db.find({email:req.body.email}).then(user => {
-            if (user) {
+        await db.find("Users", "email", req.body.email, users => {
+            if (users.length >= 1) {
                 return res.status(401).json({
-                    message:
-                        "user already exist,try again"
+                    message: "user already exist,try again"
                 });
             }
-        });
-        //create && save new user send mail to verify
-        await db.addUser(req.body).then(result => {
-             mailer.verifyAccountMail(result);
-            return res.status(201).json({
-                message:
-                    "User Created Successfully , Please check Your Mail To Verify Your Account"
+            //create && save new user send mail to verify
+            db.addUser(req.body, result => {
+                console.log("before mail:", result);
+                mailer.verifyAccountMail(result);
+                return res.status(201).json({
+                    message:
+                        "User Created Successfully , Please check Your Mail To Verify Your Account"
+                });
             });
         });
     } catch (error) {
@@ -34,10 +34,12 @@ async function login(req, res) {
     console.log("registration Controller: login call()");
     try {
         //try find request user
-        await db.find({email:req.body.email}).then(user => {
-            if (user) {
+        await db.find("Users", "email", req.body.email, (user, err) => {
+            if (user.length >= 1) {
+                console.log("log", user);
+
                 //check the activation
-                if (!user.active) {
+                if (!user[0].active) {
                     return res.status(401).json({
                         message:
                             "You Didn`t Verify Your Account Yet,Please Check Your Mail Box And Verify It"
@@ -53,8 +55,13 @@ async function login(req, res) {
                     });
                 } else
                     return res.status(401).json({
-                        message: "Auth failed, worng password"
+                        message: "Auth failed"
                     });
+            }
+            if (err) {
+                return res.status(401).json({
+                    message: "Auth failed"
+                });
             }
         });
     } catch (error) {
@@ -66,17 +73,19 @@ async function login(req, res) {
 
 async function verifyAccount(req, res) {
     console.log("registration Controller: verifyAccount() call");
+
     try {
-        await db.find({_id:req.body.id}).then(user => {
+        await db.find("Users", "_id", req.body.id, user => {
+            console.log("registrationFind:" ,user);
             if (user.active) {
                 res.status(200).json({});
             } else {
-                 db.verifyAccount(req.body.email).then(res => {
+                db.verifyAccount(req.body.id, result => {
+                    console.log("registrationVerify:" ,result);
                     res.status(200).json({
-                        message:
-                            "active account Successfully , you can log in now"
+                        message: "active account Successfully , you can log in now"
                     });
-                })
+                });
             }
         });
     } catch (error) {
@@ -89,21 +98,21 @@ async function verifyAccount(req, res) {
 async function forgotPassword(req, res) {
     console.log("registration Controller: forgotPassword call()");
     try {
-        await db.find({email:req.body.email}).then(user => {
+        await db.find({ email: req.body.email }).then(user => {
             if (user) {
-                let NewPassword = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+                let NewPassword = (((1 + Math.random()) * 0x10000) | 0)
+                    .toString(16)
+                    .substring(1);
                 let hashNewPassword = NewPassword;
-                  db.changePassword(req.body.email, hashNewPassword).then(results => {
+                db.changePassword(req.body.email, hashNewPassword).then(results => {
                     if (results) {
-                        mailer.forgotPasswordMail(user,NewPassword);
+                        mailer.forgotPasswordMail(user, NewPassword);
                         res.status(401).json({
-                            message:
-                                "Change Password!,Please Check your Email"
+                            message: "Change Password!,Please Check your Email"
                         });
-
-                    }else {
+                    } else {
                         res.status(401).json({
-                            message:"failed to change password,try again later"
+                            message: "failed to change password,try again later"
                         });
                     }
                 });

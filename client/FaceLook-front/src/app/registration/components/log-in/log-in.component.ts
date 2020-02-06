@@ -39,9 +39,9 @@ export class LogInComponent implements OnInit {
         if (this.response.message === "Auth successful") {
           this.userService.userData = data["user"];
 
-          localStorage.setItem("user", data["user_type"]);
+          localStorage.setItem("user", data["role"]);
           localStorage.setItem("token", data["token"]);
- 
+
           //give client message
           this.toastr.success(data["message"], "Success");
 
@@ -62,12 +62,10 @@ export class LogInComponent implements OnInit {
       this.route.params.subscribe(params =>
         this.api.verifyAccount(params).subscribe(
           res => {
-            if (res["message"] === "Your Account Is Active Now") {
+            console.log(res);
+            if (res["message"] === "active account Successfully , you can log in now") {
               //give client message
-              this.toastr.success(
-                "Success to active Your User\n you can login now"
-              );
-              this.userService.userData = res["user"];
+              this.toastr.success(res["message"]);
             }
           },
           err => {

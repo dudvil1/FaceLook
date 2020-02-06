@@ -14,7 +14,7 @@ function verifyAccountMail(mailOptions) {
   transporter.sendMail({
     to: mailOptions.email,
     subject: "verfiy account for FaceLook",
-    html: `<p>please verify your account in http://localhost:4200/login/${mailOptions.id}</p>`
+    html: `<p>please verify your account in http://localhost:4200/login/${mailOptions._id}</p>`
   });
 }
 
