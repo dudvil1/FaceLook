@@ -1,1 +1,37 @@
-<p class="feed">feed works!</p>
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <p class="text-center">
+        <a href="javascript:;" routerLink="/register">publish new post</a>
+      </p>
+    </div>
+    <div class="col">
+      <p class="text-center">
+        <a href="javascript:;" routerLink="/register">friends</a>
+    </div>
+  </div>
+</div>
+ <div class="login-form">
+   <form
+   #f="ngForm"
+   (ngSubmit)="f.form.valid "
+   autocomplete="on"
+   action=""
+   method="post"
+   >
+   <h3 class="text-center">posts filter</h3>
+   <div class="form-group">
+     <input
+     [(ngModel)]="postsFilterService.postsData.fromToFilter"
+     #fromToFilter="ngModel"
+     name="fromToFilter"
+     type="date"
+     class="form-control"
+     placeholder="fromToFilter"
+   />
+   </div>
+   </form>
+ </div>
+
+
+

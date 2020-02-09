@@ -24,9 +24,11 @@ export class HeaderInterceptor implements HttpInterceptor {
     //get token from local storage
     let token = localStorage.getItem("token");
     //cloning the request and adding Authorization header to it
-    req = req.clone({
-      headers: req.headers.set("Authorization", "JWT " + token)
-    });
+    if(token){
+      req = req.clone({
+        headers: req.headers.set("Authorization", "JWT " + token)
+      });
+    }
     //passing the request
     return next.handle(req);
   }

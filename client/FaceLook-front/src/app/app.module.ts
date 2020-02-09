@@ -7,6 +7,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { HeaderInterceptor } from "./interceptors/header-inceptor";
 import { registrationApiService } from "../app/registration/service/api-service.service";
+import { AgmCoreModule } from '@agm/core';
+import { AgmDirectionModule } from 'agm-direction';
 
 import { AppComponent } from "./app.component";
 import { LogInComponent } from "./registration/components/log-in/log-in.component";
@@ -32,7 +34,12 @@ import { MapComponent } from "./social/components/map/map.component";
     ToastrModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDmwtWcaG48hu9jgVn5Z20f1FgLQW3LATk',
+      libraries: ['visualization']
+    }),
+    AgmDirectionModule,
   ],
   providers: [
     registrationApiService,

@@ -11,6 +11,7 @@
   },
   "private": true,
   "dependencies": {
+    "@agm/core": "^1.1.0",
     "@angular/animations": "~8.2.11",
     "@angular/common": "~8.2.11",
     "@angular/compiler": "~8.2.11",
@@ -19,6 +20,8 @@
     "@angular/platform-browser": "~8.2.11",
     "@angular/platform-browser-dynamic": "~8.2.11",
     "@angular/router": "~8.2.11",
+    "@types/googlemaps": "^3.39.2",
+    "agm-direction": "^0.7.9",
     "bootstrap": "^4.4.1",
     "ngx-toastr": "^11.3.2",
     "rxjs": "~6.4.0",

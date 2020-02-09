@@ -20,7 +20,6 @@ export class registrationApiService {
   }
 
   verifyAccount(params) {
-    console.log("verfiy" , params)
     return this.httpClient.patch(this.url + "verifyAccount", params);
   }
 
