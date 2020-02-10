@@ -17,6 +17,8 @@ import { ForgetPasswordComponent } from "./registration/components/forget-passwo
 import { socialComponent } from "./social/social.component";
 import { FeedComponent } from "./social/components/feed/feed.component";
 import { MapComponent } from "./social/components/map/map.component";
+import { SharePostComponent } from './social/components/share-post/share-post.component';
+import { FriendsComponent } from './social/components/friends/friends.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { MapComponent } from "./social/components/map/map.component";
     ForgetPasswordComponent,
     socialComponent,
     FeedComponent,
-    MapComponent
+    MapComponent,
+    SharePostComponent,
+    FriendsComponent
   ],
   imports: [
     BrowserModule,

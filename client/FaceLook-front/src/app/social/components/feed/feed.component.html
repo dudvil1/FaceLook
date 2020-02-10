@@ -2,36 +2,87 @@
   <div class="row">
     <div class="col">
       <p class="text-center">
-        <a href="javascript:;" routerLink="/register">publish new post</a>
+        <a href="javascript:;" routerLink="/sharePost">publish new post</a>
       </p>
     </div>
     <div class="col">
       <p class="text-center">
-        <a href="javascript:;" routerLink="/register">friends</a>
+        <a href="javascript:;" routerLink="/friends">friends</a>
+      </p>
     </div>
   </div>
 </div>
- <div class="login-form">
-   <form
-   #f="ngForm"
-   (ngSubmit)="f.form.valid "
-   autocomplete="on"
-   action=""
-   method="post"
-   >
-   <h3 class="text-center">posts filter</h3>
-   <div class="form-group">
-     <input
-     [(ngModel)]="postsFilterService.postsData.fromToFilter"
-     #fromToFilter="ngModel"
-     name="fromToFilter"
-     type="date"
-     class="form-control"
-     placeholder="fromToFilter"
-   />
-   </div>
-   </form>
- </div>
 
+<div class="login-form">
+  <form  #f="ngForm" (ngSubmit)="(f.form.valid)" autocomplete="on" action="" method="post">
 
+    <h3 class="text-center">posts filter</h3>
+
+    <div class="form-group">
+      <span>
+        from
+      </span>
+      <span>
+        <input [(ngModel)]="postsFilterService.postsData.fromFilter" #fromFilter="ngModel" name="fromFilter" type="date"
+          class="form-control" placeholder="from where to get posrt" />
+      </span>
+      <span>
+        To
+      </span>
+      <span>
+        <input [(ngModel)]="postsFilterService.postsData.ToFilter" #ToFilter="ngModel" name="ToFilter" type="date"
+          class="form-control" placeholder="to" />
+      </span>
+    </div>
+
+    <hr/>
+
+    <div class="form-group">
+      <span>
+        publisher:
+      </span>
+      <span>
+        <input [(ngModel)]="postsFilterService.postsData.publisher" #publisherFilter="ngModel" name="publisherFilter" type="text"
+        class="form-control" placeholder="enter publisher name" />
+      </span>
+    </div>
+
+    <hr/>
+
+    <div class="form-group">
+      <span>
+        radius from current location:
+      </span>
+      <span>
+        <input [(ngModel)]="postsFilterService.postsData.radiusFrom" #radiusFrom="ngModel" name="radiusFrom" type="number"
+        class="form-control" placeholder="enter radius" />
+      </span>
+    </div>
+
+    <hr/>
+
+    <div class="form-group">
+      <span>
+        image tags
+      </span>
+      <span>
+        <input [(ngModel)]="postsFilterService.postsData.imageTags" #imageTags="ngModel" name="imageTags" type="text"
+        class="form-control" placeholder="enter image Tags"/>
+      </span>
+    </div>
+
+    <hr/>
+
+    <div class="form-group">
+      <span>
+        user tags
+      </span>
+      <span>
+        <input [(ngModel)]="postsFilterService.postsData.userTags" #userTags="ngModel" name="userTags" type="text"
+        class="form-control" placeholder="enter user Tags"/>
+      </span>
+    </div>
+
+  </form>
+</div>
 
