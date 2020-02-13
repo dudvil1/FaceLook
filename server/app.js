@@ -2,9 +2,9 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 
-
 const registrationRoutes = require("./routes/registration");
 const defaultRoutes = require("./routes/default"); 
+const socialRoutes = require("./routes/social");
 
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
@@ -33,6 +33,7 @@ app.use(function(req, res, next) {
  
 app.use("/", defaultRoutes);
 app.use("/registration", registrationRoutes); 
+app.use("/social", socialRoutes)
 
 app.use((req, res, next) => {
   const error = new Error("Not Found");

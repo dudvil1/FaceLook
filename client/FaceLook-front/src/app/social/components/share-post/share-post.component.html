@@ -1,7 +1,12 @@
 <h1>share post</h1>
 <hr />
 <div class="container">
-  <form #imageForm="ngForm" method="POST" (ngSubmit)="(imageForm.form.valid)">
+  <form
+    #imageForm="ngForm"
+    method="POST"
+    (ngSubmit)="(imageForm.form.valid)"
+    enctype="multipart/form-data"
+  >
     <div class="form-group">
       <input
         [(ngModel)]="this.shareModel.sharePostsModel.text"

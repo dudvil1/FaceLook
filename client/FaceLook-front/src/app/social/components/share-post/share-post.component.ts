@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { sharePostService } from "../models/sharePost.model";
+import { feedApiService} from "../../service/feedApi.service"
 
 @Component({
   selector: "app-share-post",
@@ -9,12 +10,16 @@ import { sharePostService } from "../models/sharePost.model";
 export class SharePostComponent implements OnInit {
   imageUrl: string = "../../../../assets/default-img.png";
   fileToUpload: File = null;
-  constructor(public shareModel: sharePostService) {}
+  constructor(
+    public shareModel: sharePostService,
+    private feedApi: feedApiService
+    ) {}
 
   ngOnInit() {}
 
   handleFileInput(file: FileList) {
     this.fileToUpload = file.item(0);
+    console.log("file" , this.fileToUpload);
 
     //Show image preview
     var reader = new FileReader();
@@ -22,13 +27,18 @@ export class SharePostComponent implements OnInit {
       this.imageUrl = event.target.result;
     };
     reader.readAsDataURL(this.fileToUpload);
-    console.log("img reader", reader);
   }
 
   createPost() {
     const formData: FormData = new FormData();
-    formData.append("Image", this.fileToUpload);
-    this.shareModel.sharePostsModel.image = formData;
-    console.log("call obj", this.shareModel.sharePostsModel);
+    formData.append("image", this.fileToUpload);
+    formData.append("text", this.shareModel.sharePostsModel.text);
+    console.log(this.fileToUpload);
+
+
+
+    this.feedApi.addPost(formData).subscribe(res => {
+       console.log("success");
+    });
   }
 }
