@@ -4,9 +4,9 @@ var secret = 'Secret_Key1-2-3.';
 
 exports.ensureAuth = function (req, res, next) {
     if (!req.headers.authorization) {
-        return res.status(403).send({message: 'Forbidden: Invalid Token.'});
+        return res.status(403).send({message: 'test'});
     }
-    var token = req.headers.authorization.replace(/['"]+/g, '');
+    const token = req.headers.authorization.split(" ")[1];
     try {
         var payload = jwt.decode(token, secret);
         if (payload.expired <= moment().unix()) {

@@ -26,6 +26,15 @@
         (change)="handleFileInput($event.target.files)"
       />
     </div>
+    <div class="form-group">
+      <input
+        [(ngModel)]="this.shareModel.sharePostsModel.tags"
+        #text="ngModel"
+        name="postTags"
+        class="form-control"
+        placeholder="tags for your posts"
+      />
+    </div>
     <button
       type="submit"
       class="btn-large btn-submit"

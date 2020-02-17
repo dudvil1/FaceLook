@@ -1,10 +1,16 @@
-
-
 function addPost(req, res) {
-  console.log(req.file);
-    //console.log(JSON.parse(req.body));
-    
-  res.send({message: "ok"});
+  
+  console.log("addPost call()");
+  console.log(req.body);
+  
+/*   let post = {
+    text: req.body.text,
+    tags: req.body.tags,
+    image: "image",
+    location: req.body.location
+  }; */
+
+  res.status(201).json({ message: "ok"});
 }
 
 module.exports = {

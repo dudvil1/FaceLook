@@ -19,6 +19,7 @@ import { FeedComponent } from "./social/components/feed/feed.component";
 import { MapComponent } from "./social/components/map/map.component";
 import { SharePostComponent } from './social/components/share-post/share-post.component';
 import { FriendsComponent } from './social/components/friends/friends.component';
+import { postApiService } from './social/service/postApi.service';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { FriendsComponent } from './social/components/friends/friends.component'
   ],
   providers: [
     registrationApiService,
+    postApiService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HeaderInterceptor,
