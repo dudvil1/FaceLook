@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { LocationService } from "../../service/locationService.service";
 
+
 @Component({
   selector: "app-map",
   templateUrl: "./map.component.html",
@@ -11,7 +12,7 @@ export class MapComponent implements OnInit {
   constructor(public location:LocationService) {}
 
   ngOnInit() {
-    
+
   }
 }
 
