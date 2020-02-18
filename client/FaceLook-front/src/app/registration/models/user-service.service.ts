@@ -9,7 +9,7 @@ export class UserService {
 
   constructor() { }
 
-  resetdate(){
+  resetData(){
     this.userData = {};
   }
 }

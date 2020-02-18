@@ -22,8 +22,8 @@ export class LogInComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-      this.verifyAccountIfNaccery();
-      this.userService.resetdate();
+      this.verifyAccountIfNecessary();
+      this.userService.resetData();
   }
 
   login() {
@@ -55,14 +55,13 @@ export class LogInComponent implements OnInit {
     );
   }
 
-  verifyAccountIfNaccery() {
+  verifyAccountIfNecessary() {
     console.log("verifyAccount Call()");
     //api call
     if (this.route.snapshot.routeConfig.path === "login/:id") {
       this.route.params.subscribe(params =>
         this.api.verifyAccount(params).subscribe(
           res => {
-            console.log(res);
             if (res["message"] === "active account Successfully , you can log in now") {
               //give client message
               this.toastr.success(res["message"]);

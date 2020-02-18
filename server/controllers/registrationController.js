@@ -15,7 +15,6 @@ async function register(req, res) {
             }
             //create && save new user send mail to verify
             db.addUser(req.body, result => {
-                console.log("before mail:", result);
                 mailer.verifyAccountMail(result);
                 return res.status(201).json({
                     message:
@@ -34,7 +33,7 @@ async function login(req, res) {
     console.log("registration Controller: login call()");
     try {
         //try find request user
-        await db.find("Users", "email", req.body.email, (user, err) => {
+        await db.find("Users", "email", req.body.email, user => {
             if (user.length >= 1) {
                 console.log("log", user);
 

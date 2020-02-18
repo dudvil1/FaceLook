@@ -8,7 +8,7 @@ export class LocationService {
     this.getLocation();
   }
 
-  async getLocation() : Promise<{lat:number,lng:number}> {
+  async getLocation(): Promise<{ lat: number; lng: number }> {
     return new Promise(resolve =>
       navigator.geolocation.getCurrentPosition(Location => {
         resolve({

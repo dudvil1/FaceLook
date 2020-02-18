@@ -16,7 +16,9 @@ const store = multer.diskStorage({
 const upload = multer({ storage: store });
 
 api.post(
-  "/addPost", upload.single("image"),postsController.addPost
+  "/addPost",
+  [md_auth.ensureAuth, upload.single("image")],
+  postsController.addPost
 );
 
 module.exports = api;

@@ -9,10 +9,10 @@ async function checkPassword(reqPassword, userPassword) {
   });
 }
 
- async function createHashPassword(password) {
+async function createHashPassword(password) {
   console.log("bycrptService: createHashPassword call()");
 
-  return await bcrypt.hashSync(password,10 , (err , hash)=>{
+  return await bcrypt.hashSync(password, 10, (err, hash) => {
     if (err) return false;
     return hash;
   });

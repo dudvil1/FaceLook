@@ -31,7 +31,7 @@ export class SharePostComponent implements OnInit {
     reader.readAsDataURL(this.fileToUpload);
   }
 
-  async createPost() {
+  async createPost() { 
       const postLocation = await this.location.getLocation();
       const formData: FormData = new FormData();
       formData.append("image", this.fileToUpload);

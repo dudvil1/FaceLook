@@ -10,7 +10,6 @@ exports.createtoken = function (user) {
         name: user.name,
         email: user.email,
         role: user.role,
-        image: user.image,
         expired: moment().add(3, 'days').unix()
     };
     return jwt.encode(payload, secret);

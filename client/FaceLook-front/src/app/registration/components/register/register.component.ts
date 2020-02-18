@@ -22,7 +22,7 @@ export class RegisterComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.userService.resetdate();
+    this.userService.resetData();
   }
 
   register(){
@@ -39,5 +39,4 @@ export class RegisterComponent implements OnInit {
     }
    )
   }
-
 }

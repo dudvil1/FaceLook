@@ -1,7 +1,6 @@
-const User = require("../models/user");
 const mongoose = require("mongoose");
 const bcrypt = require("../services/bcryptService");
-const mailer = require("../services/mailService");
+const moment = require('moment');
 const sql = require("msnodesqlv8");
 const connectionString =
   "server=(localdb)\\sqlexpress;Database=FaceLook;Trusted_Connection=Yes;Driver={SQL Server Native Client 11.0}";
@@ -56,6 +55,16 @@ async function changePassword(userEmail, newpassword) {
       return err;
     });
 }
+
+async function addPost(post,callback){
+  console.log("dbManeger: addPost call()");
+  
+  post.date = moment().unix().toString();
+  post.post_id = new mongoose.Types.ObjectId();
+  const query = `INSERT INTO Posts VALUES( '${post.post_id}','${image}' , '${post.text}' , '${post.date} ,
+   '${post.locationLocationLat}' , ${post.locationLocationLng})`;
+} 
+
 
 module.exports = {
   find,
