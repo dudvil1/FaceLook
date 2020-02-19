@@ -59,16 +59,42 @@ async function changePassword(userEmail, newpassword) {
 async function addPost(post,callback){
   console.log("dbManeger: addPost call()");
   
-  post.date = moment().unix().toString();
   post.post_id = new mongoose.Types.ObjectId();
+  post.date = moment().unix().toString();
   const query = `INSERT INTO Posts VALUES( '${post.post_id}','${image}' , '${post.text}' , '${post.date} ,
-   '${post.locationLocationLat}' , ${post.locationLocationLng})`;
+   '${post.locationLocationLat}' , ${post.locationLocationLng}) , ${post.text}`;
+
+   await sql.query(connectionString, query, (err, res) => {
+   callback(post);
+  });
 } 
 
+async function addTag(tag,callback) {
+  console.log("dbManeger: addTag call()");
+
+  tag.tag_id = new mongoose.Types.ObjectId();
+  const query =  `INSERT INTO tags VALUES( '${tag.tag_id}', '${tag.tag}'`;
+  await sql.query(connectionString, query, (err, res) => {
+    callback(tag);
+   });
+}
+
+async function addPost_Tag(post_tag, callback) {
+  console.log("dbManeger: Post_Tag call()");
+
+  const query =  `INSERT INTO Post_Tag VALUES( '${post_tag.post_id}', '${post_tag.tag_id}'`;
+  await sql.query(connectionString, query, (err, res) => {
+    callback(post_tag);
+   });
+
+}
 
 module.exports = {
   find,
   verifyAccount,
   addUser,
-  changePassword
+  changePassword,
+  addPost,
+  addTag,
+  addPost_Tag
 };

@@ -11,6 +11,7 @@ import { AgmCoreModule } from '@agm/core';
 import { GoogleMapsModule } from '@angular/google-maps';
 
 import { AgmDirectionModule } from 'agm-direction';
+import {GoogleMapsModule} from "@angular/google-maps"
 
 import { AppComponent } from "./app.component";
 import { LogInComponent } from "./registration/components/log-in/log-in.component";

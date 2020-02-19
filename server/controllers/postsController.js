@@ -1,16 +1,24 @@
-function addPost(req, res) {
-  
-  console.log("addPost call()");
-  console.log(req.body);
-  
-/*   let post = {
-    text: req.body.text,
-    tags: req.body.tags,
-    image: "image",
-    location: req.body.location
-  }; */
+const db = require("../repository/dbmaneger");
 
-  res.status(201).json({ message: "ok"});
+async function addPost(req, res) {
+  console.log("addPost call()");
+
+  try {
+    await db.addPost(req.body, postResult => {
+      db.addTag(postResult, tagResult => {
+        db.addPost_Tag(tagResult, result =>{
+          return res.status(201).json({
+            message:
+                "User Created Successfully , Please check Your Mail To Verify Your Account"
+        });
+        })
+      })
+    });
+  } catch (error) {
+    return res.status(401).json({
+      message: "Failure to create post"
+    });
+  }
 }
 
 module.exports = {

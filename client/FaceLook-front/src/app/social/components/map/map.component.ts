@@ -5,6 +5,7 @@ import { LocationService } from "../../service/locationService.service";
 import { PostCollectionService } from "../../service/post-collection.service";
 import { ToastInjector } from 'ngx-toastr';
 
+
 @Component({
   selector: "app-map",
   templateUrl: "./map.component.html",
@@ -64,8 +65,7 @@ export class MapComponent implements AfterViewInit {
 
     //////// second on the map: iterate of all posts
     this.postCollection.postCollections.forEach(elm => {
-      //create post coordinates
-      //post location
+      //create post location coordinates
       let postLocation = {lat: +elm.lat, lng: +elm.lng};
       
       //create post props 
@@ -83,7 +83,7 @@ export class MapComponent implements AfterViewInit {
       //add props to map
       postMarker.setMap(googleMap);
 
-      let contentString = `<div class="info_content" id="content">
+      let bubbleDiv = `<div class="info_content" id="content">
         <div id="bodyContent">
         <p><b>${elm.title}</b>,
         Heritage Site.</p>
@@ -93,7 +93,7 @@ export class MapComponent implements AfterViewInit {
 
       //add bubbles to the map
       let infowindow = new google.maps.InfoWindow({
-          content: contentString,
+          content: bubbleDiv,
           maxWidth: 200,
       });
 
