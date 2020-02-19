@@ -11,7 +11,7 @@ import { ToastInjector } from 'ngx-toastr';
   styleUrls: ["./map.component.css"]
 })
 
-export class MapComponent implements OnInit {
+export class MapComponent implements AfterViewInit {
 
   // userCurrentLocation = this.location.getLocation();
 
@@ -24,7 +24,7 @@ export class MapComponent implements OnInit {
     public mapsModule: GoogleMapsModule,
   ) {}
 
-  ngOnInit() {   
+  ngAfterViewInit() {   
     this.getUserCurrentLocation();
   }
 
@@ -42,9 +42,10 @@ export class MapComponent implements OnInit {
     //user current location
     let myCenter = {lat: this.userCurrentLocation.lat, lng: this.userCurrentLocation.lng} ;
     // gen center prop of the map
-    let mapProp = {
+    let mapProp:google.maps.MapOptions = {
       center: new google.maps.LatLng(this.userCurrentLocation.lat, this.userCurrentLocation.lng),
       zoom: 13,
+      streetViewControl:false
     };
     //init the map and props
     let googleMap = new google.maps.Map(document.getElementById("googleMap"), mapProp);
@@ -55,6 +56,7 @@ export class MapComponent implements OnInit {
         position: myCenter,
         animation: google.maps.Animation.DROP,
         title: 'YOU!',
+        zIndex: 100,
       }
     );
     //add the marker of user curr location
@@ -71,7 +73,10 @@ export class MapComponent implements OnInit {
         {
           position: postLocation,
           animation: google.maps.Animation.DROP,
-          icon: 'http://localhost:3000/public/uploads/img/' + elm.image,
+          icon: {
+             url: 'http://localhost:3000/public/uploads/img/' + elm.image,
+             scaledSize: new google.maps.Size(50, 50, 'px', 'px')
+          },
           title: elm.title,
         }
       );
@@ -101,7 +106,7 @@ export class MapComponent implements OnInit {
       // postMarker.addListener('mouseout', function() {
       //   infowindow.close();
       // });
-      
+
     });
 
   }
