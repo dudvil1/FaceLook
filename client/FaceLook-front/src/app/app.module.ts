@@ -8,6 +8,8 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { HeaderInterceptor } from "./interceptors/header-inceptor";
 import { registrationApiService } from "../app/registration/service/api-service.service";
 import { AgmCoreModule } from '@agm/core';
+import { GoogleMapsModule } from '@angular/google-maps';
+
 import { AgmDirectionModule } from 'agm-direction';
 
 import { AppComponent } from "./app.component";
@@ -39,6 +41,7 @@ import { postApiService } from './social/service/postApi.service';
     ToastrModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
+    GoogleMapsModule,
     BrowserAnimationsModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDmwtWcaG48hu9jgVn5Z20f1FgLQW3LATk',
