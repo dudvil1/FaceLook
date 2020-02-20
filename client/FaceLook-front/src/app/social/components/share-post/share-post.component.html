@@ -9,12 +9,22 @@
   >
     <div class="form-group">
       <input
+        [(ngModel)]="this.shareModel.sharePostsModel.title"
+        #title="ngModel"
+        name="postTitle"
+        class="form-control"
+        placeholder="title here please"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <input
         [(ngModel)]="this.shareModel.sharePostsModel.text"
         #text="ngModel"
         name="postText"
         class="form-control"
         placeholder="text here please"
-        required="required"
+        required
       />
     </div>
     <div class="form-group">
