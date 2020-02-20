@@ -17,7 +17,9 @@ export class SharePostComponent implements OnInit {
     private location: LocationService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.postApi.getAllPosts();
+  }
 
   handleFileInput(file: FileList) {
     this.fileToUpload = file.item(0);

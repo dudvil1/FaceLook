@@ -22,7 +22,6 @@ export class PostCollectionService {
       lat: '32.094328',
       lng: '34.825681',
     },
-    
 ]
 
   constructor() { }

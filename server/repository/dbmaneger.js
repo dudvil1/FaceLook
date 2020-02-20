@@ -42,11 +42,22 @@ async function verifyAccount(userId, callback) {
 async function changePassword(userEmail, newpassword) {
   console.log("dbManeger: changePassword call()");
 
-  await User.find({ email: userEmail })
+  await User.find({
+    email: userEmail
+  })
     .exec()
     .then(user => {
       if (user) {
-        User.update({ email: userEmail }, { $set: { password: newpassword } });
+        User.update(
+          {
+            email: userEmail
+          },
+          {
+            $set: {
+              password: newpassword
+            }
+          }
+        );
         return true;
       }
     })
@@ -60,13 +71,15 @@ async function addPost(post, callback) {
 
   post.post_id = new mongoose.Types.ObjectId();
   post.image = "";
-  post.date = moment().unix().toString();
-  
+  post.date = moment()
+    .unix()
+    .toString();
+
   const query = `INSERT INTO Posts VALUES( '${post.post_id}','${post.user[0]._id}','${post.image}' , '${post.text}' , '${post.date}' ,
    '${post.locationLocationLat}' , '${post.locationLocationLng}' , '${post.title}')`;
 
   await sql.query(connectionString, query, (err, res) => {
-    if(err)console.log("from addPost",err);
+    if (err) console.log("from addPost", err);
     callback(post);
   });
 }
@@ -80,7 +93,7 @@ async function addTag(tag, callback) {
       const query = `INSERT INTO Tags
                      VALUES( '${tag.tag_id}', '${tag.tags}')`;
       sql.query(connectionString, query, (err, res) => {
-        if(err)console.log("from addtag",err);
+        if (err) console.log("from addtag", err);
         callback(tag);
       });
     } else callback({});
@@ -92,8 +105,22 @@ async function addPost_Tag(post_tag, callback) {
 
   const query = `INSERT INTO Post_Tag VALUES( '${post_tag.post_id}', '${post_tag.tag_id}')`;
   await sql.query(connectionString, query, (err, res) => {
-    if(err)console.log("from addPost_tag",err);
+    if (err) console.log("from addPost_tag", err);
     callback(post_tag);
+  });
+}
+
+function getAllPosts(callback) {
+  console.log("dbmaneger: getAllPost call()");
+
+  const query = `select *
+                  from Posts 
+                  join Post_Tag on Posts.post_id = Post_Tag.post_id
+                  join Tags on Tags.tag_id = Post_Tag.tag_id `;
+
+  sql.query(connectionString, query, (err, rows) => {
+    if (err) console.log("from addPost_tag", err);
+    callback(rows);
   });
 }
 
@@ -104,5 +131,6 @@ module.exports = {
   changePassword,
   addPost,
   addTag,
-  addPost_Tag
+  addPost_Tag,
+  getAllPosts
 };

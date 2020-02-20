@@ -20,17 +20,17 @@ export class MapComponent implements AfterViewInit {
   userCurrentLocation: any;
 
   constructor(
-    public locationService: LocationService, 
+    public locationService: LocationService,
     public postCollection: PostCollectionService,
     public mapsModule: GoogleMapsModule,
   ) {}
 
-  ngAfterViewInit() {   
+  ngAfterViewInit() {
     this.getUserCurrentLocation();
   }
 
   async getUserCurrentLocation(){
-    this.userCurrentLocation = await this.locationService.getLocation();    
+    this.userCurrentLocation = await this.locationService.getLocation();
     // this.myMap(this.postCollection.postCollections);
     this.myMap();
   }
@@ -38,7 +38,7 @@ export class MapComponent implements AfterViewInit {
   // myMap(postCollections) {
   myMap() {
     console.log(this.postCollection.postCollections);
-    
+
     //////// first on the map
     //user current location
     let myCenter = {lat: this.userCurrentLocation.lat, lng: this.userCurrentLocation.lng} ;
@@ -67,8 +67,8 @@ export class MapComponent implements AfterViewInit {
     this.postCollection.postCollections.forEach(elm => {
       //create post location coordinates
       let postLocation = {lat: +elm.lat, lng: +elm.lng};
-      
-      //create post props 
+
+      //create post props
       let postMarker = new google.maps.Marker(
         {
           position: postLocation,
@@ -111,4 +111,4 @@ export class MapComponent implements AfterViewInit {
 
   }
 
-} 
+}
