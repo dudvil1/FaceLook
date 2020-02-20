@@ -9,12 +9,12 @@ export class LocationService {
   }
 
   async getLocation(): Promise<{ lat: number; lng: number }> {
-    return new Promise(resolve =>
-      navigator.geolocation.getCurrentPosition((loc) => {
+    return new Promise(
+      resolve => navigator.geolocation.getCurrentPosition((location) => {
         if(resolve){
           resolve({
-            lat: loc.coords.latitude,
-            lng: loc.coords.longitude
+            lat: location.coords.latitude,
+            lng: location.coords.longitude
           });
         }
       }, 
@@ -23,7 +23,7 @@ export class LocationService {
         console.log("An ERROR occured:");
         console.log(err);
         console.log('===>>> PLEASE ALLOW LOCATION ON YOUR BROWSER');
-      })
-    );
+      }) // end of getcurrentposition()
+    ); // end of promise
   }
 }       

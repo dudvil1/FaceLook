@@ -21,6 +21,7 @@ import { MapComponent } from "./social/components/map/map.component";
 import { SharePostComponent } from './social/components/share-post/share-post.component';
 import { FriendsComponent } from './social/components/friends/friends.component';
 import { postApiService } from './social/service/postApi.service';
+import { HeaderComponent } from './header/header/header.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { postApiService } from './social/service/postApi.service';
     FeedComponent,
     MapComponent,
     SharePostComponent,
-    FriendsComponent
+    FriendsComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

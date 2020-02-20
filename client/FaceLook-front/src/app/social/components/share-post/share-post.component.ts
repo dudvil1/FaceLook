@@ -9,7 +9,7 @@ import { LocationService } from "../../service/locationService.service";
   styleUrls: ["./share-post.component.css"]
 })
 export class SharePostComponent implements OnInit {
-  imageUrl: string = "../../../../assets/default-img.png";
+  imageUrl: string = "./assets/img/anonym.png";
   fileToUpload: File = null;
   constructor(
     public postApi: postApiService,
@@ -17,9 +17,7 @@ export class SharePostComponent implements OnInit {
     private location: LocationService
   ) {}
 
-  ngOnInit() {
-    this.postApi.getAllPosts();
-  }
+  ngOnInit() {}
 
   handleFileInput(file: FileList) {
     this.fileToUpload = file.item(0);
@@ -47,4 +45,5 @@ export class SharePostComponent implements OnInit {
         console.log(res);
       });
   }
+
 }

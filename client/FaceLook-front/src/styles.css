@@ -3,3 +3,13 @@ BODY{
   padding: 0;
   box-sizing: border-box;
 }
+
+HR{
+  margin: 0;
+}
+
+.header_margin{
+  /* height: 10px;  */
+  height: 5rem; 
+  overflow: hidden;
+}
