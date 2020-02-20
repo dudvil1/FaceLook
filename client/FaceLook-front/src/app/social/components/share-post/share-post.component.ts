@@ -31,10 +31,11 @@ export class SharePostComponent implements OnInit {
     reader.readAsDataURL(this.fileToUpload);
   }
 
-  async createPost() { 
+  async createPost() {
       const postLocation = await this.location.getLocation();
       const formData: FormData = new FormData();
       formData.append("image", this.fileToUpload);
+      formData.append("title",this.shareModel.sharePostsModel.title)
       formData.append("text", this.shareModel.sharePostsModel.text);
       formData.append("tags", this.shareModel.sharePostsModel.tags);
       formData.append("locationLocationLat", postLocation.lat.toString());

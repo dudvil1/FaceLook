@@ -10,6 +10,7 @@ import { registrationApiService } from "../app/registration/service/api-service.
 import { AgmCoreModule } from '@agm/core';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { AgmDirectionModule } from 'agm-direction';
+
 import { AppComponent } from "./app.component";
 import { LogInComponent } from "./registration/components/log-in/log-in.component";
 import { RegisterComponent } from "./registration/components/register/register.component";

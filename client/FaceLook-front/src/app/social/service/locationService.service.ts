@@ -26,4 +26,4 @@ export class LocationService {
       }) // end of getcurrentposition()
     ); // end of promise
   }
-}
+}       

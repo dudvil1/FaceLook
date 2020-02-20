@@ -35,8 +35,6 @@ async function login(req, res) {
         //try find request user
         await db.find("Users", "email", req.body.email, user => {
             if (user.length >= 1) {
-                console.log("log", user);
-
                 //check the activation
                 if (!user[0].active) {
                     return res.status(401).json({
