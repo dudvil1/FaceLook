@@ -15,6 +15,7 @@ import { catchError } from 'rxjs/operators';
 
 
 //@injectable
+@Injectable()
 export class HeaderInterceptor implements HttpInterceptor {
   //this function intercepts the request
   intercept(

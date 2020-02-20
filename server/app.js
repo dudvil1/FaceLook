@@ -8,11 +8,13 @@ const socialRoutes = require("./routes/social");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 var cors = require("cors");
+const path = require('path');
 
 app.use(cors());
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 app.use(function(req, res, next) {
   console.log("header-interceptor: Start setting headers.");

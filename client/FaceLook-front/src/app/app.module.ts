@@ -8,6 +8,8 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { HeaderInterceptor } from "./interceptors/header-inceptor";
 import { registrationApiService } from "../app/registration/service/api-service.service";
 import { AgmCoreModule } from '@agm/core';
+import { GoogleMapsModule } from '@angular/google-maps';
+
 import { AgmDirectionModule } from 'agm-direction';
 import {GoogleMapsModule} from "@angular/google-maps"
 
