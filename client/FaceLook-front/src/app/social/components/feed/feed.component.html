@@ -1,26 +1,12 @@
-<div class="container">
-  <div class="row">
-    <div class="col">
-      <p class="text-center">
-        <a href="javascript:;" routerLink="/sharePost">publish new post</a>
-      </p>
-    </div>
-    <div class="col">
-      <p class="text-center">
-        <a href="javascript:;" routerLink="/friends">friends</a>
-      </p>
-    </div>
-  </div>
-</div>
-
 <div class="login-form">
+
   <form  #f="ngForm" (ngSubmit)="(f.form.valid)" autocomplete="on" action="" method="post">
 
-    <h3 class="text-center">posts filter</h3>
+    <h3 class="text-center">Posts filters</h3>
 
     <div class="form-group">
       <span>
-        from
+        From
       </span>
       <span>
         <input [(ngModel)]="postsFilterService.postsData.fromFilter" #fromFilter="ngModel" name="fromFilter" type="date"
@@ -39,7 +25,7 @@
 
     <div class="form-group">
       <span>
-        publisher:
+        Publisher:
       </span>
       <span>
         <input [(ngModel)]="postsFilterService.postsData.publisher" #publisherFilter="ngModel" name="publisherFilter" type="text"
@@ -51,7 +37,7 @@
 
     <div class="form-group">
       <span>
-        radius from current location:
+        Radius from current location:
       </span>
       <span>
         <input [(ngModel)]="postsFilterService.postsData.radiusFrom" #radiusFrom="ngModel" name="radiusFrom" type="number"
@@ -63,7 +49,7 @@
 
     <div class="form-group">
       <span>
-        image tags
+        Image tags
       </span>
       <span>
         <input [(ngModel)]="postsFilterService.postsData.imageTags" #imageTags="ngModel" name="imageTags" type="text"
@@ -75,7 +61,7 @@
 
     <div class="form-group">
       <span>
-        user tags
+        User tags
       </span>
       <span>
         <input [(ngModel)]="postsFilterService.postsData.userTags" #userTags="ngModel" name="userTags" type="text"

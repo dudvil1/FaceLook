@@ -9,7 +9,7 @@ import { LocationService } from "../../service/locationService.service";
   styleUrls: ["./share-post.component.css"]
 })
 export class SharePostComponent implements OnInit {
-  imageUrl: string = "../../../../assets/default-img.png";
+  imageUrl: string = "./assets/img/anonym.png";
   fileToUpload: File = null;
   constructor(
     public postApi: postApiService,
@@ -44,4 +44,5 @@ export class SharePostComponent implements OnInit {
         console.log(res);
       });
   }
+  
 }

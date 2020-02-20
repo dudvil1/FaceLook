@@ -9,10 +9,7 @@ import { HeaderInterceptor } from "./interceptors/header-inceptor";
 import { registrationApiService } from "../app/registration/service/api-service.service";
 import { AgmCoreModule } from '@agm/core';
 import { GoogleMapsModule } from '@angular/google-maps';
-
 import { AgmDirectionModule } from 'agm-direction';
-import {GoogleMapsModule} from "@angular/google-maps"
-
 import { AppComponent } from "./app.component";
 import { LogInComponent } from "./registration/components/log-in/log-in.component";
 import { RegisterComponent } from "./registration/components/register/register.component";
@@ -23,6 +20,7 @@ import { MapComponent } from "./social/components/map/map.component";
 import { SharePostComponent } from './social/components/share-post/share-post.component';
 import { FriendsComponent } from './social/components/friends/friends.component';
 import { postApiService } from './social/service/postApi.service';
+import { HeaderComponent } from './header/header/header.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +32,8 @@ import { postApiService } from './social/service/postApi.service';
     FeedComponent,
     MapComponent,
     SharePostComponent,
-    FriendsComponent
+    FriendsComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

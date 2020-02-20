@@ -1,0 +1,30 @@
+.bg{
+    background: lightblue;
+}
+
+.nav_top ul {
+    list-style-type: none;
+    margin: 0 !important; 
+    padding: 0 !important;
+    box-shadow: 1px 2px 3px grey;
+}
+
+.nav_top > li {
+    display: inline-block;
+    margin: 12px 0;
+}
+
+.nav_top > li > a {
+    padding: 1rem;
+    text-transform: uppercase;
+    font-size: 1.3rem;
+    transition: all 0.3s;
+    text-shadow: 0;
+    text-decoration: none;
+    color: #000;
+}
+
+.nav_top a:hover {
+    /* background: #8E2BFF; */
+    text-shadow: 1px 2px 3px orange;
+}

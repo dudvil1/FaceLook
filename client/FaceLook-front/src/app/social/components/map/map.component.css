@@ -1,5 +1,6 @@
 #map, #googleMap {
-  height: 400px;
+  height: 50rem;
+  /* min-height: 400px; */
   width: 100%;
   margin: 20px auto;
   overflow: hidden;

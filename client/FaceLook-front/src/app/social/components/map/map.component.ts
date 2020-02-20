@@ -30,8 +30,7 @@ export class MapComponent implements AfterViewInit {
   }
 
   async getUserCurrentLocation(){
-    this.userCurrentLocation = await this.locationService.getLocation();    
-    // this.myMap(this.postCollection.postCollections);
+    this.userCurrentLocation = await this.locationService.getLocation();
     this.myMap();
   }
 
@@ -63,7 +62,7 @@ export class MapComponent implements AfterViewInit {
     //add the marker of user curr location
     marker.setMap(googleMap);
 
-    //////// second on the map: iterate of all posts
+    //////// second on the map: all posts
     this.postCollection.postCollections.forEach(elm => {
       //create post location coordinates
       let postLocation = {lat: +elm.lat, lng: +elm.lng};
