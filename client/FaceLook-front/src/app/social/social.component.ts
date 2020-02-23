@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PostCollectionService } from './service/post-collection.service';
 
 @Component({
   selector: 'app-social',
@@ -6,10 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./social.component.css']
 })
 export class socialComponent implements OnInit {
+  public markers;
 
-  constructor() { }
+  constructor(private postCollection: PostCollectionService) { }
 
   ngOnInit() {
+    this.markers = this.postCollection.postCollections;
   }
 
 }

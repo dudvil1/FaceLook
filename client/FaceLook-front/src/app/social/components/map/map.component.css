@@ -14,5 +14,6 @@
 /* cannot get this class on the bubble */
 .likes{
   float: right;
-  color: lightblue;
+  color: blue;
+  cursor: pointer;
 }
