@@ -1,13 +1,13 @@
 import { Injectable } from "@angular/core";
 import { HttpClient} from "@angular/common/http";
-import {PostCollectionService} from "../service/post-collection.service"
+import {markerCollectionsService} from "../service/marker-collection.service"
 
 @Injectable()
 export  class postApiService {
   url = "http://localhost:3000/social/";
 
   constructor(
-    private postService:PostCollectionService,
+    private markersService:markerCollectionsService,
     private httpClient: HttpClient
     ) {}
 
@@ -19,8 +19,7 @@ export  class postApiService {
   getAllPosts(){
     return this.httpClient.get(this.url + "getPosts").toPromise()
     .then(collection => {
-        this.postService.postCollections = collection as any[];
-        console.log("collection",this.postService.postCollections);
+        this.markersService.markerCollections = collection as any[];
     })
   }
 }
