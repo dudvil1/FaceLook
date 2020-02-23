@@ -74,9 +74,10 @@ async function addPost(post, callback) {
   post.date = moment()
     .unix()
     .toString();
-
-  const query = `INSERT INTO Posts VALUES( '${post.post_id}','${post.user[0]._id}','${post.image}' , '${post.text}' , '${post.date}' ,
-   '${post.locationLocationLat}' , '${post.locationLocationLng}' , '${post.title}')`;
+  
+    console.log(post);
+  const query = `INSERT INTO Posts VALUES( '${post.post_id}','${post.user[0]._id}','${post.imageUrl}' , '${post.text}' , '${post.date}' ,
+   '${post.locationLocationLat}' , '${post.locationLocationLng}' , '${post.title}' , '0')`;
 
   await sql.query(connectionString, query, (err, res) => {
     if (err) console.log("from addPost", err);

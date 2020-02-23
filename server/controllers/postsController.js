@@ -28,7 +28,7 @@ function getAllPosts(req, res) {
     db.getAllPosts(posts => {
       res.status(201).json({
         message: "ok",
-        PostCollection: posts 
+        PostCollection: posts
       });
     });
   } catch (error) {
