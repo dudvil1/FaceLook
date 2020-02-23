@@ -45,5 +45,5 @@ export class SharePostComponent implements OnInit {
         console.log(res);
       });
   }
-  
+
 }

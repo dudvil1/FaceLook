@@ -137,4 +137,4 @@ export class MapComponent implements AfterViewInit {
     console.log('TEST LIKES CLICKED');
   }
 
-} 
+}

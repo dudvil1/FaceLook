@@ -24,7 +24,6 @@ export class PostCollectionService {
       lng: '34.825681',
       likes: '28'
     },
-    
 ]
 
   constructor() { }
