@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, AfterViewInit, Input } from '@angular/core';
 import { GoogleMapsModule } from '@angular/google-maps';
 
 import { LocationService } from "../../service/locationService.service";
-import { markerCollectionsService } from "../../service/marker-collection.service";
+import { PostCollectionService } from "../../service/post-collection.service";
 import { ToastInjector } from 'ngx-toastr';
 
 
@@ -13,12 +13,15 @@ import { ToastInjector } from 'ngx-toastr';
 })
 
 export class MapComponent implements AfterViewInit {
+
+  // userCurrentLocation = this.location.getLocation();
+
+  // googleMap: any;
   userCurrentLocation: any;
 
   constructor(
     public locationService: LocationService,
     // public postCollection: PostCollectionService,
-
     public mapsModule: GoogleMapsModule,
     // private _document: Document
   ) { }
@@ -70,13 +73,12 @@ export class MapComponent implements AfterViewInit {
     this.markers.forEach(elm => {
     // this.postCollection.postCollections.forEach(elm => {
       console.log("POST element");
-
       console.log(elm);
-
+      
       //create post location coordinates
       let postLocation = { lat: +elm.lat, lng: +elm.lng };
 
-      //create post props
+      //create post props 
       let postMarker = new google.maps.Marker(
         {
           position: postLocation,
