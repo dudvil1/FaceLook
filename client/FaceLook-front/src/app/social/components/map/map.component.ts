@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, AfterViewInit, Input } from '@angular/core';
 import { GoogleMapsModule } from '@angular/google-maps';
 
 import { LocationService } from "../../service/locationService.service";
-import { MarkerCollectionService } from "../../service/marker-collection.service";
+import { markerCollectionsService } from "../../service/marker-collection.service";
 import { ToastInjector } from 'ngx-toastr';
 
 
