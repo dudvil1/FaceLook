@@ -13,3 +13,7 @@ HR{
   height: 5rem; 
   overflow: hidden;
 }
+
+.test_likes{
+  float: right;color: blue; cursor: pointer;
+}

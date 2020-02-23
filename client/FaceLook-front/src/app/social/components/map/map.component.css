@@ -10,3 +10,9 @@
 .info_content{
   max-width: 250px;
 }
+
+/* cannot get this class on the bubble */
+.likes{
+  float: right;
+  color: lightblue;
+}

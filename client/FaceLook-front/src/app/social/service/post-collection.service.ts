@@ -13,6 +13,7 @@ export class PostCollectionService {
       image: 'mai.png',
       lat: '32.092855',
       lng: '34.811656',
+      likes: '12'
     },
     {
       id: 'bbbbb',
@@ -21,6 +22,7 @@ export class PostCollectionService {
       image: 'shahar.png',
       lat: '32.094328',
       lng: '34.825681',
+      likes: '28'
     },
     
 ]
