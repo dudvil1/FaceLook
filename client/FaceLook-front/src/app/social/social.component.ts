@@ -12,7 +12,7 @@ export class socialComponent implements OnInit {
   constructor(private markerCollection: markerCollectionsService) { }
 
   ngOnInit() {
-    this.markers = this.markerCollection.markerCollections;
+     this.markers = this.markerCollection.markerCollections;
   }
 
 }
