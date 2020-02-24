@@ -125,6 +125,19 @@ function getAllPosts(callback) {
   });
 }
 
+function updateLikes(post, callback) {
+  const query = `
+    UPDATE Posts
+    SET likes = ${post.likes}
+    WHERE post_id = ${post.id}
+  `;
+
+  sql.query(connectionString, query, (err, res) => {
+    if (err) console.log("from updateLikes", err);
+    callback(res);
+  });
+}
+
 module.exports = {
   find,
   verifyAccount,
@@ -133,5 +146,6 @@ module.exports = {
   addPost,
   addTag,
   addPost_Tag,
-  getAllPosts
+  getAllPosts,
+  updateLikes
 };

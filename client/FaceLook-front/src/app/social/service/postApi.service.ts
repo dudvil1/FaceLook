@@ -12,8 +12,7 @@ export  class postApiService {
     ) {}
 
   addPost(post: any) {
-    console.log(post);
-    return this.httpClient.post(this.url + "addPost",post);
+    return this.httpClient.post(this.url + "addPost", post);
   }
 
   getAllPosts(){
@@ -21,5 +20,9 @@ export  class postApiService {
     .then(collection => {
         this.markersService.markerCollections = collection as any[];
     })
+  }
+
+  updateLikes(markerElm){
+    return this.httpClient.patch(this.url + "updateLikes", {markerElm} );
   }
 }

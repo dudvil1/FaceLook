@@ -7,7 +7,7 @@ export class markerCollectionsService {
 
   public markerCollections: any = [
     {
-      id: 'aas',
+      id: '1234',
       title: 'Title of post',
       text: 'text of the post whatever text',
       image: 'mai.png',
@@ -16,7 +16,7 @@ export class markerCollectionsService {
       likes: '12'
     },
     {
-      id: 'bbbbb',
+      id: '1235',
       title: 'bbbbbb Title of post',
       text: 'bbbbbbb text of the post whatever text',
       image: 'shahar.png',

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PostCollectionService } from './service/post-collection.service';
+import { markerCollectionsService } from './service/marker-collection.service';
 
 @Component({
   selector: 'app-social',
@@ -9,10 +9,10 @@ import { PostCollectionService } from './service/post-collection.service';
 export class socialComponent implements OnInit {
   public markers;
 
-  constructor(private postCollection: PostCollectionService) { }
+  constructor(private markerCollection: markerCollectionsService) { }
 
   ngOnInit() {
-    this.markers = this.postCollection.postCollections;
+    this.markers = this.markerCollection.markerCollections;
   }
 
 }

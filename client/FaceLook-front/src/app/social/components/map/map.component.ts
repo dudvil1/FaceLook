@@ -2,6 +2,7 @@ import { Component, OnInit, Inject, AfterViewInit, Input } from '@angular/core';
 import { GoogleMapsModule } from '@angular/google-maps';
 
 import { LocationService } from "../../service/locationService.service";
+import { postApiService } from "../../service/postApi.service";
 import { markerCollectionsService } from "../../service/marker-collection.service";
 import { ToastInjector } from 'ngx-toastr';
 
@@ -14,23 +15,18 @@ import { ToastInjector } from 'ngx-toastr';
 
 export class MapComponent implements AfterViewInit {
 
-  // userCurrentLocation = this.location.getLocation();
-
-  // googleMap: any;
   userCurrentLocation: any;
 
   constructor(
     public locationService: LocationService,
-    // public postCollection: PostCollectionService,
     public mapsModule: GoogleMapsModule,
-    // private _document: Document
+    private postApiService: postApiService
   ) { }
 
   @Input() markers;
 
   ngAfterViewInit() {
     this.getUserCurrentLocation();
-    console.log('ngAfterViewInit');
   }
 
   async getUserCurrentLocation() {
@@ -152,18 +148,11 @@ export class MapComponent implements AfterViewInit {
   }
 
   likesClicked(markerElm) {
-    // change likes value in bubble
-    // console.log(document.querySelectorAll('#' + bubbleId));
-    // this.markers.id[bubbleId].likes = 30;
-    // this.markers
-    console.log("markerElm");
-    console.log(markerElm);
-
-    
-    // document.querySelectorAll('#bubbleId');
-
-    // send new value of likes to server and DB
-    
+    // send new value of likes to server and DB - wait for response on subscribe
+    this.postApiService.updateLikes(markerElm).subscribe((res)=>{
+      console.log("returned of result of postApiService.updateLikes with the given postId, res ==> ");
+      console.log(res);
+    })
   }
 
 }

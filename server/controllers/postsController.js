@@ -38,7 +38,23 @@ function getAllPosts(req, res) {
   }
 }
 
+async function updateLikes(req, res) {
+  try {
+    await db.updateLikes(req.body.markerElm, (data)=>{
+      res.status(201).json({
+        message: "Post Like updated successfuly"
+      })
+    })
+  } 
+  catch (error) {
+    console.log("ERROR: postController: updateLikes ==>");
+    console.log(error.message);
+  }
+}
+
+
 module.exports = {
   addPost,
-  getAllPosts
+  getAllPosts,
+  updateLikes
 };
