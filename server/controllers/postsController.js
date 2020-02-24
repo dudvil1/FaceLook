@@ -50,7 +50,7 @@ async function updateLikes(req, res) {
     console.log(error.message);
     return res.status(401).json({
       message: "Failure, try again"
-    });
+    })
   }
 }
 

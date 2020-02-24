@@ -1,4 +1,4 @@
-<!-- <app-header></app-header> -->
+<app-header></app-header>
 <div class="header_margin">&nbsp;</div>
 <div class="container-fluid">
   <div class="row">
@@ -6,7 +6,13 @@
       <app-feed></app-feed>
     </div>
     <div class="col-md-9">
-      <app-map [markers]="markers"></app-map>
+      <ul class="nav_social">
+        <li><a routerLink="map">MAP</a></li> | 
+        <li><a routerLink="posts">POSTS</a></li>
+      </ul>
+
+      <app-map *ngIf="markers" [markers]="markers"></app-map>
+      <!-- <app-posts *ngIf="posts" [posts]="posts"></app-posts> -->
     </div>
   </div>
 </div>

@@ -116,8 +116,8 @@ function getAllPosts(callback) {
 
   const query = `select *
                   from Posts 
-                  join Post_Tag on Posts.post_id = Post_Tag.post_id
-                  join Tags on Tags.tag_id = Post_Tag.tag_id `;
+                  --join Post_Tag on Posts.post_id = Post_Tag.post_id
+                  --join Tags on Tags.tag_id = Post_Tag.tag_id `;
 
   sql.query(connectionString, query, (err, rows) => {
     if (err) console.log("from addPost_tag", err);

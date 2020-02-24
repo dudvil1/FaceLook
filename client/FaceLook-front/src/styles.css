@@ -30,3 +30,15 @@ HR{
   width: 25px; 
   vertical-align: middle;
 }
+
+.nav_social{
+  list-style-type: none !important;
+  margin: 0 !important; 
+  padding: 0 !important;
+  text-align: right !important;
+}
+
+.nav_social li {
+  padding: 30px 20px 7px 20px; 
+  display: inline-block;
+}

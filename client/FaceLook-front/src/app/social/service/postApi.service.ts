@@ -1,11 +1,14 @@
 import { Injectable } from "@angular/core";
 import { HttpClient} from "@angular/common/http";
+import { markerCollectionsService } from "../service/marker-collection.service"
+import { tap } from 'rxjs/operators';
 
 @Injectable()
 export  class postApiService {
   url = "http://localhost:3000/social/";
 
   constructor(
+    private markersService: markerCollectionsService,
     private httpClient: HttpClient
     ) {}
 
@@ -14,7 +17,21 @@ export  class postApiService {
   }
 
   getAllPosts(){
-    return this.httpClient.get(this.url + "getPosts");
+    return this.httpClient.get(this.url + "getPosts").pipe(
+      tap((res) => {
+        const markersArr = (<any>res).PostCollection.map(post => ({
+          id: post.post_id,
+          title: post.title,
+          text: post.text,
+          image: post.image,
+          lat: post.latitude,
+          lng: post.longitude,
+          likes: post.likes,
+        }));
+
+        this.markersService.markers$.next(markersArr);
+      })
+    );
   }
 
   updateLikes(markerElm){
