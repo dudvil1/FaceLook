@@ -49,6 +49,9 @@ async function updateLikes(req, res) {
   catch (error) {
     console.log("ERROR: postController: updateLikes ==>");
     console.log(error.message);
+    return res.status(401).json({
+      message: "Failure, try again"
+    })
   }
 }
 

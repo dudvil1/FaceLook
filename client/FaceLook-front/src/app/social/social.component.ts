@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { markerCollectionsService } from './service/marker-collection.service';
+import { postApiService } from './service/postApi.service';
 
 @Component({
   selector: 'app-social',
@@ -9,10 +10,18 @@ import { markerCollectionsService } from './service/marker-collection.service';
 export class socialComponent implements OnInit {
   public markers;
 
-  constructor(private markerCollection: markerCollectionsService) { }
+  constructor(
+    private _markerCollection: markerCollectionsService,
+    private _postApiService: postApiService) { }
 
   ngOnInit() {
-    this.markers = this.markerCollection.markerCollections;
+    this._postApiService.getAllPosts().subscribe((res) => {
+      console.log('POSTS-->',res)
+    });
+
+    this._markerCollection.markers$.subscribe((res)=>{
+      this.markers = res;
+    });
   }
 
 }
