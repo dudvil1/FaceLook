@@ -23,6 +23,7 @@ import { FriendsComponent } from './social/components/friends/friends.component'
 import { postApiService } from './social/service/postApi.service';
 import { HeaderComponent } from './header/header/header.component';
 import { PostsComponent } from './social/components/posts/posts.component';
+import { PostComponent } from './social/components/post/post.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { PostsComponent } from './social/components/posts/posts.component';
     SharePostComponent,
     FriendsComponent,
     HeaderComponent,
-    PostsComponent
+    PostsComponent,
+    PostComponent
   ],
   imports: [
     BrowserModule,

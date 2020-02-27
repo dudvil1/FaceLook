@@ -126,10 +126,13 @@ function getAllPosts(callback) {
 }
 
 function updateLikes(post, callback) {
+  console.log(post.post_id, post.likes);
+  console.log(typeof post.post_id, typeof post.likes);
+  
   const query = `
     UPDATE Posts
     SET likes = ${post.likes}
-    WHERE post_id = ${post.id}
+    WHERE post_id = '${post.post_id}';
   `;
 
   sql.query(connectionString, query, (err, res) => {

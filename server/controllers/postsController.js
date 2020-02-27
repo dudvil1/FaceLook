@@ -40,7 +40,8 @@ function getAllPosts(req, res) {
 
 async function updateLikes(req, res) {
   try {
-    await db.updateLikes(req.body.markerElm, (data)=>{
+    // await db.updateLikes(req.body.markerElm, (data)=>{
+    await db.updateLikes(req.body.post, (data)=>{      
       res.status(201).json({
         message: "Post Like updated successfuly"
       })

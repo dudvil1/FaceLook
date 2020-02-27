@@ -1,0 +1,20 @@
+<div class="fLeft" *ngIf="post">
+    <div class="user_name">
+        {{post.title}}
+    </div>
+    <div class="user_details">
+        Date of post: {{post.date | date}}
+        <br />
+        {{post.text}}
+    </div>
+</div>
+
+<div class="fRight">
+    <img src="{{imgPath}}{{post.image}}" class="user_img fRight" title="{{post.Name}}" />
+
+    <div (click)="addLike(post)"
+        class="likes_div likes_div_SELECTOR" 
+        id={{post.post_id}}>
+        <span>{{post.likes}}</span> Liks <img src="./assets/img/like.png" class="like_icon" title="Like me or die" />
+    </div>
+</div>

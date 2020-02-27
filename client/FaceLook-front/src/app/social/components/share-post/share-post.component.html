@@ -1,5 +1,5 @@
   <app-header></app-header>
-  <div class="container-fluid" style="margin-top: 60px;">
+  <div class="container-fluid" class="main_wrap">
 
     <div *ngIf="!postCreated" class="login-form">
       <form #imageForm="ngForm" method="POST" (ngSubmit)="(imageForm.form.valid)" enctype="multipart/form-data">
