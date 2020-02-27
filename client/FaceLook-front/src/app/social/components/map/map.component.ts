@@ -79,7 +79,7 @@ export class MapComponent implements AfterViewInit {
         animation: google.maps.Animation.DROP,
         icon: {
           
-          url: "",
+          url: "http://localhost:3000/public/uploads/images/" + elm.image,
           scaledSize: new google.maps.Size(50, 50, "px", "px")
         },
         title: elm.title
@@ -148,9 +148,9 @@ export class MapComponent implements AfterViewInit {
     });
   }
 
-  likesClicked(markerElm) {
+  likesClicked(post) {
     // send new value of likes to server and DB - wait for response on subscribe
-    this.postApiService.updateLikes(markerElm).subscribe(res => {
+    this.postApiService.updateLikes(post).subscribe(res => {
       console.log(
         "returned of result of postApiService.updateLikes with the given postId, res ==> "
       );
