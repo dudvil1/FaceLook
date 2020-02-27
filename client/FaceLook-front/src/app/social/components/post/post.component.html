@@ -12,7 +12,9 @@
 <div class="fRight">
     <img src="{{imgPath}}{{post.image}}" class="user_img fRight" title="{{post.Name}}" />
 
-    <div (click)="addLike(post)" class="likes_div likes_div_SELECTOR" id={{post.post_id}}>
+    <div (click)="addLike(post)"
+        class="likes_div likes_div_SELECTOR" 
+        id={{post.post_id}}>
         <span>{{post.likes}}</span> Liks <img src="./assets/img/like.png" class="like_icon" title="Like me or die" />
     </div>
 </div>

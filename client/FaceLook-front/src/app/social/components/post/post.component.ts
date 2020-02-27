@@ -12,6 +12,8 @@ export class PostComponent implements OnInit {
 
   imgPath: string = 'http://localhost:3000/public/uploads/images/';
 
+  likeClicked: boolean = false;
+
   constructor() { }
 
   ngOnInit(): void {
@@ -20,14 +22,17 @@ export class PostComponent implements OnInit {
 
   
   addLike(post: any){
-    // update THIS post likes
-    // MAKE RESTRICTIONS HERE !!!!! 
-    // 1. to click once only
-    // 2. to check less than 0
-    this.post.likes++;
+    // likes = 0
+    if(this.post.likes == 0 ) return;
+    // if not clicked already
+    if(this.likeClicked == false){
+      // update THIS post likes
+      this.post.likes++;
+      // include the new value of likes
+      this.likesEmitter.emit(post);
+      this.likeClicked = true;
+    } 
 
-    // include the new value of likes
-    this.likesEmitter.emit(post);
     
   }
 
