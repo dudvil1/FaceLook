@@ -8,6 +8,7 @@ import {ForgetPasswordComponent} from './registration/components/forget-password
 import { socialComponent } from './social/social.component';
 import { SharePostComponent } from './social/components/share-post/share-post.component'
 import {FriendsComponent} from './social/components/friends/friends.component'
+import { PostsComponent } from './social/components/posts/posts.component';
 
 
 const routes: Routes = [
@@ -18,7 +19,8 @@ const routes: Routes = [
   {path: 'forgotpassword' , component: ForgetPasswordComponent},
   {path: 'social' , component: socialComponent},
   {path: 'sharePost' , component: SharePostComponent },
-  {path: 'friends' , component: FriendsComponent }
+  {path: 'friends' , component: FriendsComponent },
+  {path: 'posts' , component: PostsComponent },
 ];
 
 @NgModule({

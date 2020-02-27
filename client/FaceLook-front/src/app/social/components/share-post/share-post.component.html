@@ -1,5 +1,7 @@
-  <div class="container-fluid">
-    <div class="login-form">
+  <app-header></app-header>
+  <div class="container-fluid" style="margin-top: 60px;">
+
+    <div *ngIf="!postCreated" class="login-form">
       <form #imageForm="ngForm" method="POST" (ngSubmit)="(imageForm.form.valid)" enctype="multipart/form-data">
         <!-- img preview -->
         <h2 class="text-center">Share a post</h2>
@@ -28,5 +30,11 @@
           share
         </button>
       </form>
+    </div>
+
+    <div *ngIf="postCreated" class="login-form">
+      SUCCESS creating a post. 
+      <br />
+      You are redirected in 2 seconds to the Posts page.
     </div>
   </div>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { Router } from '@angular/router';
 import { sharePostService } from "../models/sharePost.model";
 import { postApiService } from "../../service/postApi.service";
 import { LocationService } from "../../service/locationService.service";
@@ -11,10 +12,13 @@ import { LocationService } from "../../service/locationService.service";
 export class SharePostComponent implements OnInit {
   imageUrl: string = "./assets/img/anonym.png";
   fileToUpload: File = null;
+  postCreated: boolean = false;
+
   constructor(
     public postApi: postApiService,
     public shareModel: sharePostService,
-    private location: LocationService
+    private location: LocationService,
+    private router: Router
   ) {}
 
   ngOnInit() {}
@@ -32,18 +36,22 @@ export class SharePostComponent implements OnInit {
   }
 
   async createPost() {
-      const postLocation = await this.location.getLocation();
-      const formData: FormData = new FormData();
-      formData.append("image", this.fileToUpload);
-      formData.append("title",this.shareModel.sharePostsModel.title)
-      formData.append("text", this.shareModel.sharePostsModel.text);
-      formData.append("tags", this.shareModel.sharePostsModel.tags);
-      formData.append("locationLocationLat", postLocation.lat.toString());
-      formData.append("locationLocationLng", postLocation.lng.toString());
+    const postLocation = await this.location.getLocation();
+    const formData: FormData = new FormData();
+    formData.append("image", this.fileToUpload);
+    formData.append("title", this.shareModel.sharePostsModel.title)
+    formData.append("text", this.shareModel.sharePostsModel.text);
+    formData.append("tags", this.shareModel.sharePostsModel.tags);
+    formData.append("locationLocationLat", postLocation.lat.toString());
+    formData.append("locationLocationLng", postLocation.lng.toString());
 
-      this.postApi.addPost(formData).subscribe(res => {
-        console.log(res);
-      });
+    this.postApi.addPost(formData).subscribe(res => {
+      this.postCreated = true;
+      this.shareModel.resetdata();
+      setTimeout(() => {
+        this.router.navigateByUrl('/posts');
+      }, 2000);
+    });
   }
 
 }

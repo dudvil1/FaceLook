@@ -93,9 +93,11 @@ export class MapComponent implements AfterViewInit {
             Heritage Site.
           </p>
           <p>${elm.text}</p>
+          <!--
           <div class="likes_div likes_div_SELECTOR" id=${elm.id}>
             <span id="like_${elm.id}">${elm.likes}</span> Liks <img src="./assets/img/like.png" class="like_icon" title="Like me or die" />
           </div>
+          -->
         </div>`;
 
       //add bubbles to the map
@@ -108,34 +110,39 @@ export class MapComponent implements AfterViewInit {
       postMarker.addListener("mouseover", () => {
         infowindow.open(googleMap, postMarker);
 
-        setTimeout(() => {
-          let singleLike = document.querySelectorAll(".likes_div_SELECTOR");
-          singleLike.forEach(elm => {
-            // if value undefined - add event listener
-            if (!wiredMarkers[elm.id]) {
-              wiredMarkers[elm.id] = true;
-              const likeFn = () => {
-                // catch the Likes value from the DATA
-                const _markerElm = this.markers.find(
-                  marker => marker.id === elm.id
-                );
-                _markerElm.likes++;
-                _markerElm.likes = _markerElm.likes.toString();
+        ////////////////////////////////////////
+        ////////////////////////////////////////
+        // TOOK OUT LIKES MODULE FOR NOW
+        // setTimeout(() => {
+        //   let singleLike = document.querySelectorAll('.likes_div_SELECTOR');
+        //   singleLike.forEach(elm => {
+        //     // if value undefined - add event listener
+        //     if(!wiredMarkers[elm.id]){ 
+        //       wiredMarkers[elm.id] = true;
+        //       const likeFn = () => {
+        //         // catch the Likes value from the DATA
+        //         const _markerElm = this.markers.find(marker => marker.id === elm.id);
+        //         _markerElm.likes++;
+        //         _markerElm.likes = _markerElm.likes.toString();
+                
+        //         // change the Likes value on the ELM
+        //         document.getElementById('like_'+elm.id).textContent = _markerElm.likes;
+                
+        //         // change the Likes to the SERVER and DB
+        //         this.likesClicked(_markerElm);
+        //       }
+        //       elm.addEventListener('click', () => {
+        //         likeFn();
+        //         elm.removeEventListener('click', likeFn);
+        //       })
+        //     }
+        //   });
+        // }, 0);
 
-                // change the Likes value on the ELM
-                document.getElementById("like_" + elm.id).textContent =
-                  _markerElm.likes;
+        // END OF 
+        ////////////////////////////////////////
+        ////////////////////////////////////////
 
-                // change the Likes to the SERVER and DB
-                this.likesClicked(_markerElm);
-              };
-              elm.addEventListener("click", () => {
-                likeFn();
-                elm.removeEventListener("click", likeFn);
-              });
-            }
-          });
-        }, 0);
       });
     });
   }

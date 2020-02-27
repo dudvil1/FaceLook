@@ -6,11 +6,10 @@
       <app-feed></app-feed>
     </div>
     <div class="col-md-9">
-      <ul class="nav_social">
-        <li><a routerLink="map">MAP</a></li> |
-        <li><a routerLink="posts">POSTS</a></li>
-      </ul>
-
+      <!-- <ul class="nav_social">
+        <li><a routerLink="map">MAP</a></li> | 
+        <li><a routerLink="/posts">POSTS</a></li>
+      </ul> -->
       <app-map *ngIf="markers" [markers]="markers"></app-map>
     </div>
   </div>

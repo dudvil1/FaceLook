@@ -1,10 +1,6 @@
 const express = require("express");
 const app = express();
 
-const registrationRoutes = require("./routes/registration");
-const defaultRoutes = require("./routes/default"); 
-const socialRoutes = require("./routes/social");
-
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 var cors = require("cors");
@@ -31,11 +27,16 @@ app.use(function(req, res, next) {
   }
   next();
 });
- 
-app.use("/", defaultRoutes);
-app.use("/registration", registrationRoutes); 
-app.use("/social", socialRoutes)
 
+// ROUTES
+// const registrationRoutes = require("./routes/registration");
+// const defaultRoutes = require("./routes/default"); 
+// const socialRoutes = require("./routes/social");
+app.use("/", require("./routes/default"));
+app.use("/registration", require("./routes/registration")); 
+app.use("/social", require("./routes/social"));
+
+// ERROR HANDLING
 app.use((req, res, next) => {
   const error = new Error("Not Found");
   error.status = 404;
