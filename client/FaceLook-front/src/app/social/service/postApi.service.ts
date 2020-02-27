@@ -8,7 +8,7 @@ export  class postApiService {
   url = "http://localhost:3000/social/";
 
   constructor(
-    private markersService:markerCollectionsService,
+    private markersService: markerCollectionsService,
     private httpClient: HttpClient
     ) {}
 
@@ -34,11 +34,6 @@ export  class postApiService {
         this.markersService.markers$.next(markersArr);
       })
     );
-
-    // return this.httpClient.get(this.url + "getPosts").toPromise()
-    // .then(collection => {
-    //     this.markersService.markerCollections = collection as any[];
-    // })
   }
 
   updateLikes(markerElm){

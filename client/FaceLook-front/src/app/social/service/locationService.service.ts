@@ -17,13 +17,10 @@ export class LocationService {
             lng: location.coords.longitude
           });
         }
-      }, 
+      },
       err =>{
         alert(err);
-        console.log("An ERROR occured:");
-        console.log(err);
-        console.log('===>>> PLEASE ALLOW LOCATION ON YOUR BROWSER');
-      }) // end of getcurrentposition()
-    ); // end of promise
+      })
+    );
   }
-}       
+}
