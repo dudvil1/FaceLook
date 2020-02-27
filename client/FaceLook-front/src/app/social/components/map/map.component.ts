@@ -78,6 +78,7 @@ export class MapComponent implements AfterViewInit {
         position: postLocation,
         animation: google.maps.Animation.DROP,
         icon: {
+          
           url: "",
           scaledSize: new google.maps.Size(50, 50, "px", "px")
         },
@@ -117,17 +118,17 @@ export class MapComponent implements AfterViewInit {
         //   let singleLike = document.querySelectorAll('.likes_div_SELECTOR');
         //   singleLike.forEach(elm => {
         //     // if value undefined - add event listener
-        //     if(!wiredMarkers[elm.id]){ 
+        //     if(!wiredMarkers[elm.id]){
         //       wiredMarkers[elm.id] = true;
         //       const likeFn = () => {
         //         // catch the Likes value from the DATA
         //         const _markerElm = this.markers.find(marker => marker.id === elm.id);
         //         _markerElm.likes++;
         //         _markerElm.likes = _markerElm.likes.toString();
-                
+
         //         // change the Likes value on the ELM
         //         document.getElementById('like_'+elm.id).textContent = _markerElm.likes;
-                
+
         //         // change the Likes to the SERVER and DB
         //         this.likesClicked(_markerElm);
         //       }
@@ -139,7 +140,7 @@ export class MapComponent implements AfterViewInit {
         //   });
         // }, 0);
 
-        // END OF 
+        // END OF
         ////////////////////////////////////////
         ////////////////////////////////////////
 
