@@ -34,8 +34,6 @@ export class MapComponent implements AfterViewInit {
   myMap() {
     console.log(this.markers);
 
-    //////// first on the map
-    //user current location
     let myCenter = {
       lat: this.userCurrentLocation.lat,
       lng: this.userCurrentLocation.lng
@@ -80,7 +78,7 @@ export class MapComponent implements AfterViewInit {
         position: postLocation,
         animation: google.maps.Animation.DROP,
         icon: {
-          url: "http://localhost:3000/public/uploads/images/" + elm.image,
+          url: "",
           scaledSize: new google.maps.Size(50, 50, "px", "px")
         },
         title: elm.title
