@@ -26,10 +26,7 @@ function getAllPosts(req, res) {
 
   try {
     db.getAllPosts(posts => {
-      res.status(201).json({
-        message: "ok",
-        PostCollection: posts
-      });
+      res.status(201).json(posts);
     });
   } catch (error) {
     return res.status(401).json({

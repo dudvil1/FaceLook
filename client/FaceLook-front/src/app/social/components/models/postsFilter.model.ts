@@ -9,7 +9,7 @@ export class postsFilterService {
 
   constructor() { }
 
-  resetdate(){
+  resetdata(){
     this.postsData = {};
   }
 }

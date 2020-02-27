@@ -9,7 +9,7 @@ export class sharePostService {
 
   constructor() { }
 
-  resetdate(){
+  resetdata(){
     this.sharePostsModel = {};
   }
 }

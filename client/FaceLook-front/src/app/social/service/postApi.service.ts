@@ -19,14 +19,16 @@ export  class postApiService {
   getAllPosts(){
     return this.httpClient.get(this.url + "getPosts").pipe(
       tap((res) => {
-        const markersArr = (<any>res).PostCollection.map(post => ({
-          id: post.post_id,
+        const markersArr = (<any>res).map(post => ({
+          postId: post.post_id,
           title: post.title,
+          publisherId: post.publisher_id,
           text: post.text,
           image: post.image,
           lat: post.latitude,
           lng: post.longitude,
           likes: post.likes,
+          date: post.date,
         }));
 
         this.markersService.markers$.next(markersArr);
@@ -42,4 +44,31 @@ export  class postApiService {
   updateLikes(markerElm){
     return this.httpClient.patch(this.url + "updateLikes", {markerElm} );
   }
+
+  getAllPostsAsPosts(){
+    return this.httpClient.get(this.url + "getPosts").pipe(
+      tap((res) => {
+        const postsArr = (<any>res).map(post => ({
+          postId: post.post_id,
+          title: post.title,
+          publisherId: post.publisher_id,
+          text: post.text,
+          image: post.image,
+          lat: post.latitude,
+          lng: post.longitude,
+          likes: post.likes,
+          date: post.date,
+        }));
+
+        // this.markersService.markers$.next(markersArr);
+        return postsArr;
+      })
+    );
+
+    // return this.httpClient.get(this.url + "getPosts").toPromise()
+    // .then(collection => {
+    //     this.markersService.markerCollections = collection as any[];
+    // })
+  }
+
 }
