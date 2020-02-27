@@ -68,15 +68,15 @@ async function changePassword(userEmail, newpassword) {
 
 async function addPost(post, callback) {
   console.log("dbManeger: addPost call()");
-
+  console.log(post.img);
+  
   post.post_id = new mongoose.Types.ObjectId();
-  post.image = "";
   post.date = moment()
     .unix()
     .toString();
   
-    console.log(post);
-  const query = `INSERT INTO Posts VALUES( '${post.post_id}','${post.user[0]._id}','${post.imageUrl}' , '${post.text}' , '${post.date}' ,
+  
+  const query = `INSERT INTO Posts VALUES( '${post.post_id}','${post.user[0]._id}','${post.img}' , '${post.text}' , '${post.date}' ,
    '${post.locationLocationLat}' , '${post.locationLocationLng}' , '${post.title}' , '0')`;
 
   await sql.query(connectionString, query, (err, res) => {
