@@ -12,15 +12,17 @@ BODY{
   float: right;
 }
 
-
 HR{
   margin: 0;
 }
 
-.header_margin{
+.header_nav{
   /* height: 10px;  */
   height: 5rem; 
   overflow: hidden;
+}
+.main_wrap{
+  margin-top: 60px;
 }
 
 .likes_div{

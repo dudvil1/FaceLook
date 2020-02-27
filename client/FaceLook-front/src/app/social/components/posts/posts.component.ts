@@ -35,7 +35,6 @@ export class PostsComponent implements OnInit {
 
   addLike(){
     console.log("addLike func");
-    
   }
 
 }
