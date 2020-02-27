@@ -8,27 +8,7 @@
           All Posts
         </h2>
         <div *ngFor="let post of posts" class="wrap">
-          <div class="fLeft">
-            <div class="user_name">
-              {{post.title}}
-            </div>
-            <div class="user_details">
-              <!-- Email: <a href="mailto:{{post.Email}}">{{post.Email}}</a>
-              <br /> -->
-              Date of post: {{post.date | date}}
-              <br />
-              {{post.text}}
-            </div>
-          </div>
-      
-          <div class="fRight">
-            <!-- <img src="./assets/img/{{user.ImageSrc}}" class="user_img" title="{{user.Name}}" /> -->
-            <img src="{{imgPath}}{{post.image}}" class="user_img fRight" title="{{post.Name}}" />
-            
-            <div (click)="addLike()" class="likes_div likes_div_SELECTOR" id={{post.post_id}}>
-              <span>{{post.likes}}</span> Liks <img src="./assets/img/like.png" class="like_icon" title="Like me or die" />
-            </div>
-          </div>
+          <app-post [post]="post" (likesEmitter)="setLikesOfPost($event)"></app-post>
         </div>
       
       </div>

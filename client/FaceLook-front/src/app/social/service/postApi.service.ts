@@ -36,8 +36,8 @@ export  class postApiService {
     );
   }
 
-  updateLikes(markerElm){
-    return this.httpClient.patch(this.url + "updateLikes", {markerElm} );
+  updateLikes(post){
+    return this.httpClient.patch(this.url + "updateLikes", {post});
   }
 
   getAllPostsAsPosts(){

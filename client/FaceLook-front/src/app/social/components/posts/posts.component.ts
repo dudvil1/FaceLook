@@ -11,16 +11,14 @@ import { postApiService } from "../../service/postApi.service";
 export class PostsComponent implements OnInit {
   
   posts: any = [];
-  subscription: Subscription;
-  imgPath:string = 'http://localhost:3000/public/uploads/images/'; 
-
+  subscriptionGet: Subscription;
+  subscriptionPost: Subscription;
+  postIdEmmited: string;
 
   constructor(private postApiService: postApiService) { }
   
-  // @Input() posts;
-
   ngOnInit(): void {
-    this.subscription = this.postApiService.getAllPostsAsPosts()
+    this.subscriptionGet = this.postApiService.getAllPostsAsPosts()
       .subscribe((res)=>{
         console.log("returned of result of postApiService.getAllPosts with the given postId, res ==> ");
         console.log(res);
@@ -30,11 +28,20 @@ export class PostsComponent implements OnInit {
 
   
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.subscriptionGet.unsubscribe();
   }
 
-  addLike(){
-    console.log("addLike func");
+  setLikesOfPost(post){
+    if(post){
+      // SEND TO DB (client updated on post comp directly)
+      console.log("THIS POST ID: " + post);
+      this.subscriptionPost = this.postApiService.updateLikes(post)
+      .subscribe((res)=>{
+        console.log("postApiService.updateLikes.");
+        console.log(res);
+        // this.posts = res;
+    })
+    }
   }
 
 }
