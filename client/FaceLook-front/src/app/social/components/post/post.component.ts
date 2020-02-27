@@ -32,7 +32,6 @@ export class PostComponent implements OnInit {
       this.likesEmitter.emit(post);
       this.likeClicked = true;
     } 
-
     
   }
 
