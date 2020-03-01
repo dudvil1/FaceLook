@@ -78,7 +78,6 @@ export class MapComponent implements AfterViewInit {
         position: postLocation,
         animation: google.maps.Animation.DROP,
         icon: {
-          
           url: "http://localhost:3000/public/uploads/images/" + elm.image,
           scaledSize: new google.maps.Size(50, 50, "px", "px")
         },
