@@ -5,7 +5,10 @@ let transporter = nodemailer.createTransport({
   auth: {
     user: "dudvil1@gmail.com",
     pass: "hfvndvoetwhkwwgw"
-  }
+  },
+//   tls: {
+//     rejectUnauthorized: false
+// }
 });
 
 function verifyAccountMail(mailOptions) {
