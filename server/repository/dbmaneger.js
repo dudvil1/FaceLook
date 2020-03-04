@@ -127,12 +127,12 @@ function getFilterQuery(filters){
     filterQuery.push(`Users.name = '${publisher}'`)
     filterQuery.push(`And`)
   }
-
+  ///by km
   if(radiusFrom && location){
-    filterQuery.push(`(
-      POWER( ( 69.1 * ( Posts.longitude - ${location.longitude} ) * cos( ${location.latitude} / 57.3 ) ) , 2 )
+    filterQuery.push(`POWER((
+      POWER( ( 53.0 * ( Posts.longitude - ${location.longitude} ) ) , 2 )
        + POWER( ( 69.1 * ( Posts.latitude - ${location.latitude} ) ) , 2 )
-      ) < ( 1 * ${radiusFrom} )`)
+      ),0.5)*1.609344  < 1 * ${radiusFrom} `)
       filterQuery.push(`And`)
   }
 
