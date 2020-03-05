@@ -17,6 +17,7 @@ export  class postApiService {
   }
 
   getAllPosts(){
+    console.log("getAllPost call()");
     return this.httpClient.get(this.url + "getPosts").pipe(
       tap((res) => {
         const markersArr = (<any>res).map(post => ({
@@ -37,7 +38,7 @@ export  class postApiService {
   }
 
   getFilterPosts(filters){
-    
+
     return this.httpClient.get(this.url + `filterPosts\\${JSON.stringify(filters)}`).pipe(
       tap((res) => {
         const markersArr = (<any>res).map(post => ({
