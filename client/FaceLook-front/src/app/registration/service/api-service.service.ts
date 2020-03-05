@@ -30,4 +30,5 @@ export class registrationApiService {
   register(user: any) {
     return this.httpClient.post(this.url + "register", user);
   }
+
 }
