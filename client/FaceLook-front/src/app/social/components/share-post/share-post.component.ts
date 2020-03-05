@@ -44,6 +44,7 @@ export class SharePostComponent implements OnInit {
     formData.append("tags", this.shareModel.sharePostsModel.tags);
     formData.append("locationLocationLat", postLocation.lat.toString());
     formData.append("locationLocationLng", postLocation.lng.toString());
+    formData.append("date", new Date().toString());
 
     this.postApi.addPost(formData).subscribe(res => {
       this.postCreated = true;

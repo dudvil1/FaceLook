@@ -20,8 +20,6 @@ export class socialComponent implements OnInit {
       console.log("POSTS-->", res);
     });
 
-    this._markerCollection.markers$.subscribe(res => {
-      this.markers = res;
-    });
+    this.markers = this._markerCollection.markers$
   }
 }

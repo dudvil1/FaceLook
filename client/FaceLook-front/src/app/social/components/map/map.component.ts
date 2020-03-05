@@ -20,7 +20,7 @@ export class MapComponent implements AfterViewInit {
     private postApiService: postApiService
   ) {}
 
-  @Input() markers;
+  @Input() markers:any;
 
   ngAfterViewInit() {
     this.getUserCurrentLocation();
@@ -28,11 +28,18 @@ export class MapComponent implements AfterViewInit {
 
   async getUserCurrentLocation() {
     this.userCurrentLocation = await this.locationService.getLocation();
-    this.myMap();
+    this.markers.subscribe(
+      markers=>{
+
+      debugger;
+        this.myMap(markers)
+      }
+    )
+
   }
 
-  myMap() {
-    console.log(this.markers);
+  myMap(markers) {
+    console.log(markers);
 
     let myCenter = {
       lat: this.userCurrentLocation.lat,
@@ -69,7 +76,7 @@ export class MapComponent implements AfterViewInit {
     this.markers.forEach(elm => {
       /* console.log("POST element");
       console.log(elm);
- */
+      */
       //create post location coordinates
       let postLocation = { lat: +elm.lat, lng: +elm.lng };
 

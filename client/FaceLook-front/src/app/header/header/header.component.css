@@ -73,6 +73,15 @@
     /* background: #8E2BFF; */
     text-shadow: 1px 2px 3px orange;
 }
+.logout{
+    margin: 6px 0 0 0;
+    text-decoration: none;
+    cursor: pointer;
+}
+.logout:hover{
+    margin: 6px 0 0 0;
+    text-decoration: underline;
+}
 
 @media only screen and (max-width: 768px) {
     .btn_search{
