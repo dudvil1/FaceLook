@@ -29,7 +29,6 @@ export class MapComponent implements AfterViewInit {
   async getUserCurrentLocation() {
     this.userCurrentLocation = await this.locationService.getLocation();
     this.markers.subscribe(
-<<<<<<< HEAD
       markers => {
         this.myMap(markers)
       });
@@ -38,29 +37,6 @@ export class MapComponent implements AfterViewInit {
   myMap(postMarkers) {
     let mapProp = GoogleMapHandler.createMapProp(this.userCurrentLocation)
 
-=======
-      markers=>{
-        this.myMap(markers)
-      }
-    )
-
-  }
-
-  myMap(markers) {
-    let myCenter = {
-      lat: this.userCurrentLocation.lat,
-      lng: this.userCurrentLocation.lng
-    };
-    // gen center prop of the map
-    let mapProp: google.maps.MapOptions = {
-      center: new google.maps.LatLng(
-        this.userCurrentLocation.lat,
-        this.userCurrentLocation.lng
-      ),
-      zoom: 13,
-      streetViewControl: false
-    };
->>>>>>> e6537073a2596f85a16000746f1d54e9d9ebc96c
     //init the map and props
     let googleMap = new google.maps.Map(
       document.getElementById("googleMap"),
@@ -71,32 +47,16 @@ export class MapComponent implements AfterViewInit {
     //add the marker of user curr location
     currentPositionMarker.setMap(googleMap);
 
-<<<<<<< HEAD
 
     postMarkers.forEach(post => {
-=======
-    let wiredMarkers = {};
-
-    //////// second on the map: all posts
-    markers.forEach(elm => {
->>>>>>> e6537073a2596f85a16000746f1d54e9d9ebc96c
       //create post location coordinates
       let postLocation = { lat: +post.lat, lng: +post.lng };
 
       //create post props
-<<<<<<< HEAD
       let postMarker = GoogleMapHandler.createMapMarker(postLocation,
         post.title,
         {
           url: "http://localhost:3000/public/uploads/images/" + post.image,
-=======
-      let postMarker = new google.maps.Marker({
-        position: postLocation,
-        animation: google.maps.Animation.DROP,
-        icon: {
-
-          url: "http://localhost:3000/public/uploads/images/" + elm.image,
->>>>>>> e6537073a2596f85a16000746f1d54e9d9ebc96c
           scaledSize: new google.maps.Size(50, 50, "px", "px")
         })
       //add props to map
@@ -173,7 +133,7 @@ class GoogleMapHandler {
        }
     </style>`
   }
-  
+
   private static setBody(content){
     return `
     <html>
