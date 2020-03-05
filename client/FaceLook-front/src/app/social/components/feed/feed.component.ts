@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { postsFilterService } from "../models/postsFilter.model";
 import { postApiService } from '../../service/postApi.service';
+import { LocationService } from '../../service/locationService.service';
 
 @Component({
   selector: "app-feed",
@@ -9,29 +10,23 @@ import { postApiService } from '../../service/postApi.service';
 })
 export class FeedComponent implements OnInit {
   constructor(public postsFilterService: postsFilterService,
-    private _postApiService: postApiService) { }
+    private _postApiService: postApiService,
+    private locationService: LocationService) { }
 
   ngOnInit() { }
 
-  search() {
+  async search() {
     if (Object.keys(this.postsFilterService.postsData).length > 0) {
-      if(this.postsFilterService.postsData.radiusFrom){
-        navigator.geolocation.getCurrentPosition((location) => {
-
-          this.postsFilterService.postsData.location = {
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude
-          };
-
-          this._postApiService.getFilterPosts(this.postsFilterService.postsData).subscribe();
-        },
-        err =>{
-          alert(err);
-        })
+      //on radius query we need the current location to comper by
+      if (this.postsFilterService.postsData.radiusFrom) {
+        const location = await this.locationService.getLocation();
+        this.postsFilterService.postsData.location = {
+          latitude: location.lat,
+          longitude: location.lng
+        };
       }
-      else{
+
       this._postApiService.getFilterPosts(this.postsFilterService.postsData).subscribe();
-      }
     }
   }
 }

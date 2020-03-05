@@ -18,9 +18,9 @@ export class MapComponent implements AfterViewInit {
     public locationService: LocationService,
     public mapsModule: GoogleMapsModule,
     private postApiService: postApiService
-  ) {}
+  ) { }
 
-  @Input() markers:any;
+  @Input() markers: any;
 
   ngAfterViewInit() {
     this.getUserCurrentLocation();
@@ -29,128 +29,49 @@ export class MapComponent implements AfterViewInit {
   async getUserCurrentLocation() {
     this.userCurrentLocation = await this.locationService.getLocation();
     this.markers.subscribe(
-      markers=>{
-        
-      debugger;
+      markers => {
         this.myMap(markers)
-      }
-    )
-    
+      });
   }
 
-  myMap(markers) {
-    console.log(markers);
+  myMap(postMarkers) {
+    let mapProp = GoogleMapHandler.createMapProp(this.userCurrentLocation)
 
-    let myCenter = {
-      lat: this.userCurrentLocation.lat,
-      lng: this.userCurrentLocation.lng
-    };
-    // gen center prop of the map
-    let mapProp: google.maps.MapOptions = {
-      center: new google.maps.LatLng(
-        this.userCurrentLocation.lat,
-        this.userCurrentLocation.lng
-      ),
-      zoom: 13,
-      streetViewControl: false
-    };
     //init the map and props
     let googleMap = new google.maps.Map(
       document.getElementById("googleMap"),
       mapProp
     );
 
-    //user PIN marker on current location on the map
-    let marker = new google.maps.Marker({
-      position: myCenter,
-      animation: google.maps.Animation.DROP,
-      title: "YOU!",
-      zIndex: 100
-    });
+    let currentPositionMarker = GoogleMapHandler.createMapMarker(this.userCurrentLocation, "YOU!");
     //add the marker of user curr location
-    marker.setMap(googleMap);
+    currentPositionMarker.setMap(googleMap);
 
-    let wiredMarkers = {};
 
-    //////// second on the map: all posts
-    markers.forEach(elm => {
-      console.log("POST element");
-      console.log(elm);
-
+    postMarkers.forEach(post => {
       //create post location coordinates
-      let postLocation = { lat: +elm.lat, lng: +elm.lng };
+      let postLocation = { lat: +post.lat, lng: +post.lng };
 
       //create post props
-      let postMarker = new google.maps.Marker({
-        position: postLocation,
-        animation: google.maps.Animation.DROP,
-        icon: {
-          
-          url: "http://localhost:3000/public/uploads/images/" + elm.image,
+      let postMarker = GoogleMapHandler.createMapMarker(postLocation,
+        post.title,
+        {
+          url: "http://localhost:3000/public/uploads/images/" + post.image,
           scaledSize: new google.maps.Size(50, 50, "px", "px")
-        },
-        title: elm.title
-      });
+        })
       //add props to map
       postMarker.setMap(googleMap);
-
-      let bubbleDiv = `
-        <div class="info_content">
-          <p>
-            <b>${elm.title}</b>,
-            Heritage Site.
-          </p>
-          <p>${elm.text}</p>
-          <!--
-          <div class="likes_div likes_div_SELECTOR" id=${elm.id}>
-            <span id="like_${elm.id}">${elm.likes}</span> Liks <img src="./assets/img/like.png" class="like_icon" title="Like me or die" />
-          </div>
-          -->
-        </div>`;
+      let bubbleDiv = GoogleMapHandler.createBubbleContent(post.title,post.text,post.post_id,post.likes)
 
       //add bubbles to the map
       let infowindow = new google.maps.InfoWindow({
         content: bubbleDiv,
-        maxWidth: 200
+        maxWidth: 400
       });
 
       // OPEN infoWindow
       postMarker.addListener("mouseover", () => {
         infowindow.open(googleMap, postMarker);
-
-        ////////////////////////////////////////
-        ////////////////////////////////////////
-        // TOOK OUT LIKES MODULE FOR NOW
-        // setTimeout(() => {
-        //   let singleLike = document.querySelectorAll('.likes_div_SELECTOR');
-        //   singleLike.forEach(elm => {
-        //     // if value undefined - add event listener
-        //     if(!wiredMarkers[elm.id]){
-        //       wiredMarkers[elm.id] = true;
-        //       const likeFn = () => {
-        //         // catch the Likes value from the DATA
-        //         const _markerElm = this.markers.find(marker => marker.id === elm.id);
-        //         _markerElm.likes++;
-        //         _markerElm.likes = _markerElm.likes.toString();
-
-        //         // change the Likes value on the ELM
-        //         document.getElementById('like_'+elm.id).textContent = _markerElm.likes;
-
-        //         // change the Likes to the SERVER and DB
-        //         this.likesClicked(_markerElm);
-        //       }
-        //       elm.addEventListener('click', () => {
-        //         likeFn();
-        //         elm.removeEventListener('click', likeFn);
-        //       })
-        //     }
-        //   });
-        // }, 0);
-
-        // END OF
-        ////////////////////////////////////////
-        ////////////////////////////////////////
-
       });
     });
   }
@@ -163,5 +84,74 @@ export class MapComponent implements AfterViewInit {
       );
       console.log(res);
     });
+  }
+}
+
+class GoogleMapHandler {
+  static createMapProp(myCenter): google.maps.MapOptions {
+    let mapProp: google.maps.MapOptions = {
+      center: new google.maps.LatLng(
+        myCenter.lat,
+        myCenter.lng
+      ),
+      zoom: 13,
+      streetViewControl: false
+    };
+
+    return mapProp;
+  }
+
+  static createMapMarker(position?, title?, icon?, zIndex?): google.maps.Marker {
+    return new google.maps.Marker({
+      position: position || { lat: 0, lng: 0 },
+      animation: google.maps.Animation.DROP,
+      title: title || "",
+      icon: icon,
+      zIndex: zIndex || 100
+    });
+  }
+
+  static createBubbleContent(title, text, id, likes): string {
+     let content =   
+       `<div class="info_content">
+          <div class="header">
+             <h1>${title}</h1>
+          </div>
+          <p>${text}</p>
+          <div class="likes_div likes_div_SELECTOR" id=${id}>
+            <span id="like_${id}">${likes}</span> Likes 
+            <img src="./assets/img/like.png" class="like_icon" />
+          </div>
+        </div>`
+
+        return this.setBody(content);
+  }
+
+  private static getStyle():string{
+    return  `
+     <style>
+       .info_content {
+         background-color: powderblue;
+       }
+       h1 {
+         color: red;
+         padding:10px;
+       }
+       p {
+         color: blue;
+       }
+    </style>`
+  }
+  
+  private static setBody(content){
+    return `
+    <html>
+      <head>
+        ${this.getStyle()}
+      </head>  
+      <body>
+      ${content}
+    </body>
+    </html>`
   }
 }
