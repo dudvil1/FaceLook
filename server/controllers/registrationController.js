@@ -34,6 +34,8 @@ async function login(req, res) {
     try {
         //try find request user
         await db.find("Users", "email", req.body.email, user => {
+                console.log(user);
+                
             if (user.length >= 1) {
                 //check the activation
                 if (!user[0].active) {
@@ -55,11 +57,11 @@ async function login(req, res) {
                         message: "Auth failed"
                     });
             }
-            if (err) {
-                return res.status(401).json({
-                    message: "Auth failed"
-                });
-            }
+            // if (err) {
+            //     return res.status(401).json({
+            //         message: "Auth failed"
+            //     });
+            // }
         });
     } catch (error) {
         return res.status(401).json({
