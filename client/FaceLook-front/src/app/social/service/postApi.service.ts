@@ -30,7 +30,7 @@ export  class postApiService {
           likes: post.likes,
           date: post.date,
         }));
-
+        console.log("res",markersArr);
         this.markersService.markers$.next(markersArr);
       })
     );

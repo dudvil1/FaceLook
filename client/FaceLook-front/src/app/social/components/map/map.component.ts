@@ -30,12 +30,12 @@ export class MapComponent implements AfterViewInit {
     this.userCurrentLocation = await this.locationService.getLocation();
     this.markers.subscribe(
       markers=>{
-        
+
       debugger;
         this.myMap(markers)
       }
     )
-    
+
   }
 
   myMap(markers) {
@@ -73,10 +73,10 @@ export class MapComponent implements AfterViewInit {
     let wiredMarkers = {};
 
     //////// second on the map: all posts
-    markers.forEach(elm => {
-      console.log("POST element");
+    this.markers.forEach(elm => {
+      /* console.log("POST element");
       console.log(elm);
-
+      */
       //create post location coordinates
       let postLocation = { lat: +elm.lat, lng: +elm.lng };
 
@@ -85,7 +85,7 @@ export class MapComponent implements AfterViewInit {
         position: postLocation,
         animation: google.maps.Animation.DROP,
         icon: {
-          
+
           url: "http://localhost:3000/public/uploads/images/" + elm.image,
           scaledSize: new google.maps.Size(50, 50, "px", "px")
         },
