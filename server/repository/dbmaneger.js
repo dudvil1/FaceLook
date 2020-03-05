@@ -156,8 +156,8 @@ function getFilterPosts(filters,callback) {
 
   const query = `select *
                   from Posts 
-                  INNER JOIN Post_Tag on Posts.post_id = Post_Tag.post_id
-                  INNER JOIN Tags on Tags.tag_id = Post_Tag.tag_id
+                  LEFT JOIN Post_Tag on Posts.post_id = Post_Tag.post_id
+                  LEFT JOIN Tags on Tags.tag_id = Post_Tag.tag_id
                   INNER JOIN Users on Users._id = Posts.publisher_id
                   
                   ${filterQuery}`;
