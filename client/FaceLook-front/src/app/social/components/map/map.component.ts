@@ -67,9 +67,9 @@ export class MapComponent implements AfterViewInit {
 
     //////// second on the map: all posts
     this.markers.forEach(elm => {
-      console.log("POST element");
+      /* console.log("POST element");
       console.log(elm);
-
+ */
       //create post location coordinates
       let postLocation = { lat: +elm.lat, lng: +elm.lng };
 
@@ -78,7 +78,7 @@ export class MapComponent implements AfterViewInit {
         position: postLocation,
         animation: google.maps.Animation.DROP,
         icon: {
-          
+
           url: "http://localhost:3000/public/uploads/images/" + elm.image,
           scaledSize: new google.maps.Size(50, 50, "px", "px")
         },
