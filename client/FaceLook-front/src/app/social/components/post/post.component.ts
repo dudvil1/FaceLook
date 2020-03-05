@@ -20,7 +20,7 @@ export class PostComponent implements OnInit {
     console.log(this.post)
   }
 
-  
+
   addLike(post: any){
     // if not clicked already
     if(this.likeClicked == false){
@@ -29,8 +29,8 @@ export class PostComponent implements OnInit {
       // include the new value of likes
       this.likesEmitter.emit(post);
       this.likeClicked = true;
-    } 
-    
+    }
+
   }
 
 }
