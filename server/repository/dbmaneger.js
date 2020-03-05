@@ -11,6 +11,7 @@ async function find(table, key, userKey, callback) {
 
   await sql.query(connectionString, query, (err, rows) => {
     if (rows == null) rows = [];
+    
     callback(rows);
   });
 }
