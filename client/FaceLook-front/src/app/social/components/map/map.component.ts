@@ -30,8 +30,6 @@ export class MapComponent implements AfterViewInit {
     this.userCurrentLocation = await this.locationService.getLocation();
     this.markers.subscribe(
       markers=>{
-
-      debugger;
         this.myMap(markers)
       }
     )
@@ -39,8 +37,6 @@ export class MapComponent implements AfterViewInit {
   }
 
   myMap(markers) {
-    console.log(markers);
-
     let myCenter = {
       lat: this.userCurrentLocation.lat,
       lng: this.userCurrentLocation.lng
@@ -73,10 +69,7 @@ export class MapComponent implements AfterViewInit {
     let wiredMarkers = {};
 
     //////// second on the map: all posts
-    this.markers.forEach(elm => {
-      /* console.log("POST element");
-      console.log(elm);
-      */
+    markers.forEach(elm => {
       //create post location coordinates
       let postLocation = { lat: +elm.lat, lng: +elm.lng };
 
@@ -117,51 +110,8 @@ export class MapComponent implements AfterViewInit {
       // OPEN infoWindow
       postMarker.addListener("mouseover", () => {
         infowindow.open(googleMap, postMarker);
-
-        ////////////////////////////////////////
-        ////////////////////////////////////////
-        // TOOK OUT LIKES MODULE FOR NOW
-        // setTimeout(() => {
-        //   let singleLike = document.querySelectorAll('.likes_div_SELECTOR');
-        //   singleLike.forEach(elm => {
-        //     // if value undefined - add event listener
-        //     if(!wiredMarkers[elm.id]){
-        //       wiredMarkers[elm.id] = true;
-        //       const likeFn = () => {
-        //         // catch the Likes value from the DATA
-        //         const _markerElm = this.markers.find(marker => marker.id === elm.id);
-        //         _markerElm.likes++;
-        //         _markerElm.likes = _markerElm.likes.toString();
-
-        //         // change the Likes value on the ELM
-        //         document.getElementById('like_'+elm.id).textContent = _markerElm.likes;
-
-        //         // change the Likes to the SERVER and DB
-        //         this.likesClicked(_markerElm);
-        //       }
-        //       elm.addEventListener('click', () => {
-        //         likeFn();
-        //         elm.removeEventListener('click', likeFn);
-        //       })
-        //     }
-        //   });
-        // }, 0);
-
-        // END OF
-        ////////////////////////////////////////
-        ////////////////////////////////////////
-
       });
     });
   }
 
-  likesClicked(post) {
-    // send new value of likes to server and DB - wait for response on subscribe
-    this.postApiService.updateLikes(post).subscribe(res => {
-      console.log(
-        "returned of result of postApiService.updateLikes with the given postId, res ==> "
-      );
-      console.log(res);
-    });
-  }
 }
