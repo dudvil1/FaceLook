@@ -36,6 +36,27 @@ export  class postApiService {
     );
   }
 
+  getFilterPosts(filters){
+    
+    return this.httpClient.get(this.url + `filterPosts\\${JSON.stringify(filters)}`).pipe(
+      tap((res) => {
+        const markersArr = (<any>res).map(post => ({
+          postId: post.post_id,
+          title: post.title,
+          publisherId: post.publisher_id,
+          text: post.text,
+          image: post.image,
+          lat: post.latitude,
+          lng: post.longitude,
+          likes: post.likes,
+          date: post.date,
+        }));
+
+        this.markersService.markers$.next(markersArr);
+      })
+    );
+  }
+
   updateLikes(post){
     return this.httpClient.patch(this.url + "updateLikes", {post});
   }

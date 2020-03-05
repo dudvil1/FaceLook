@@ -61,6 +61,22 @@ function comparePostByDate(a, b) {
   return 0;
 }
 
+function getFilterPosts(req, res) {
+
+  try {
+    const filters = JSON.parse(req.params.filters);
+    db.getFilterPosts(filters,posts => {
+      res.status(201).json(posts);
+    });
+  } catch (error) {
+    console.log(error);
+    
+    return res.status(401).json({
+      message: "Failure, try again"
+    });
+  }
+}
+
 async function updateLikes(req, res) {
   try {
     // await db.updateLikes(req.body.markerElm, (data)=>{
@@ -82,5 +98,6 @@ async function updateLikes(req, res) {
 module.exports = {
   addPost,
   getAllPosts,
-  updateLikes
+  updateLikes,
+  getFilterPosts
 };
