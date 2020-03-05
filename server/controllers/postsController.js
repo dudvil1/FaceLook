@@ -4,9 +4,10 @@ async function addPost(req, res) {
   console.log("postController: addPost call()");
   req.body.user = req.user;
   req.body.img = req.image;
-  console.log("test",req.image);
+  console.log("test", req.image);
   
-  console.log("addpost",req.body.img);
+
+  console.log("addpost", req.body.img);
   try {
     await db.addPost(req.body, postResult => {
       db.addTag(postResult, tagResult => {
@@ -29,6 +30,18 @@ function getAllPosts(req, res) {
 
   try {
     db.getAllPosts(posts => {
+
+      if (posts){
+        const validPosts = posts.map(post=>{
+          post.date = new Date(post.date)
+          return post
+        })
+        validPosts.sort(comparePostByDate);
+
+        
+        res.status(201).json(validPosts);
+        return;
+      }
       res.status(201).json(posts);
     });
   } catch (error) {
@@ -38,10 +51,20 @@ function getAllPosts(req, res) {
   }
 }
 
+function comparePostByDate(a, b) {
+  if (a.date < b.date) {
+    return -1;
+  }
+  if (a.date > b.date) {
+    return 1;
+  }
+  return 0;
+}
+
 async function updateLikes(req, res) {
   try {
     // await db.updateLikes(req.body.markerElm, (data)=>{
-    await db.updateLikes(req.body.post, (data)=>{      
+    await db.updateLikes(req.body.post, (data) => {
       res.status(201).json({
         message: "Post Like updated successfuly"
       })

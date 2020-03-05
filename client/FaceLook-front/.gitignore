@@ -1,6 +1,6 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 TASKS_ON_PROJECT.docx
-
+../../פרוייקט שלב ב.pdf
 # compiled output
 /dist
 /tmp
