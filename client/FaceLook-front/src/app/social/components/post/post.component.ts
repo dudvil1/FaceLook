@@ -22,8 +22,6 @@ export class PostComponent implements OnInit {
 
   
   addLike(post: any){
-    // likes = 0
-    if(this.post.likes == 0 ) return;
     // if not clicked already
     if(this.likeClicked == false){
       // update THIS post likes
