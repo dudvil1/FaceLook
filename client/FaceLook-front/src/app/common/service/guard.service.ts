@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { NavigatorService } from './navigator.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,14 +17,14 @@ export class GuardService implements CanActivate{
     
     //reRoute if cant access
     if(isJwtNeeded && !isTokenExist){
-      this.router.navigate(['login']);
+      this.navigateService.goToLogin();
     }
     if(!isJwtNeeded && isTokenExist){
-      this.router.navigate(['social']);
+      this.navigateService.goToHomePage();
     }
 
     return isJwtNeeded ? isTokenExist:!isTokenExist
   }
 
-  constructor(private router: Router) { }
+  constructor(private navigateService: NavigatorService) { }
 }

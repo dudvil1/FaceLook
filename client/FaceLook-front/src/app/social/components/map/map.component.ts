@@ -51,7 +51,6 @@ export class MapComponent implements AfterViewInit {
     postMarkers.forEach(post => {
       //create post location coordinates
       let postLocation = { lat: +post.lat, lng: +post.lng };
-
       //create post props
       let postMarker = GoogleMapHandler.createMapMarker(postLocation,
         post.title,
@@ -61,17 +60,28 @@ export class MapComponent implements AfterViewInit {
         })
       //add props to map
       postMarker.setMap(googleMap);
-      let bubbleDiv = GoogleMapHandler.createBubbleContent(post.title,post.text,post.post_id,post.likes)
+      let bubbleDiv = GoogleMapHandler.createBubbleContent(post.title, post.text, post.post_id, post.likes)
 
       //add bubbles to the map
       let infowindow = new google.maps.InfoWindow({
         content: bubbleDiv,
         maxWidth: 400
       });
+      let isOpen = false;
 
       // OPEN infoWindow
-      postMarker.addListener("mouseover", () => {
-        infowindow.open(googleMap, postMarker);
+      postMarker.addListener("click", () => {
+        console.log(googleMap);
+        if (isOpen) {
+          infowindow.close();
+          isOpen = false;
+        }
+        else {
+          infowindow.open(googleMap, postMarker);
+          isOpen = true;
+        }
+
+
       });
     });
   }
@@ -103,8 +113,8 @@ class GoogleMapHandler {
   }
 
   static createBubbleContent(title, text, id, likes): string {
-     let content =   
-       `<div class="info_content">
+    let content =
+      `<div class="info_content">
           <div class="header">
              <h1>${title}</h1>
           </div>
@@ -115,11 +125,11 @@ class GoogleMapHandler {
           </div>
         </div>`
 
-        return this.setBody(content);
+    return this.setBody(content);
   }
 
-  private static getStyle():string{
-    return  `
+  private static getStyle(): string {
+    return `
      <style>
        .info_content {
          background-color: powderblue;
@@ -134,7 +144,7 @@ class GoogleMapHandler {
     </style>`
   }
 
-  private static setBody(content){
+  private static setBody(content) {
     return `
     <html>
       <head>
