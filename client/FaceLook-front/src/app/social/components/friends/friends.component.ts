@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserApiService } from '../../service/userApi.service';
 
 @Component({
   selector: 'app-friends',
@@ -6,10 +7,23 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./friends.component.css']
 })
 export class FriendsComponent implements OnInit {
+  users: any;
+  searchQuery: string
 
-  constructor() { }
+  constructor(
+    private userApiService: UserApiService
+  ) { }
 
   ngOnInit() {
+
+  }
+
+  searchUsers() {
+    if (this.searchQuery && this.searchQuery.length > 1) {
+      this.userApiService.getAllUsers(this.searchQuery).subscribe(
+        users => this.users = users
+      )
+    }
   }
 
 }

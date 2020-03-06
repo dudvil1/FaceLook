@@ -11,7 +11,7 @@ async function find(table, key, userKey, callback) {
 
   await sql.query(connectionString, query, (err, rows) => {
     if (rows == null) rows = [];
-    
+
     callback(rows);
   });
 }
@@ -70,17 +70,37 @@ async function changePassword(userEmail, newpassword) {
 async function addPost(post, callback) {
   console.log("dbManeger: addPost call()");
   console.log(post.img);
-  
+
   post.post_id = new mongoose.Types.ObjectId();
   post.date = formatDate(new Date());
-  
-  
+
+
   const query = `INSERT INTO Posts VALUES( '${post.post_id}','${post.user[0]._id}','${post.img}' , '${post.text}' , '${post.date}' ,
    '${post.locationLocationLat}' , '${post.locationLocationLng}' , '${post.title}' , '0')`;
 
   await sql.query(connectionString, query, (err, res) => {
     if (err) console.log("from addPost", err);
     callback(post);
+  });
+}
+
+function getUsers(callback, filter,userId) {
+
+  console.log("dbmaneger: getUsers call()");
+  console.log();
+
+  const query = `select * From Users
+                 LEFT JOIN user_friends ON user_friends.userId =Users._id
+                 
+                 where Users._id !='${userId}'
+                 ${filter ? `And (Users.name like '%${filter}%' OR Users.email like '%${filter}%')`:""}`;
+
+  sql.query(connectionString, query, (err, rows) => {
+    if (err) {
+      //logger
+      console.log(err)
+    }
+    callback(rows);
   });
 }
 
@@ -110,38 +130,38 @@ async function addPost_Tag(post_tag, callback) {
   });
 }
 
-function getFilterQuery(filters){
-  const{fromFilter, ToFilter, publisher, radiusFrom,location, imageTags,userTags} = filters;
+function getFilterQuery(filters) {
+  const { fromFilter, ToFilter, publisher, radiusFrom, location, imageTags, userTags } = filters;
   filterQuery = ["Where"];
 
-  if(fromFilter){
+  if (fromFilter) {
     filterQuery.push(`CAST(Posts.date as datetime)>='${fromFilter}'`)
     filterQuery.push(`And `)
   }
 
-  if(ToFilter){
+  if (ToFilter) {
     filterQuery.push(`CAST(Posts.date as datetime)<='${ToFilter}'`)
     filterQuery.push(`And`)
   }
 
-  if(publisher){
+  if (publisher) {
     filterQuery.push(`Users.name = '${publisher}'`)
     filterQuery.push(`And`)
   }
   ///by km
-  if(radiusFrom && location){
+  if (radiusFrom && location) {
     filterQuery.push(`POWER((
       POWER( ( 53.0 * ( Posts.longitude - ${location.longitude} ) ) , 2 )
        + POWER( ( 69.1 * ( Posts.latitude - ${location.latitude} ) ) , 2 )
       ),0.5)*1.609344  < 1 * ${radiusFrom} `)
-      filterQuery.push(`And`)
+    filterQuery.push(`And`)
   }
 
-  if(imageTags){
+  if (imageTags) {
     //not implamented
   }
 
-  if(userTags){
+  if (userTags) {
     filterQuery.push(`Tags.text = '${userTags}'`)
     filterQuery.push(`And`)
   }
@@ -150,7 +170,7 @@ function getFilterQuery(filters){
 
   return filterQuery.join(" ");
 }
-function getFilterPosts(filters,callback) {
+function getFilterPosts(filters, callback) {
 
   console.log("dbmaneger: getFilterPosts call()");
   filterQuery = getFilterQuery(filters);
@@ -168,7 +188,6 @@ function getFilterPosts(filters,callback) {
     callback(rows);
   });
 }
-
 function getAllPosts(callback) {
   console.log("dbmaneger: getAllPost call()");
 
@@ -184,25 +203,23 @@ function getAllPosts(callback) {
     callback(rows);
   });
 }
-
 function formatDate(date) {
   var d = new Date(date),
-      month = '' + (d.getMonth() + 1),
-      day = '' + d.getDate(),
-      year = d.getFullYear();
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear();
 
-  if (month.length < 2) 
-      month = '0' + month;
-  if (day.length < 2) 
-      day = '0' + day;
+  if (month.length < 2)
+    month = '0' + month;
+  if (day.length < 2)
+    day = '0' + day;
 
   return [year, month, day].join('-');
 }
-
 function updateLikes(post, callback) {
   console.log(post.post_id, post.likes);
   console.log(typeof post.post_id, typeof post.likes);
-  
+
   const query = `
     UPDATE Posts
     SET likes = ${post.likes}
@@ -225,5 +242,6 @@ module.exports = {
   addTag,
   addPost_Tag,
   getAllPosts,
-  updateLikes
+  updateLikes,
+  getUsers
 };
