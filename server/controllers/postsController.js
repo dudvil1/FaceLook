@@ -69,7 +69,6 @@ function getFilterPosts(req, res) {
       res.status(201).json(posts);
     });
   } catch (error) {
-    console.log(error);
     
     return res.status(401).json({
       message: "Failure, try again"

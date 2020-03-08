@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { NgForm } from "@angular/forms";
 import { registrationApiService } from "../../service/api-service.service";
 import { UserService } from "../../models/user-service.service";
+import { NavigatorService } from 'src/app/common/service/navigator.service';
 
 @Component({
   selector: "app-log-in",
@@ -14,7 +15,7 @@ export class LogInComponent implements OnInit {
   response: any = {};
 
   constructor(
-    private router: Router,
+    private navigateService:NavigatorService,
     private route: ActivatedRoute,
     private api: registrationApiService,
     public userService: UserService,
@@ -45,7 +46,7 @@ export class LogInComponent implements OnInit {
           this.toastr.success(data["message"], "Success");
 
           //route to the feed
-          this.router.navigate(["/social"]);
+          this.navigateService.goToHomePage()
         }
       },
       error => {
@@ -90,5 +91,9 @@ export class LogInComponent implements OnInit {
         }
       );
     }
+  }
+
+  goToRegisterPage(){
+    this.navigateService.goToRegister();
   }
 }

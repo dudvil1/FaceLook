@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import {ToastrService} from 'ngx-toastr';
 import { registrationApiService } from "../../service/api-service.service";
 import { UserService } from "../../models/user-service.service";
+import { NavigatorService } from 'src/app/common/service/navigator.service';
 
 
 @Component({
@@ -14,8 +15,7 @@ import { UserService } from "../../models/user-service.service";
 export class RegisterComponent implements OnInit {
 
   constructor(
-    private router: Router,
-    private route: ActivatedRoute,
+    private navigateService:NavigatorService,
     private api: registrationApiService,
     public userService: UserService,
     private toastr: ToastrService
@@ -38,5 +38,9 @@ export class RegisterComponent implements OnInit {
       this.toastr.error(error.error.message, "Error in register");
     }
    )
+  }
+
+  goToLoginPage(){
+    this.navigateService.goToLogin();
   }
 }

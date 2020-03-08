@@ -10,6 +10,7 @@ import { registrationApiService } from "../app/registration/service/api-service.
 import { AgmCoreModule } from '@agm/core';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { AgmDirectionModule } from 'agm-direction';
+import { JwtModule } from "@auth0/angular-jwt";
 
 import { AppComponent } from "./app.component";
 import { LogInComponent } from "./registration/components/log-in/log-in.component";
@@ -24,6 +25,12 @@ import { postApiService } from './social/service/postApi.service';
 import { HeaderComponent } from './header/header/header.component';
 import { PostsComponent } from './social/components/posts/posts.component';
 import { PostComponent } from './social/components/post/post.component';
+import { FriendComponent } from './social/components/friend/friend.component';
+import { UserApiService } from './social/service/userApi.service';
+
+ function getToken() {
+  return localStorage.getItem('token');
+}
 
 @NgModule({
   declarations: [
@@ -38,12 +45,18 @@ import { PostComponent } from './social/components/post/post.component';
     FriendsComponent,
     HeaderComponent,
     PostsComponent,
-    PostComponent
+    PostComponent,
+    FriendComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ToastrModule.forRoot(),
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: getToken
+      }
+    }),
     AppRoutingModule,
     HttpClientModule,
     GoogleMapsModule,
@@ -57,6 +70,7 @@ import { PostComponent } from './social/components/post/post.component';
   providers: [
     registrationApiService,
     postApiService,
+    UserApiService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HeaderInterceptor,

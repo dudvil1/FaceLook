@@ -32,6 +32,9 @@ export class PostsComponent implements OnInit {
   }
 
   setLikesOfPost(post){
+    console.log("POST emitter");
+    console.log(post);
+    
     if(post){
       // SEND TO DB (client updated on post comp directly)
       console.log("THIS POST ID: " + post);

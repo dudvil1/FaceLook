@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
+import { NavigatorService } from 'src/app/common/service/navigator.service';
 
 @Component({
   selector: 'app-header',
@@ -10,7 +11,7 @@ import { Router } from "@angular/router";
 export class HeaderComponent implements OnInit {
 
   constructor(
-    private rout: Router
+    private navigateService: NavigatorService
   ) { }
 
   ngOnInit(): void {
@@ -19,6 +20,6 @@ export class HeaderComponent implements OnInit {
   userLogout(){
     // this.api.logout();
     localStorage.removeItem("token");
-    this.rout.navigate(['/']);
+    this.navigateService.goToLogin();
   }
 }
