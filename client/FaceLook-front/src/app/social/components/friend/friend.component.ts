@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { IUser } from 'src/app/common/model/user';
 import { JwtService } from 'src/app/common/service/jwt.service';
-import { UserApiService } from '../../service/userApi.service';
+import { FriendApiService } from '../../service/friendApi.service';
 
 @Component({
   selector: 'app-friend',
@@ -15,7 +15,7 @@ export class FriendComponent implements OnInit {
 
   constructor(
     private jwtService: JwtService,
-    private userApiService: UserApiService
+    private userApiService: FriendApiService
   ) { }
 
   ngOnInit(): void {

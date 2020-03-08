@@ -4,7 +4,7 @@ import { JwtService } from 'src/app/common/service/jwt.service';
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class UserApiService {
+export class FriendApiService {
   url = "http://localhost:3000/user/";
 
   constructor(
