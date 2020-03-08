@@ -17,7 +17,7 @@ const routes: Routes = [
   { path: 'login', component: LogInComponent, canActivate: [GuardService], data: { jwtNeeded: false } },
   { path: 'login/:id', component: LogInComponent, canActivate: [GuardService], data: { jwtNeeded: false } },
   { path: 'register', component: RegisterComponent, canActivate: [GuardService], data: { jwtNeeded: false } },
-  { path: 'forgotpassword', component: ForgetPasswordComponent, canActivate: [GuardService], data: { jwtNeeded: true } },
+  { path: 'forgotpassword', component: ForgetPasswordComponent},
   { path: 'social', component: socialComponent, canActivate: [GuardService], data: { jwtNeeded: true } },
   { path: 'sharePost', component: SharePostComponent, canActivate: [GuardService], data: { jwtNeeded: true } },
   { path: 'friends', component: FriendsComponent, canActivate: [GuardService], data: { jwtNeeded: true } },

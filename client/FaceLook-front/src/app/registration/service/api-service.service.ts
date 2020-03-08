@@ -23,12 +23,15 @@ export class registrationApiService {
     return this.httpClient.patch(this.url + "verifyAccount", params);
   }
 
-  forgotPassword(user: any) {
-    return this.httpClient.patch(this.url + "Forgot-Password", user);
-  }
-
   register(user: any) {
     return this.httpClient.post(this.url + "register", user);
   }
 
+  updatePassword(params){
+    return this.httpClient.patch(this.url+ "forgetPassword" , params);
+  }
+
+  getResetCodePassword(user){
+    return this.httpClient.get(this.url + "getResetCodePassword");
+  }
 }
