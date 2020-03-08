@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, AfterViewInit, Input } from "@angular/core";
 import { GoogleMapsModule } from "@angular/google-maps";
 
-import { LocationService } from "../../service/locationService.service";
+import { LocationService } from "../../../common/service/locationService.service";
 import { postApiService } from "../../service/postApi.service";
 import { markerCollectionsService } from "../../service/marker-collection.service";
 import { ToastInjector } from "ngx-toastr";
@@ -67,8 +67,8 @@ export class MapComponent implements AfterViewInit {
         content: bubbleDiv,
         maxWidth: 400
       });
-      let isOpen = false;
 
+      let isOpen = false;
       // OPEN infoWindow
       postMarker.addListener("click", () => {
         console.log(googleMap);
@@ -132,7 +132,7 @@ class GoogleMapHandler {
     return `
      <style>
        .info_content {
-         background-color: powderblue;
+         background-color: black;
        }
        h1 {
          color: red;
@@ -140,6 +140,7 @@ class GoogleMapHandler {
        }
        p {
          color: blue;
+         text-align:center;
        }
     </style>`
   }

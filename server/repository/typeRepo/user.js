@@ -56,10 +56,12 @@ function getUsers(callback, filter, userId) {
     console.log("dbmaneger: getUsers call()");
     console.log();
 
-    const query = `select * From Users
-                 LEFT JOIN user_friends ON user_friends.userId =Users._id
+    const query = `select *
+                   From Users
+
+                   left JOIN (select * From user_friends where user_friends.friendId = '${userId}') as friends ON friends.userId = Users._id
                  
-                 where Users._id !='${userId}'
+                 where Users._id !='${userId}' 
                  ${filter ? `And (Users.name like '%${filter}%' OR Users.email like '%${filter}%')` : ""}`;
 
     sql.query(connectionString, query, (err, rows) => {
@@ -84,9 +86,10 @@ function getUser(userId, callback) {
         if (err) {
             console.log(err)
         }
-        callback(rows ? rows[0]:rows);
+        callback(rows ? rows[0] : rows);
     });
 }
+
 
 module.exports = {
     verifyAccount,
