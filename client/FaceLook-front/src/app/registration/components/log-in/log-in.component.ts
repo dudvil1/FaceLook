@@ -78,12 +78,13 @@ export class LogInComponent implements OnInit {
   onforgotPassword() {
     if (!this.userService.userData.email) alert("enter Your Email First");
     else {
-      console.log("forgot password call()");
+      console.log("getResetCodePassword call()");
       //api call
-      this.api.forgotPassword(this.userService.userData).subscribe(
+      this.api.getResetCodePassword(this.userService.userData.email).subscribe(
         res => {
           //give client message
-          this.toastr.success("Please Check Your Email");
+          this.toastr.success("a Reset Code just send to your email");
+          this.router.navigate(["/forgotpassword"]);
         },
         err => {
           this.toastr.error("please try again");
