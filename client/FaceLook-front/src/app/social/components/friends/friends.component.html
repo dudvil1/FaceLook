@@ -1,1 +1,23 @@
 <app-header></app-header>
+
+<div class="main_wrap">
+    <div class="input-group">
+        <input name="searchQuery" [(ngModel)]="searchQuery" type="text" class="form-control"
+            placeholder="Search By Name Or Email...">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" (click)="searchUsers()">Search</button>
+        </div>
+    </div>
+
+    <div class="user-list" *ngIf="users">
+        <div class="gen_wrap">
+            <h2>
+                All Users
+            </h2>
+            <div *ngFor="let user of users" class="wrap">
+                <app-friend [user]="user"></app-friend>
+            </div>
+
+        </div>
+    </div>
+</div>
