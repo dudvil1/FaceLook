@@ -12,6 +12,8 @@ container.registerModule('mongoose',[],require('mongoose'),true);
 container.registerModule('bcryptjs',[],require('bcryptjs'),true);
 container.registerModule('jwt',[],require('jwt-simple'),true);
 container.registerModule('moment',[],require('moment'),true);
+container.registerModule('nodemailer',[],require('nodemailer'),true);
+container.registerModule('multer',[],require('multer'),true);
 
 //config services
 container.registerModule('dbConfig',[],require('./repository/DbConnection'));
@@ -19,10 +21,12 @@ container.registerModule('dbConfig',[],require('./repository/DbConnection'));
 //simple services
 container.registerModule('bcrypt',['bcryptjs'],require('./services/bcryptService'));
 container.registerModule('jwtService',['jwt','moment'],require('./services/jwtService'));
+container.registerModule('multerService',['multer'],require('./services/multerService'));
+container.registerModule('mailService',['nodemailer'],require('./services/mailService'));
 container.registerModule('passwordGeneretor',[],require('./services/passwordGeneretor'));
 
 //middlewares
-// container.registerModule('authenticated',['jwtService'],require('./middlewares/authenticated'));
+container.registerModule('authenticated',['jwtService'],require('./middlewares/authenticated'));
 
 //base Repositories
 container.registerModule('baseRepo',['sql','dbConfig'],require('./repository/typeRepo/base'));
@@ -34,7 +38,20 @@ container.registerModule('userFriendRepo',['sql','dbConfig'],require('./reposito
 //db manager
 container.registerModule('dbManager',['userRepo','baseRepo','tagRepo','postRepo','userFriendRepo'],require('./repository/dbmaneger'));
 
+//controllers
+container.registerModule('defaultController',["moment"],require('./controllers/defaultController'));
+container.registerModule('friendController',["dbManager"],require('./controllers/friendController'));
+container.registerModule('postsController',["dbManager"],require('./controllers/postsController'));
+container.registerModule('registrationController',["dbManager",'mailService','bcrypt','jwtService'],require('./controllers/registrationController'));
+
+//routes
+container.registerModule('defaultRoutes',['express','defaultController'],require('./routes/default'));
+container.registerModule('friendRoutes',['express','friendController','authenticated'],require('./routes/friend'));
+container.registerModule('registrationtRoutes',['express','registrationController'],require('./routes/registration'));
+container.registerModule('socialRoutes',['express','postsController','authenticated','multerService'],require('./routes/social'));
+
+
 //app
-container.registerModule("app",['express','bodyParser','morgan','cors','path'],require('./app'));
+container.registerModule("app",['express','bodyParser','morgan','cors','path','defaultRoutes','friendRoutes','registrationtRoutes','socialRoutes'],require('./app'));
 
 module.exports = container
