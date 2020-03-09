@@ -1,9 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from '@angular/router';
-import { sharePostService } from "../models/sharePost.model";
+import { Router } from "@angular/router";
+import { sharePostService } from "../../models/sharePost.model";
 import { postApiService } from "../../service/postApi.service";
 import { LocationService } from "../../service/locationService.service";
-import { NavigatorService } from 'src/app/common/service/navigator.service';
+import { NavigatorService } from "src/app/common/service/navigator.service";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: "app-share-post",
@@ -19,7 +20,8 @@ export class SharePostComponent implements OnInit {
     public postApi: postApiService,
     public shareModel: sharePostService,
     private location: LocationService,
-    private navigateService:NavigatorService,
+    private navigateService: NavigatorService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit() {}
@@ -40,7 +42,7 @@ export class SharePostComponent implements OnInit {
     const postLocation = await this.location.getLocation();
     const formData: FormData = new FormData();
     formData.append("image", this.fileToUpload);
-    formData.append("title", this.shareModel.sharePostsModel.title)
+    formData.append("title", this.shareModel.sharePostsModel.title);
     formData.append("text", this.shareModel.sharePostsModel.text);
     formData.append("tags", this.shareModel.sharePostsModel.tags);
     formData.append("locationLocationLat", postLocation.lat.toString());
@@ -50,10 +52,10 @@ export class SharePostComponent implements OnInit {
     this.postApi.addPost(formData).subscribe(res => {
       this.postCreated = true;
       this.shareModel.resetdata();
+      this.toastr.success(res["message"]);
       setTimeout(() => {
         this.navigateService.goToPostsPage();
       }, 2000);
     });
   }
-
 }

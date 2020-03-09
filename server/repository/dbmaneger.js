@@ -13,9 +13,6 @@ async function addUser(user, callback) {
 async function verifyAccount(userId, callback) {
   return await  User.verifyAccount(userId, callback)
 }
-async function changePassword(userEmail, newpassword) {
-  return await  User.changePassword(userEmail, newpassword)
-}
 async function addPost(post, callback) {
   return await  Post.addPost(post, callback) 
 }
@@ -46,6 +43,12 @@ function updateFollow(friendId,userId, callback) {
 async function addUser_Friend(friendId,userId, callback) {
   return await UserFriend.addUser_Friend(friendId,userId, callback) 
 }
+async function changePassword(user,newPassword, callback) {
+  return await  User.changePassword(user, newPassword,callback)
+}
+async function getResetCodePassword(user,callback){
+   return await User.getResetCodePassword(user,callback);
+}
 
 module.exports = {
   getFilterPosts,
@@ -61,5 +64,6 @@ module.exports = {
   updateLikes,
   getUsers,
   addUser_Friend,
-  updateFollow
+  updateFollow,
+  getResetCodePassword
 };

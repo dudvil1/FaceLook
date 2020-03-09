@@ -4,22 +4,27 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { NgForm } from "@angular/forms";
 import { registrationApiService } from "../../service/api-service.service";
 import { UserService } from "../../models/user-service.service";
-import { NavigatorService } from 'src/app/common/service/navigator.service';
+import { NavigatorService } from '../../../common/service/navigator.service';
+import { StorageService} from '../../../common/service/storage.service';
+import { from } from 'rxjs';
 
 @Component({
   selector: "app-log-in",
   templateUrl: "./log-in.component.html",
   styleUrls: ["./log-in.component.css"]
 })
+
 export class LogInComponent implements OnInit {
   response: any = {};
 
   constructor(
     private navigateService:NavigatorService,
-    private route: ActivatedRoute,
     private api: registrationApiService,
     public userService: UserService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private StorageService:StorageService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -40,7 +45,8 @@ export class LogInComponent implements OnInit {
         if (this.response.message === "Auth successful") {
           this.userService.userData = data["user"];
 
-          localStorage.setItem("token", data["token"]);
+          this.StorageService.setToken(data["token"]);
+          /* localStorage.setItem("token", data["token"]); */
 
           //give client message
           this.toastr.success(data["message"], "Success");
@@ -57,13 +63,12 @@ export class LogInComponent implements OnInit {
 
   verifyAccountIfNecessary() {
     console.log("verifyAccount Call()");
-    //api call
+    
     if (this.route.snapshot.routeConfig.path === "login/:id") {
       this.route.params.subscribe(params =>
         this.api.verifyAccount(params).subscribe(
           res => {
             if (res["message"] === "active account Successfully , you can log in now") {
-              //give client message
               this.toastr.success(res["message"]);
             }
           },
@@ -83,8 +88,7 @@ export class LogInComponent implements OnInit {
       this.api.getResetCodePassword(this.userService.userData.email).subscribe(
         res => {
           //give client message
-          this.toastr.success("a Reset Code just send to your email");
-          this.router.navigate(["/forgotpassword"]);
+          this.toastr.success("Reset Code just send to your email");
         },
         err => {
           this.toastr.error("please try again");

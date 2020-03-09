@@ -28,14 +28,11 @@ app.use(function(req, res, next) {
   next();
 });
 
-// ROUTES
-// const registrationRoutes = require("./routes/registration");
-// const defaultRoutes = require("./routes/default"); 
-// const socialRoutes = require("./routes/social");
+
 app.use("/", require("./routes/default"));
 app.use("/registration", require("./routes/registration")); 
 app.use("/social", require("./routes/social"));
-app.use("/user", require("./routes/user"));
+app.use("/friend", require("./routes/friend"));
 
 // ERROR HANDLING
 app.use((req, res, next) => {

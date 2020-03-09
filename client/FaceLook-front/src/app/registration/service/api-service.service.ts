@@ -31,7 +31,7 @@ export class registrationApiService {
     return this.httpClient.patch(this.url+ "forgetPassword" , params);
   }
 
-  getResetCodePassword(user){
-    return this.httpClient.get(this.url + "getResetCodePassword");
+  getResetCodePassword(userMail:any){
+    return this.httpClient.patch(this.url + "getResetCodePassword", {userMail});
   }
 }
