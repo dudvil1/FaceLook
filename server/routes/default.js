@@ -1,8 +1,8 @@
-var express = require('express');
-var api = express.Router();
-var DefaultController = require("../containerConfig").getModule('defaultController');
+module.exports = (express ,DefaultController) => {
+    const api = express.Router();
 
-api.get('/', DefaultController.help);
-api.get('/status', DefaultController.status);
+    api.get('/', DefaultController.help);
+    api.get('/status', DefaultController.status);
 
-module.exports = api;
+    return api;
+};

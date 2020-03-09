@@ -45,9 +45,13 @@ container.registerModule('postsController',["dbManager"],require('./controllers/
 container.registerModule('registrationController',["dbManager",'mailService','bcrypt','jwtService'],require('./controllers/registrationController'));
 
 //routes
-// container.registerModule('dbManager',[],require('./repository/dbmaneger'));
+container.registerModule('defaultRoutes',['express','defaultController'],require('./routes/default'));
+container.registerModule('friendRoutes',['express','friendController','authenticated'],require('./routes/friend'));
+container.registerModule('registrationtRoutes',['express','registrationController'],require('./routes/registration'));
+container.registerModule('socialRoutes',['express','postsController','authenticated','multerService'],require('./routes/social'));
+
 
 //app
-container.registerModule("app",['express','bodyParser','morgan','cors','path'],require('./app'));
+container.registerModule("app",['express','bodyParser','morgan','cors','path','defaultRoutes','friendRoutes','registrationtRoutes','socialRoutes'],require('./app'));
 
 module.exports = container
