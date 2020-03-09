@@ -1,5 +1,5 @@
 var express = require('express');
-var registrationController = require('../controllers/registrationController');
+var registrationController = require("../containerConfig").getModule('registrationController');
 var api = express.Router();
 
 api.post("/register", registrationController.register);
