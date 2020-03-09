@@ -84,7 +84,6 @@ export class LogInComponent implements OnInit {
         res => {
           //give client message
           this.toastr.success("a Reset Code just send to your email");
-          this.router.navigate(["/forgotpassword"]);
         },
         err => {
           this.toastr.error("please try again");
