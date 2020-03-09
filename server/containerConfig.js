@@ -19,6 +19,7 @@ container.registerModule('dbConfig',[],require('./repository/DbConnection'));
 //simple services
 container.registerModule('bcrypt',['bcryptjs'],require('./services/bcryptService'));
 container.registerModule('jwtService',['jwt','moment'],require('./services/jwtService'));
+container.registerModule('passwordGeneretor',[],require('./services/passwordGeneretor'));
 
 //middlewares
 // container.registerModule('authenticated',['jwtService'],require('./middlewares/authenticated'));
@@ -27,7 +28,7 @@ container.registerModule('jwtService',['jwt','moment'],require('./services/jwtSe
 container.registerModule('baseRepo',['sql','dbConfig'],require('./repository/typeRepo/base'));
 container.registerModule('postRepo',['sql','dbConfig','mongoose'],require('./repository/typeRepo/post'));
 container.registerModule('tagRepo',['sql','dbConfig','mongoose','baseRepo'],require('./repository/typeRepo/tag'));
-container.registerModule('userRepo',['sql','dbConfig','mongoose','bcrypt'],require('./repository/typeRepo/user'));
+container.registerModule('userRepo',['sql','dbConfig','mongoose','bcrypt','passwordGeneretor'],require('./repository/typeRepo/user'));
 container.registerModule('userFriendRepo',['sql','dbConfig'],require('./repository/typeRepo/userFriend'));
 
 //db manager

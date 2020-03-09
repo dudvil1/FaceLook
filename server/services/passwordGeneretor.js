@@ -8,4 +8,6 @@ function generatePassword() {
     return retVal;
 }
 
-module.exports ={generatePassword};
+module.exports = {
+    generatePassword
+};

@@ -109,10 +109,10 @@ module.exports = (userRepo, baseRepo, tagRepo, postRepo, userFriendRepo) => {
     return await userFriendRepo.addUser_Friend(friendId, userId, callback)
   }
   async function changePassword(user,newPassword, callback) {
-    return await  User.changePassword(user, newPassword,callback)
+    return await  userRepo.changePassword(user, newPassword,callback)
   }
   async function getResetCodePassword(user,callback){
-     return await User.getResetCodePassword(user,callback);
+     return await userRepo.getResetCodePassword(user,callback);
   }
 
   return {
