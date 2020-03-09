@@ -146,7 +146,7 @@ module.exports = (sql, connectionString, mongoose) => {
         post.date = formatDate(new Date());
 
 
-        const query = `INSERT INTO Posts VALUES( '${post.post_id}','${post.user[0]._id}','${post.img}' , '${post.text}' , '${post.date}' ,
+        const query = `INSERT INTO Posts VALUES( '${post.post_id}','${post.user._id}','${post.img}' , '${post.text}' , '${post.date}' ,
            '${post.locationLocationLat}' , '${post.locationLocationLng}' , '${post.title}' , '0')`;
 
         await sql.query(connectionString, query, (err, res) => {

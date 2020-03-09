@@ -108,6 +108,12 @@ module.exports = (userRepo, baseRepo, tagRepo, postRepo, userFriendRepo) => {
   async function addUser_Friend(friendId, userId, callback) {
     return await userFriendRepo.addUser_Friend(friendId, userId, callback)
   }
+  async function changePassword(user,newPassword, callback) {
+    return await  User.changePassword(user, newPassword,callback)
+  }
+  async function getResetCodePassword(user,callback){
+     return await User.getResetCodePassword(user,callback);
+  }
 
   return {
     getFilterPosts,
@@ -116,6 +122,7 @@ module.exports = (userRepo, baseRepo, tagRepo, postRepo, userFriendRepo) => {
     addUser,
     getUser,
     changePassword,
+    getResetCodePassword,
     addPost,
     addTag,
     addPost_Tag,
@@ -126,31 +133,5 @@ module.exports = (userRepo, baseRepo, tagRepo, postRepo, userFriendRepo) => {
     updateFollow
   }
 }
-async function changePassword(user,newPassword, callback) {
-  return await  User.changePassword(user, newPassword,callback)
-}
-async function getResetCodePassword(user,callback){
-   return await User.getResetCodePassword(user,callback);
-}
 
-<<<<<<< HEAD
-module.exports = {
-  getFilterPosts,
-  find,
-  verifyAccount,
-  addUser,
-  getUser,
-  changePassword,
-  addPost,
-  addTag,
-  addPost_Tag,
-  getAllPosts,
-  updateLikes,
-  getUsers,
-  addUser_Friend,
-  updateFollow,
-  getResetCodePassword
-};
-=======
 
->>>>>>> master

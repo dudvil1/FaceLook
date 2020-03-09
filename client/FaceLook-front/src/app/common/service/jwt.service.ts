@@ -32,7 +32,7 @@ export class JwtService {
 
   private getUserFromToken(token):IUser{
     const tokenData =  this.jwtHelper.decodeToken(token)
-    const user: IUser = tokenData[0]
+    const user: IUser = tokenData
     return user
   }
 }

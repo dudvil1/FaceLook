@@ -1,4 +1,4 @@
-var jwtService = require('../services/jwtService');
+const jwtService = require("../containerConfig").getModule('jwtService');
 
 exports.ensureAuth = function (req, res, next) {
   console.log("ensureAuth call()");

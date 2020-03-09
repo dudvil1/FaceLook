@@ -17,6 +17,8 @@ async function addPost(req, res) {
       });
     });
   } catch (error) {
+    console.log(error);
+    
     return res.status(401).json({
       message: "Failure to create post"
     });

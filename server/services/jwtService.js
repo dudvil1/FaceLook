@@ -13,11 +13,12 @@ module.exports = (jwt, moment) => {
     }
 
     isTokenExpire = (token) => {
-        return jwt.isTokenExpire(token);
+        const payload = decodeToken(token)
+        return payload.expired <= moment().unix()
     }
 
     return {
-        createtoken,
+        createToken,
         decodeToken,
         isTokenExpire
     }

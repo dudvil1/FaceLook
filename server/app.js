@@ -28,7 +28,7 @@ module.exports = (express, bodyParser, morgan, cors, path) => {
   app.use("/", require("./routes/default"));
   app.use("/registration", require("./routes/registration"));
   app.use("/social", require("./routes/social"));
-  app.use("/user", require("./routes/user"));
+  app.use("/friend", require("./routes/friend"));
 
   // ERROR HANDLING
   app.use((req, res, next) => {
