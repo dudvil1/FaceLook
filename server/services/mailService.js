@@ -11,20 +11,20 @@ let transporter = nodemailer.createTransport({
 }
 });
 
-async function verifyAccountMail(mailOptions) {
+function verifyAccountMail(mailOptions) {
   console.log("verifyAccountMail() call");
   
- await transporter.sendMail({
+    transporter.sendMail({
     to: mailOptions.email,
     subject: "verfiy account for FaceLook",
     html: `<p>please verify your account in http://localhost:4200/login/${mailOptions._id}</p>`
   });
 }
 
-async function forgotPasswordMail(mailOptions) {
+function forgotPasswordMail(mailOptions) {
   console.log("forgotPasswordMail() call",mailOptions);
   
-    await transporter.sendMail({
+    transporter.sendMail({
     to: mailOptions.email,
     subject: "reset code for FaceLook",
     html: `<p>your Reset Code To Your password is ${mailOptions.resetCode}</p> 

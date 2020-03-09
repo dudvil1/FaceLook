@@ -90,8 +90,6 @@ async function forgetPassword(req, res) {
 
   try {
     await db.find("Users", "_id", req.body.id, user => {
-      console.log("sdsd" , user[0]);
-      
       if (bcrypt.checkPassword(req.body.user.resetCode,user[0].resetPasswordCode)) {
         db.changePassword(user[0], req.body.user.newPassword, answer => {
           res.status(201).json({

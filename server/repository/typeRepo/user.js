@@ -28,10 +28,8 @@ async function verifyAccount(userId, callback) {
 }
 async function changePassword(user, newPassword, callback) {
   console.log("dbManeger: changePassword call()");
-   console.log("user",user);
-   console.log("newPassword",newPassword);
+
   let hash = await bcrypt.createHashPassword(newPassword);
-  console.log("hash",hash);
   
   const query = `UPDATE Users
                    SET password = '${hash}' , resetPasswordCode = ''
