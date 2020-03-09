@@ -1,4 +1,5 @@
-const db = require("../repository/dbmaneger");
+// const db = require("../repository/dbmaneger");
+const db = require("../containerConfig").getModule('dbManager');
 
 async function addPost(req, res) {
   console.log("postController: addPost call()");
@@ -30,18 +31,6 @@ function getAllPosts(req, res) {
 
   try {
     db.getAllPosts(posts => {
-
-      if (posts){
-        const validPosts = posts.map(post=>{
-          post.date = new Date(post.date)
-          return post
-        })
-        validPosts.sort(comparePostByDate);
-
-        
-        res.status(201).json(validPosts);
-        return;
-      }
       res.status(201).json(posts);
     });
   } catch (error) {
@@ -49,16 +38,6 @@ function getAllPosts(req, res) {
       message: "Failure, try again"
     });
   }
-}
-
-function comparePostByDate(a, b) {
-  if (a.date < b.date) {
-    return -1;
-  }
-  if (a.date > b.date) {
-    return 1;
-  }
-  return 0;
 }
 
 function getFilterPosts(req, res) {

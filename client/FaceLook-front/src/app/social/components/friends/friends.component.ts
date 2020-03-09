@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserApiService } from '../../service/userApi.service';
+import { FriendApiService } from '../../service/friendApi.service';
 
 @Component({
   selector: 'app-friends',
@@ -11,7 +11,7 @@ export class FriendsComponent implements OnInit {
   searchQuery: string
 
   constructor(
-    private userApiService: UserApiService
+    private friendApiService: FriendApiService
   ) { }
 
   ngOnInit() {
@@ -20,7 +20,7 @@ export class FriendsComponent implements OnInit {
 
   searchUsers() {
     if (this.searchQuery && this.searchQuery.length > 1) {
-      this.userApiService.getAllUsers(this.searchQuery).subscribe(
+      this.friendApiService.getAllUsers(this.searchQuery).subscribe(
         users => {
           this.users = users}
       )

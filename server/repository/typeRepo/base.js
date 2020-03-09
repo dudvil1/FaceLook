@@ -1,18 +1,40 @@
-const connectionString = require("../DbConnection");
-const sql = require("msnodesqlv8");
+// const connectionString = require("../DbConnection");
+// const sql = require("msnodesqlv8");
 
-async function find(table, key, userKey, callback) {
-  console.log("dbManeger: find call()");
+// async function find(table, key, userKey, callback) {
+//   console.log("dbManeger: find call()");
 
-  const query = `SELECT * FROM ${table} WHERE ${key} = '${userKey}'`;
+//   const query = `SELECT * FROM ${table} WHERE ${key} = '${userKey}'`;
 
-  await sql.query(connectionString, query, (err, rows) => {
-    if (rows == null) rows = [];
+//   await sql.query(connectionString, query, (err, rows) => {
+//     if (rows == null) rows = [];
 
-    callback(rows);
-  });
+//     callback(rows);
+//   });
+// }
+
+// module.exports = {
+//   find
+// };
+
+
+
+module.exports = (sql, connectionString) => {
+
+  const find = async (table, key, userKey, callback) => {
+    console.log("dbManeger: find call()");
+
+    const query = `SELECT * FROM ${table} WHERE ${key} = '${userKey}'`;
+
+    await sql.query(connectionString, query, (err, rows) => {
+      if (rows == null) rows = [];
+
+      callback(rows);
+    });
+
+  };
+
+  return {
+    find: find
+  }
 }
-
-module.exports = {
-  find
-};

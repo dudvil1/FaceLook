@@ -1,4 +1,5 @@
-const db = require("../repository/dbmaneger");
+// const db = require("../repository/dbmaneger");
+const db = require("../containerConfig").getModule('dbManager');
 
 function searchUsers(req, res) {
   try {
@@ -7,7 +8,6 @@ function searchUsers(req, res) {
       res.status(201).json(posts);
     }, filter, userId);
   } catch (error) {
-
     return res.status(401).json({
       message: "Failure, try again"
     });
@@ -28,7 +28,6 @@ async function updateFollowFriend(req, res) {
       }
     })
   } catch (error) {
-    console.log(error.message);
     return res.status(401).json({
       message: "Failure, try again"
     })

@@ -18,7 +18,7 @@
     <div *ngIf="user.userId && user.friendId == currentUser._id">
         <div class="link-look-alike" (click)="updateFollow(user._id)" id={{user.userId}}>
             
-            <span>{{user.isFollowed == 'True' ? 'Follow':"UnFollow"}}</span>
+            <span>{{user.isFollowed == 'True' ? 'Un-Follow':"Follow"}}</span>
         </div>
     </div>
     <!-- option to add new friend -->

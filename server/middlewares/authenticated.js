@@ -1,8 +1,6 @@
-var jwt = require("jwt-simple");
-var moment = require("moment");
-var secret = "Secret_Key1-2-3.";
+var jwtService = require('../services/jwtService');
 
-exports.ensureAuth = function(req, res, next) {
+exports.ensureAuth = function (req, res, next) {
   console.log("ensureAuth call()");
 
   if (!req.headers.authorization) {
@@ -10,8 +8,8 @@ exports.ensureAuth = function(req, res, next) {
   }
   try {
     const token = req.headers.authorization.split(" ")[1];
-    var payload = jwt.decode(token, secret);
-    if (payload.expired <= moment().unix()) {
+    var payload = jwtService.decodeToken(token);
+    if (jwtService.isTokenExpire(token)) {
       return res.status(401).send({ message: "Expired Token." });
     }
   } catch (ex) {
@@ -21,3 +19,30 @@ exports.ensureAuth = function(req, res, next) {
 
   next();
 };
+
+// module.exports = (jwtService) => {
+
+//   ensureAuth = (req, res, next) => {
+//     console.log("ensureAuth call()");
+
+//     if (!req.headers.authorization) {
+//       return res.status(403).send({ message: "Auth failed" });
+//     }
+//     try {
+//       const token = req.headers.authorization.split(" ")[1];
+//       var payload = jwtService.decodeToken(token);
+//       if (jwtService.isTokenExpire(token)) {
+//         return res.status(401).send({ message: "Expired Token." });
+//       }
+//     } catch (ex) {
+//       return res.status(403).send({ message: "Forbidden: Invalid Token..." });
+//     }
+//     req.user = payload;
+
+//     next();
+//   };
+
+//   return {
+//     ensureAuth
+//   }
+// }

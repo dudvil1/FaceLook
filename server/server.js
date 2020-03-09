@@ -1,6 +1,8 @@
-const http = require('http');
+const container = require('./containerConfig')
+const http = container.get('http');
 
-const app = require('./app');
+const app = container.get('app');
+// const app = require('./app');
 
 const port = process.env.port || 3000;
 
