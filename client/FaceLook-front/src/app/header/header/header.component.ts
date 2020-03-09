@@ -22,4 +22,19 @@ export class HeaderComponent implements OnInit {
     localStorage.removeItem("token");
     this.navigateService.goToLogin();
   }
+  goToPosts(){
+    this.navigateService.goToPostsPage();
+  }
+  goToSocial(){
+    this.navigateService.goToHomePage();
+  }
+  goToFriends(){
+    this.navigateService.goToFriendsPage();
+  }
+  goToSharePost(){
+    this.navigateService.goToSharePostPage();
+  }
+  goToHomePage(){
+    this.navigateService.goToHomePage();
+  }
 }

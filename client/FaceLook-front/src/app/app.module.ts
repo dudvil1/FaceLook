@@ -26,7 +26,7 @@ import { HeaderComponent } from './header/header/header.component';
 import { PostsComponent } from './social/components/posts/posts.component';
 import { PostComponent } from './social/components/post/post.component';
 import { FriendComponent } from './social/components/friend/friend.component';
-import { UserApiService } from './social/service/userApi.service';
+import { FriendApiService } from './social/service/friendApi.service';
 
  function getToken() {
   return localStorage.getItem('token');
@@ -70,7 +70,7 @@ import { UserApiService } from './social/service/userApi.service';
   providers: [
     registrationApiService,
     postApiService,
-    UserApiService,
+    FriendApiService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HeaderInterceptor,

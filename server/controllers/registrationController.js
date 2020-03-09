@@ -1,7 +1,8 @@
 const jwt = require("../services/jwtService");
-const bcrypt = require("../services/bcryptService");
+const bcrypt = require("../containerConfig").getModule('bcrypt');
 const mailer = require("../services/mailService");
-const db = require("../repository/dbmaneger");
+// const db = require("../repository/dbmaneger");
+const db = require("../containerConfig").getModule('dbManager');
 
 async function register(req, res) {
   console.log("registration Controller: register call()");
@@ -30,28 +31,39 @@ async function register(req, res) {
 }
 
 async function login(req, res) {
-  console.log("registration Controller: login call()");
-  try {
-    await db.find("Users", "email", req.body.email, user => {
-      console.log(user);
+    console.log("registration Controller: login call()");
+    try {
+        //try find request user
+        await db.find("Users", "email", req.body.email, users => {
+            console.log(users);
 
-      if (user.length >= 1) {
-        //check the activation
-        if (!user[0].active) {
-          return res.status(401).json({
-            message:
-              "You Didn`t Verify Your Account Yet,Please Check Your Mail Box And Verify It"
-          });
-        }
-        if (bcrypt.checkPassword(req.body.password, user.password)) {
-          let token = jwt.createtoken(user);
-          return res.status(200).json({
-            message: "Auth successful",
-            user: user,
-            token: token
-          });
-        } else
-          return res.status(401).json({
+            if (users.length >= 1) {
+                const user = users[0]
+                //check the activation
+                if (!user.active) {
+                    return res.status(401).json({
+                        message:
+                            "You Didn`t Verify Your Account Yet,Please Check Your Mail Box And Verify It"
+                    });
+                }
+                //check password
+                console.log(bcrypt.checkPassword(req.body.password, user.password));
+                
+                if (bcrypt.checkPassword(req.body.password, user.password)) {
+                    let token = jwt.createtoken(users[0]);
+                    return res.status(200).json({
+                        message: "Auth successful",
+                        user: user,
+                        token: token
+                    });
+                } else
+                    return res.status(401).json({
+                        message: "Auth failed"
+                    });
+            }
+        });
+    } catch (error) {
+        return res.status(401).json({
             message: "Auth failed"
           });
       }
@@ -66,6 +78,7 @@ async function login(req, res) {
 async function verifyAccount(req, res) {
   console.log("registration Controller: verifyAccount() call");
 
+<<<<<<< HEAD
   try {
     await db.find("Users", "_id", req.body.id, user => {
       if (user.active) {
@@ -76,6 +89,21 @@ async function verifyAccount(req, res) {
           res.status(200).json({
             message: "active account Successfully , you can log in now"
           });
+=======
+    try {
+        await db.find("Users", "_id", req.body.id, user => {
+            console.log("registrationFind:", user);
+            if (user.active) {
+                res.status(200).json({});
+            } else {
+                db.verifyAccount(req.body.id, result => {
+                    console.log("registrationVerify:", result);
+                    res.status(200).json({
+                        message: "active account Successfully , you can log in now"
+                    });
+                });
+            }
+>>>>>>> master
         });
       }
     });

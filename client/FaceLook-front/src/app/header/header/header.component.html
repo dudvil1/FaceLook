@@ -12,27 +12,23 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a routerLink="/" title="Home">Home</a></li>
+                <li><a (click)="goToHomePage()">Home</a></li>
                 <li>
-                    <a routerLink="/sharePost">Publish new post</a>
-                </li>
-                <!-- <li>
-                    <a routerLink="/friends">Friends</a>
-                </li> -->
-                <li>
-                    <a routerLink="/social">Feed and Map (social)</a>
+                    <a (click)="goToSharePost()">Publish new post</a>
                 </li>
                 <li>
-                    <a routerLink="/posts">All posts</a>
+                    <a (click)="goToFriends()">Friends</a>
+                </li>
+                <li>
+                    <a (click)="goToSocial()">Feed and Map (social)</a>
+                </li>
+                <li>
+                    <a (click)="goToPosts()">All posts</a>
                 </li>
             </ul>
 
             <div class="navbar-form navbar-right">
                 <div (click)="userLogout()" class="logout">Logout</div>
-                <!-- <div class="form-group">
-                    <input type="text" class="form-control" />
-                </div>
-                <button class="btn btn-primary btn_search">Search</button> -->
             </div>
 
         </div>
