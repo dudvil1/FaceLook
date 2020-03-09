@@ -5,10 +5,7 @@ async function addPost(req, res) {
   console.log("postController: addPost call()");
   req.body.user = req.user;
   req.body.img = req.image;
-  console.log("test", req.image);
   
-
-  console.log("addpost", req.body.img);
   try {
     await db.addPost(req.body, postResult => {
       db.addTag(postResult, tagResult => {
@@ -71,7 +68,6 @@ async function updateLikes(req, res) {
     })
   }
 }
-
 
 module.exports = {
   addPost,

@@ -26,4 +26,7 @@ export class NavigatorService {
   goToPostsPage(){
     this.router.navigate(["posts"])
   }
+  goToForgetPassword(){
+    this.router.navigate(["forgetpassword"])
+  }
 }

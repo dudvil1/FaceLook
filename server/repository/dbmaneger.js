@@ -126,5 +126,31 @@ module.exports = (userRepo, baseRepo, tagRepo, postRepo, userFriendRepo) => {
     updateFollow
   }
 }
+async function changePassword(user,newPassword, callback) {
+  return await  User.changePassword(user, newPassword,callback)
+}
+async function getResetCodePassword(user,callback){
+   return await User.getResetCodePassword(user,callback);
+}
 
+<<<<<<< HEAD
+module.exports = {
+  getFilterPosts,
+  find,
+  verifyAccount,
+  addUser,
+  getUser,
+  changePassword,
+  addPost,
+  addTag,
+  addPost_Tag,
+  getAllPosts,
+  updateLikes,
+  getUsers,
+  addUser_Friend,
+  updateFollow,
+  getResetCodePassword
+};
+=======
 
+>>>>>>> master
