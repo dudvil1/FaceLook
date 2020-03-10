@@ -1,19 +1,9 @@
 module.exports = (express, postsController, md_auth, multer) => {
     const api = express.Router();
 
-    api.post(
-        "/addPost",
-        [md_auth.ensureAuth, multer.single("image")],
-        postsController.addPost
-    );
+    api.post("/addPost", [md_auth.ensureAuth, multer.single("image")], postsController.addPost);
     api.get("/getPosts", md_auth.ensureAuth, postsController.getAllPosts);
-    api.get(
-        "/filterPosts/:filters",
-        md_auth.ensureAuth,
-        postsController.getFilterPosts
-    );
+    api.get("/filterPosts/:filters", md_auth.ensureAuth, postsController.getFilterPosts);
     api.patch("/updateLikes", md_auth.ensureAuth, postsController.updateLikes);
-
     return api;
 };
-    
