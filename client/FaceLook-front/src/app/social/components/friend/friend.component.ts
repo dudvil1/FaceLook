@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { IUser } from 'src/app/common/model/user';
-import { JwtService } from 'src/app/common/service/jwt.service';
+import { IUser } from '../../../common/model/user';
+import { JwtService } from '../../../common/service/jwt.service';
 import { FriendApiService } from '../../service/friendApi.service';
 
 @Component({

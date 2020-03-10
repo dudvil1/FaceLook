@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { IPost } from '../../../common/model/post';
 
 @Component({
   selector: 'app-post',
@@ -7,8 +8,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class PostComponent implements OnInit {
 
-  @Input() post: any;
-  @Output() likesEmitter = new EventEmitter<string>();
+  @Input() post: IPost;
+  @Output() likesEmitter = new EventEmitter<IPost>();
 
   imgPath: string = 'http://localhost:3000/public/uploads/images/';
 
@@ -21,14 +22,9 @@ export class PostComponent implements OnInit {
   }
 
   
-  addLike(post: any){
-    // likes = 0
-    if(this.post.likes == 0 ) return;
-    // if not clicked already
+  addLike(post: IPost){
     if(this.likeClicked == false){
-      // update THIS post likes
       this.post.likes++;
-      // include the new value of likes
       this.likesEmitter.emit(post);
       this.likeClicked = true;
     } 

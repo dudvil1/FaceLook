@@ -48,9 +48,7 @@ module.exports = (sql, connectionString, mongoose) => {
         const query = `select *
                           from Posts 
                           --join Post_Tag on Posts.post_id = Post_Tag.post_id
-                          --join Tags on Tags.tag_id = Post_Tag.tag_id
-                          
-                          where CAST(Posts.date as datetime2)>'2018-11-11'`;
+                          --join Tags on Tags.tag_id = Post_Tag.tag_id`;
 
         sql.query(connectionString, query, (err, rows) => {
             if (err) console.log("from addPost_tag", err);
@@ -64,66 +62,15 @@ module.exports = (sql, connectionString, mongoose) => {
             WHERE post_id = '${post.post_id}';
           `;
 
+          console.log(query
+            );
+          
         sql.query(connectionString, query, (err, res) => {
             if (err) console.log("from updateLikes", err);
             callback(res);
         });
     }
-    ///private methods
-    function formatDate(date) {
-        var d = new Date(date),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
-
-        if (month.length < 2)
-            month = '0' + month;
-        if (day.length < 2)
-            day = '0' + day;
-
-        return [year, month, day].join('-');
-    }
-    function getFilterQuery(filters) {
-        const { fromFilter, ToFilter, publisher, radiusFrom, location, imageTags, userTags } = filters;
-        filterQuery = ["Where"];
-
-        if (fromFilter) {
-            filterQuery.push(`CAST(Posts.date as datetime)>='${fromFilter}'`)
-            filterQuery.push(`And `)
-        }
-
-        if (ToFilter) {
-            filterQuery.push(`CAST(Posts.date as datetime)<='${ToFilter}'`)
-            filterQuery.push(`And`)
-        }
-
-        if (publisher) {
-            filterQuery.push(`Users.name = '${publisher}'`)
-            filterQuery.push(`And`)
-        }
-        ///by km
-        if (radiusFrom && location) {
-            filterQuery.push(`POWER((
-                POWER( ( 53.0 * ( Posts.longitude - ${location.longitude} ) ) , 2 )
-                 + POWER( ( 69.1 * ( Posts.latitude - ${location.latitude} ) ) , 2 )
-                ),0.5)*1.609344  < 1 * ${radiusFrom} `)
-            filterQuery.push(`And`)
-        }
-
-        if (imageTags) {
-            //not implamented
-        }
-
-        if (userTags) {
-            filterQuery.push(`Tags.text = '${userTags}'`)
-            filterQuery.push(`And`)
-        }
-
-        filterQuery.pop();
-
-        return filterQuery.join(" ");
-    }
-
+    
     return {
         getFilterPosts,
         addPost,
@@ -131,5 +78,60 @@ module.exports = (sql, connectionString, mongoose) => {
         getAllPosts,
         updateLikes
     }
+}
+
+///private methods
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2)
+        month = '0' + month;
+    if (day.length < 2)
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+function getFilterQuery(filters) {
+    const { fromFilter, ToFilter, publisher, radiusFrom, location, imageTags, userTags } = filters;
+    filterQuery = ["Where"];
+
+    if (fromFilter) {
+        filterQuery.push(`CAST(Posts.date as datetime)>='${fromFilter}'`)
+        filterQuery.push(`And `)
+    }
+
+    if (ToFilter) {
+        filterQuery.push(`CAST(Posts.date as datetime)<='${ToFilter}'`)
+        filterQuery.push(`And`)
+    }
+
+    if (publisher) {
+        filterQuery.push(`Users.name = '${publisher}'`)
+        filterQuery.push(`And`)
+    }
+    ///by km
+    if (radiusFrom && location) {
+        filterQuery.push(`POWER((
+            POWER( ( 53.0 * ( Posts.longitude - ${location.longitude} ) ) , 2 )
+             + POWER( ( 69.1 * ( Posts.latitude - ${location.latitude} ) ) , 2 )
+            ),0.5)*1.609344  < 1 * ${radiusFrom} `)
+        filterQuery.push(`And`)
+    }
+
+    if (imageTags) {
+        //not implamented
+    }
+
+    if (userTags) {
+        filterQuery.push(`Tags.text = '${userTags}'`)
+        filterQuery.push(`And`)
+    }
+
+    filterQuery.pop();
+
+    return filterQuery.join(" ");
 }
 

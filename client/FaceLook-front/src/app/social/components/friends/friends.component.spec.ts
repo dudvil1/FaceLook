@@ -1,16 +1,22 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FriendsComponent } from './friends.component';
+import { FriendApiService } from '../../service/friendApi.service';
 
-describe('FriendsComponent', () => {
+fdescribe('FriendsComponent', () => {
   let component: FriendsComponent;
   let fixture: ComponentFixture<FriendsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FriendsComponent ]
+      declarations: [
+        FriendsComponent
+      ],
+      providers: [
+        {provide:FriendApiService,useValue:{}}
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
