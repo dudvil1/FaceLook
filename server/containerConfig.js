@@ -1,4 +1,5 @@
 const container = require('./container')
+require('dotenv').config()
 
 //node_modules services
 container.registerModule('http',[],require('http'),true);

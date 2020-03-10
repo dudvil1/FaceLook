@@ -1,37 +1,49 @@
 import { Injectable } from "@angular/core";
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpRequest,
-  HttpParams
-} from "@angular/common/http";
-import { Observable, from } from "rxjs";
+import {HttpClient} from "@angular/common/http";
+import { ApiConfigService } from '../../common/service/api-config.service';
 
 @Injectable({
   providedIn: "root"
 })
 export class registrationApiService {
-  url = "http://localhost:3000/registration/";
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(
+    private httpClient: HttpClient,
+    private apiConfig: ApiConfigService)
+     { }
 
   login(user: any) {
-    return this.httpClient.post(this.url + "login", user);
+    const { registrationUrl, login } = this.apiConfig.registrationApi
+    const url = registrationUrl + login
+
+    return this.httpClient.post(url, user);
   }
 
   verifyAccount(params) {
-    return this.httpClient.patch(this.url + "verifyAccount", params);
+    const { registrationUrl, verifyAccount } = this.apiConfig.registrationApi
+    const url = registrationUrl + verifyAccount
+    
+    return this.httpClient.patch(url, params);
   }
 
   register(user: any) {
-    return this.httpClient.post(this.url + "register", user);
+    const { registrationUrl, register } = this.apiConfig.registrationApi
+    const url = registrationUrl + register
+    
+    return this.httpClient.post(url, user);
   }
 
-  updatePassword(params){
-    return this.httpClient.patch(this.url+ "forgetPassword" , params);
+  updatePassword(params) {
+    const { registrationUrl, forgetPassword } = this.apiConfig.registrationApi
+    const url = registrationUrl + forgetPassword
+
+    return this.httpClient.patch(url, params);
   }
 
-  getResetCodePassword(userMail:any){
-    return this.httpClient.patch(this.url + "getResetCodePassword", {userMail});
+  getResetCodePassword(userMail: any) {
+    const { registrationUrl, getResetCodePassword } = this.apiConfig.registrationApi
+    const url = registrationUrl + getResetCodePassword
+
+    return this.httpClient.patch(url, { userMail });
   }
 }

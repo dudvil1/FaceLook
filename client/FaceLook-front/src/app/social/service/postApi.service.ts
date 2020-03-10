@@ -1,91 +1,79 @@
 import { Injectable } from "@angular/core";
-import { HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { markerCollectionsService } from "../service/marker-collection.service"
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
+import { ApiConfigService } from '../../common/service/api-config.service';
 
 @Injectable()
-export  class postApiService {
-  url = "http://localhost:3000/social/";
-
+export class postApiService {
   constructor(
     private markersService: markerCollectionsService,
-    private httpClient: HttpClient
-    ) {}
+    private httpClient: HttpClient,
+    private apiConfig: ApiConfigService
+  ) { }
 
   addPost(post: any) {
-    return this.httpClient.post(this.url + "addPost", post);
+    const { socialUrl, addPost } = this.apiConfig.socialApi
+    const url = socialUrl + addPost
+
+    return this.httpClient.post(url, post);
   }
 
-  getAllPosts(){
-    console.log("getAllPost call()");
-    return this.httpClient.get(this.url + "getPosts").pipe(
+  getAllPosts() {
+    const { socialUrl, getPosts } = this.apiConfig.socialApi
+    const url = socialUrl + getPosts
+
+    return this.httpClient.get(url).pipe(
       tap((res) => {
-        const markersArr = (<any>res).map(post => ({
-          postId: post.post_id,
-          title: post.title,
-          publisherId: post.publisher_id,
-          text: post.text,
-          image: post.image,
-          lat: post.latitude,
-          lng: post.longitude,
-          likes: post.likes,
-          date: post.date,
-        }));
-        console.log("res",markersArr);
-        this.markersService.markers$.next(markersArr);
+        const markers = this.setPostsToMarkers(res);
+        console.log("res", markers);
+        this.markersService.markers$.next(markers);
       })
     );
   }
 
-  getFilterPosts(filters){
+  getFilterPosts(filters) {
+    const { socialUrl, filterPosts } = this.apiConfig.socialApi
+    const url = socialUrl + filterPosts(JSON.stringify(filters))
 
-    return this.httpClient.get(this.url + `filterPosts\\${JSON.stringify(filters)}`).pipe(
+    return this.httpClient.get(url).pipe(
       tap((res) => {
-        const markersArr = (<any>res).map(post => ({
-          postId: post.post_id,
-          title: post.title,
-          publisherId: post.publisher_id,
-          text: post.text,
-          image: post.image,
-          lat: post.latitude,
-          lng: post.longitude,
-          likes: post.likes,
-          date: post.date,
-        }));
+        const markers = this.setPostsToMarkers(res);
 
-        this.markersService.markers$.next(markersArr);
+        this.markersService.markers$.next(markers);
       })
     );
   }
+  updateLikes(post) {
+    const { socialUrl, updateLikes } = this.apiConfig.socialApi
+    const url = socialUrl + updateLikes
 
-  updateLikes(post){
-    return this.httpClient.patch(this.url + "updateLikes", {post});
+    return this.httpClient.patch(url, { post });
   }
 
-  getAllPostsAsPosts(){
-    return this.httpClient.get(this.url + "getPosts").pipe(
-      tap((res) => {
-        const postsArr = (<any>res).map(post => ({
-          postId: post.post_id,
-          title: post.title,
-          publisherId: post.publisher_id,
-          text: post.text,
-          image: post.image,
-          lat: post.latitude,
-          lng: post.longitude,
-          likes: post.likes,
-          date: post.date,
-        }));
+  getAllPostsAsPosts() {
+    const { socialUrl, getPosts } = this.apiConfig.socialApi
+    const url = socialUrl + getPosts
 
-        // this.markersService.markers$.next(markersArr);
-        return postsArr;
+    return this.httpClient.get(url).pipe(
+      map((res) => {
+        return this.setPostsToMarkers(res);
       })
     );
-
-    // return this.httpClient.get(this.url + "getPosts").toPromise()
-    // .then(collection => {
-    //     this.markersService.markerCollections = collection as any[];
-    // })
   }
+  private setPostsToMarkers(res: Object) {
+    return (<any>res).map(post => ({
+      postId: post.post_id,
+      title: post.title,
+      publisherId: post.publisher_id,
+      text: post.text,
+      image: post.image,
+      lat: post.latitude,
+      lng: post.longitude,
+      likes: post.likes,
+      date: post.date,
+    }));
+  }
+
 
 }
