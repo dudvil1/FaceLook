@@ -14,6 +14,8 @@ container.registerModule('jwt',[],require('jwt-simple'),true);
 container.registerModule('moment',[],require('moment'),true);
 container.registerModule('nodemailer',[],require('nodemailer'),true);
 container.registerModule('multer',[],require('multer'),true);
+container.registerModule('swaggerUi',[],require('swagger-ui-express'),true);
+container.registerModule('YAML',[],require('yamljs'),true);
 
 //config services
 container.registerModule('dbConfig',[],require('./repository/DbConnection'));
@@ -52,6 +54,6 @@ container.registerModule('socialRoutes',['express','postsController','authentica
 
 
 //app
-container.registerModule("app",['express','bodyParser','morgan','cors','path','defaultRoutes','friendRoutes','registrationtRoutes','socialRoutes'],require('./app'));
+container.registerModule("app",['express','bodyParser','morgan','cors','path','defaultRoutes','friendRoutes','registrationtRoutes','socialRoutes','swaggerUi','YAML'],require('./app'));
 
 module.exports = container
