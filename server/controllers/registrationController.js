@@ -1,9 +1,9 @@
-module.exports = (db,mailer,bcrypt,jwt) => {
-    async function register(req, res) {
+module.exports = (db, mailer, bcrypt, jwt) => {
+    function register(req, res) {
         console.log("registration Controller: register call()");
         try {
             //check if user exist
-            await db.find("Users", "email", req.body.email, users => {
+            db.find("Users", "email", req.body.email, users => {
                 if (users.length >= 1) {
                     return res.status(401).json({
                         message: "user already exist,try again"
@@ -24,13 +24,13 @@ module.exports = (db,mailer,bcrypt,jwt) => {
             });
         }
     }
-    async function login(req, res) {
+    function login(req, res) {
         console.log("registration Controller: login call()");
         try {
             //try find request user
-            await db.find("Users", "email", req.body.email, users => {
-                if (users.length >= 1) {
-                    const user = users[0]
+            db.find("Users", "email", req.body.email, user => {
+                if (user) {
+                    const user = user
                     //check the activation
                     if (!user.active) {
                         return res.status(401).json({
@@ -39,8 +39,6 @@ module.exports = (db,mailer,bcrypt,jwt) => {
                         });
                     }
                     //check password
-                    console.log(bcrypt.checkPassword(req.body.password, user.password));
-    
                     if (bcrypt.checkPassword(req.body.password, user.password)) {
                         let token = jwt.createToken(user);
                         return res.status(200).json({
@@ -60,11 +58,11 @@ module.exports = (db,mailer,bcrypt,jwt) => {
             });
         }
     }
-    async function verifyAccount(req, res) {
+    function verifyAccount(req, res) {
         console.log("registration Controller: verifyAccount() call");
-    
+
         try {
-            await db.find("Users", "_id", req.body.id, user => {
+            db.find("Users", "_id", req.body.id, user => {
                 if (user.active) {
                     res.status(200).json({});
                 } else {
@@ -82,18 +80,23 @@ module.exports = (db,mailer,bcrypt,jwt) => {
             });
         }
     }
-    async function forgetPassword(req, res) {
+    function forgetPassword(req, res) {
         console.log("registration Controller: forgotPassword call()", req.body);
-    
+
         try {
-            await db.find("Users", "_id", req.body.id, user => {
-                console.log("sdsd", user[0]);
-    
-                if (bcrypt.checkPassword(req.body.user.resetCode, user[0].resetPasswordCode)) {
-                    db.changePassword(user[0], req.body.user.newPassword, answer => {
-                        res.status(201).json({
-                            message: "password change successfuly"
-                        });
+            db.find("Users", "_id", req.body.id, user => {
+                if (user && bcrypt.checkPassword(req.body.user.resetCode, user.resetPasswordCode)) {
+                    db.changePassword(user, req.body.user.newPassword, success => {
+                        if (success) {
+                            res.status(201).json({
+                                message: "password change successfuly"
+                            });
+                        }
+                        else {
+                            return res.status(401).json({
+                                message: "Auth failed"
+                            });
+                        }
                     });
                 }
             });
@@ -103,17 +106,23 @@ module.exports = (db,mailer,bcrypt,jwt) => {
             });
         }
     }
-    async function getResetCodePassword(req, res) {
+    function getResetCodePassword(req, res) {
         console.log("getResetCodePassword call()");
-    
+
         try {
-            await db.find("Users", "email", req.body.userMail, user => {
-                let priveteUser = user[0];
+            db.find("Users", "email", req.body.userMail, user => {
+                let priveteUser = user;
                 db.getResetCodePassword(priveteUser, userResetCode => {
-                    mailer.forgotPasswordMail(userResetCode);
-                    return res.status(201).json({
-                        message: "ok"
-                    });
+                    if (userResetCode) {
+                        mailer.forgotPasswordMail(userResetCode);
+                        return res.status(201).json({
+                            message: "ok"
+                        });
+                    } else {
+                        return res.status(401).json({
+                            message: "Failure to get Reset Code Password"
+                        });
+                    }
                 });
             });
         } catch (error) {

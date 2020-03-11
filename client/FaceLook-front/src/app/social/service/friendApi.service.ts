@@ -8,7 +8,7 @@ import { IUser } from '../../common/model/user';
 
 export interface IFriendApi {
   addFriend(userId: string, friendId: string): Observable<IUser>,
-  getAllUsers(filter?): Observable<IUser[]>,
+  getAllUsers(filter?: string): Observable<IUser[]>,
   updateFollow(userId: string, friendId: string): Observable<IUser>
 }
 
@@ -27,7 +27,7 @@ export class FriendApiService implements IFriendApi {
     return this.httpClient.post<IUser>(url, { userId, friendId })
   }
 
-  getAllUsers(filter?): Observable<IUser[]> {
+  getAllUsers(filter?: string): Observable<IUser[]> {
     const data = { filter: filter, userId: this.jwtService.getUserId() }
 
     const { friendUrl, searchUsers } = this.apiConfig.friendApi

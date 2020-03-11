@@ -1,13 +1,15 @@
 
 module.exports = (db) => {
-  async function addPost(req, res) {
+  function addPost(req, res) {
     console.log("postController: addPost call()");
     req.body.user = req.user;
     req.body.img = req.image;
-  
+
+    console.log(req.body)
+
     try {
-      await db.addPost(req.body, postResult => {
-        db.addTag(postResult, tagResult => {
+      db.addPost(req.body, postResult => {
+        db.addTag(req.body.tag, tagResult => {
           db.addPost_Tag(tagResult, result => {
             return res.status(201).json({
               message: "post Created Successfully"
@@ -17,7 +19,7 @@ module.exports = (db) => {
       });
     } catch (error) {
       console.log(error);
-  
+
       return res.status(401).json({
         message: "Failure to create post"
       });
@@ -25,7 +27,7 @@ module.exports = (db) => {
   }
   function getAllPosts(req, res) {
     console.log("postController: getAllPosts call()");
-  
+
     try {
       db.getAllPosts(posts => {
         res.status(201).json(posts);
@@ -37,24 +39,22 @@ module.exports = (db) => {
     }
   }
   function getFilterPosts(req, res) {
-  
+
     try {
       const filters = JSON.parse(req.params.filters);
       db.getFilterPosts(filters, posts => {
         res.status(201).json(posts);
       });
     } catch (error) {
-  
+
       return res.status(401).json({
         message: "Failure, try again"
       });
     }
   }
-  async function updateLikes(req, res) {
+  function updateLikes(req, res) {
     try {
-      await db.updateLikes(req.body.post, (data) => {
-        console.log(data);
-        
+      db.updateLikes(req.body.post, (data) => {
         res.status(201).json({
           message: "Post Like updated successfuly"
         })

@@ -28,4 +28,8 @@ fdescribe('FriendsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('search', () => {
+    component.searchUsers()
+  });
 });

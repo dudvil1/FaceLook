@@ -3,7 +3,7 @@ module.exports = (bcrypt) => {
 
   function checkPassword(reqPassword, userPassword) {
     console.log("bycrptService: checkPassword call()");
-    
+
     return bcrypt.compareSync(reqPassword, userPassword);
   }
 

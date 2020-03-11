@@ -1,27 +1,21 @@
 module.exports = (sql, connectionString, mongoose) => {
-    async function addPost(post, callback) {
+    function addPost(post, callback) {
         console.log("dbManeger: addPost call()");
 
         post.post_id = new mongoose.Types.ObjectId();
         post.date = formatDate(new Date());
 
-
         const query = `INSERT INTO Posts VALUES( '${post.post_id}','${post.user._id}','${post.img}' , '${post.text}' , '${post.date}' ,
            '${post.locationLocationLat}' , '${post.locationLocationLng}' , '${post.title}' , '0')`;
 
-        await sql.query(connectionString, query, (err, res) => {
-            if (err) console.log("from addPost", err);
-            callback(post);
-        });
+        sql.add(connectionString, query, callback);
     }
-    async function addPost_Tag(post_tag, callback) {
+    function addPost_Tag(post_tag, callback) {
         console.log("dbManeger: Post_Tag call()");
 
         const query = `INSERT INTO Post_Tag VALUES( '${post_tag.post_id}', '${post_tag.tag_id}')`;
-        await sql.query(connectionString, query, (err, res) => {
-            if (err) console.log("from addPost_tag", err);
-            callback(post_tag);
-        });
+
+        sql.add(connectionString, query, callback);
     }
     function getFilterPosts(filters, callback) {
 
@@ -36,10 +30,7 @@ module.exports = (sql, connectionString, mongoose) => {
                           
                           ${filterQuery}`;
 
-        sql.query(connectionString, query, (err, rows) => {
-            if (err) console.log("from addPost_tag", err);
-            callback(rows);
-        });
+        sql.getMany(connectionString, query, callback);
     }
     function getAllPosts(callback) {
 
@@ -50,10 +41,7 @@ module.exports = (sql, connectionString, mongoose) => {
                           --join Post_Tag on Posts.post_id = Post_Tag.post_id
                           --join Tags on Tags.tag_id = Post_Tag.tag_id`;
 
-        sql.query(connectionString, query, (err, rows) => {
-            if (err) console.log("from addPost_tag", err);
-            callback(rows);
-        });
+        sql.getMany(connectionString, query, callback);
     }
     function updateLikes(post, callback) {
         const query = `
@@ -62,15 +50,9 @@ module.exports = (sql, connectionString, mongoose) => {
             WHERE post_id = '${post.post_id}';
           `;
 
-          console.log(query
-            );
-          
-        sql.query(connectionString, query, (err, res) => {
-            if (err) console.log("from updateLikes", err);
-            callback(res);
-        });
+        sql.updateOne(connectionString, query, callback);
     }
-    
+
     return {
         getFilterPosts,
         addPost,
