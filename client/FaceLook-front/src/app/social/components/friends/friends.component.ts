@@ -21,8 +21,7 @@ export class FriendsComponent implements OnInit {
   searchUsers() {
     if (this.searchQuery && this.searchQuery.length > 1) {
       this.friendApiService.getAllUsers(this.searchQuery).subscribe(
-        users => {
-          this.users = users}
+        users => {this.users = users}
       )
     }
   }

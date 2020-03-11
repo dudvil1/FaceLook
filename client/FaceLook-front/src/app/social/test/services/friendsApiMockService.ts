@@ -13,7 +13,7 @@ export class FriendApiMockService implements IFriendApi {
             //return Observable of all the users that thier email or name contain 
             return of(this.users.filter(user => (user.name.includes(filter) || user.email.includes(filter))))
         }
-        else{
+        else {
             of(this.users)
         }
     }
@@ -21,9 +21,13 @@ export class FriendApiMockService implements IFriendApi {
         throw new Error("Method not implemented.");
     }
 
-    constructor(){
+    constructor() {
         this.users = [
-            // {},
+            { active: true, email: 'guykem@gmail.com', name: 'guy', _id: '1', role: 'user' },
+            { active: true, email: 'nirkem@gmail.com', name: 'nir', _id: '2', role: 'user' },
+            { active: true, email: 'dudukem@gmail.com', name: 'guykem', _id: '3', role: 'user' },
+            { active: true, email: 'sharonkem@gmail.com', name: 'sharon', _id: '4', role: 'user' },
+            { active: true, email: 'amnonkem@gmail.com', name: 'amnon', _id: '5', role: 'user' },
         ]
     }
 
