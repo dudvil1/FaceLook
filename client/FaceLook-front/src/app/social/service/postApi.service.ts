@@ -3,77 +3,68 @@ import { HttpClient } from "@angular/common/http";
 import { markerCollectionsService } from "../service/marker-collection.service"
 import { tap, map } from 'rxjs/operators';
 import { ApiConfigService } from '../../common/service/api-config.service';
+import { Observable } from 'rxjs';
+import { IPost } from '../../common/model/post';
+import { ReturnStatement } from '@angular/compiler';
+import { ISuccessResponse } from '../../common/model/successResponse';
+
+export interface IPostApi {
+  addPost(post: any): Observable<ISuccessResponse>,
+  getAllPosts(): Observable<IPost[]>,
+  getFilterPosts(filters): Observable<IPost[]>,
+  updateLikes(post): Observable<ISuccessResponse>,
+  getAllPostsAsPosts(): Observable<IPost[]>
+}
 
 @Injectable()
-export class postApiService {
+export class postApiService implements IPostApi {
   constructor(
     private markersService: markerCollectionsService,
     private httpClient: HttpClient,
     private apiConfig: ApiConfigService
   ) { }
 
-  addPost(post: any) {
+  addPost(post: any): Observable<ISuccessResponse> {
     const { socialUrl, addPost } = this.apiConfig.socialApi
     const url = socialUrl + addPost
 
-    return this.httpClient.post(url, post);
+    return this.httpClient.post<ISuccessResponse>(url, post).pipe(
+      tap(res => console.log(res))
+    );
   }
 
-  getAllPosts() {
+  getAllPosts(): Observable<IPost[]> {
     const { socialUrl, getPosts } = this.apiConfig.socialApi
     const url = socialUrl + getPosts
 
-    return this.httpClient.get(url).pipe(
-      tap((res) => {
-        const markers = this.setPostsToMarkers(res);
-        console.log("res", markers);
-        this.markersService.markers$.next(markers);
+    return this.httpClient.get<IPost[]>(url).pipe(
+      tap((posts) => {
+        this.markersService.markers$.next(posts);
       })
     );
   }
 
-  getFilterPosts(filters) {
+  getFilterPosts(filters): Observable<IPost[]> {
     const { socialUrl, filterPosts } = this.apiConfig.socialApi
     const url = socialUrl + filterPosts(JSON.stringify(filters))
 
-    return this.httpClient.get(url).pipe(
-      tap((res) => {
-        const markers = this.setPostsToMarkers(res);
-
-        this.markersService.markers$.next(markers);
+    return this.httpClient.get<IPost[]>(url).pipe(
+      tap((posts) => {
+        this.markersService.markers$.next(posts);
       })
     );
   }
-  updateLikes(post) {
+  updateLikes(post:IPost): Observable<ISuccessResponse> {
     const { socialUrl, updateLikes } = this.apiConfig.socialApi
     const url = socialUrl + updateLikes
 
-    return this.httpClient.patch(url, { post });
+    return this.httpClient.patch<ISuccessResponse>(url, { post });
   }
 
-  getAllPostsAsPosts() {
+  getAllPostsAsPosts(): Observable<IPost[]> {
     const { socialUrl, getPosts } = this.apiConfig.socialApi
     const url = socialUrl + getPosts
 
-    return this.httpClient.get(url).pipe(
-      map((res) => {
-        return this.setPostsToMarkers(res);
-      })
-    );
+    return this.httpClient.get<IPost[]>(url)
   }
-  private setPostsToMarkers(res: Object) {
-    return (<any>res).map(post => ({
-      postId: post.post_id,
-      title: post.title,
-      publisherId: post.publisher_id,
-      text: post.text,
-      image: post.image,
-      lat: post.latitude,
-      lng: post.longitude,
-      likes: post.likes,
-      date: post.date,
-    }));
-  }
-
-
 }

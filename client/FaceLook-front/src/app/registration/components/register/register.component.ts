@@ -4,7 +4,7 @@ import { NgForm } from '@angular/forms';
 import {ToastrService} from 'ngx-toastr';
 import { registrationApiService } from "../../service/api-service.service";
 import { UserService } from "../../models/user-service.service";
-import { NavigatorService } from 'src/app/common/service/navigator.service';
+import { NavigatorService } from '../../../common/service/navigator.service';
 
 
 @Component({

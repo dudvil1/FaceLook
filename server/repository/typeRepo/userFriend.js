@@ -1,25 +1,19 @@
 module.exports = (sql, connectionString) => {
     function updateFollow(friendId, userId, callback) {
-        const query = `UPDATE user_friends
-        SET isFollowed = ( CASE WHEN isFollowed = 'True' THEN 'False' else 'True'END)
-        WHERE user_friends.userId = '${friendId}' And user_friends.friendId = '${userId}';`;
+        const query = `UPDATE User_Friend
+        SET isFollowed = ( CASE WHEN isFollowed = '0' THEN '1' else '0'END)
+        WHERE User_Friend.userId = '${friendId}' And User_Friend.friendId = '${userId}';`;
 
-        sql.query(connectionString, query, (err, res) => {
-            if (err) console.log("from updateLikes", err);
-            callback(res);
-        });
+        sql.update(connectionString, query, callback);
     }
-    async function addUser_Friend(friendId, userId, callback) {
+    function addUser_Friend(friendId, userId, callback) {
         console.log("dbManeger: User_Friend call()");
 
-        const query = `INSERT INTO user_friends VALUES
-        ('${userId}', '${friendId}','False'),
-        ('${friendId}', '${userId}','False')`;
+        const query = `INSERT INTO User_Friend VALUES
+        ('${userId}', '${friendId}','0'),
+        ('${friendId}', '${userId}','0')`;
 
-        await sql.query(connectionString, query, (err, res) => {
-            if (err) console.log("from addUser_Friend", err);
-            callback(err ? false : true);
-        });
+        sql.add(connectionString, query, callback);
     }
 
     return {
