@@ -2,7 +2,7 @@ import { IFriendApi } from '../../service/friendApi.service';
 import { Observable, of } from 'rxjs';
 import { IUser } from 'src/app/common/model/user';
 
-export class FriendApiService implements IFriendApi {
+export class FriendApiMockService implements IFriendApi {
     users: IUser[]
 
     addFriend(userId: string, friendId: string): Observable<IUser> {

@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FriendsComponent } from './friends.component';
 import { FriendApiService } from '../../service/friendApi.service';
+import { FriendApiMockService } from '../../test/services/friendsApiMockService';
 
 fdescribe('FriendsComponent', () => {
   let component: FriendsComponent;
@@ -13,7 +14,7 @@ fdescribe('FriendsComponent', () => {
         FriendsComponent
       ],
       providers: [
-        {provide:FriendApiService,useValue:{}}
+        {provide:FriendApiService,useClass:FriendApiMockService}
       ]
     })
       .compileComponents();

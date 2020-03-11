@@ -21,7 +21,6 @@ module.exports = db => {
       db.updateFollow(friendId, userId, data => {
         if (data) {
           db.getUser(friendId, user => {
-            console.log(user)
             return res.status(200).json(user);
           });
         }
