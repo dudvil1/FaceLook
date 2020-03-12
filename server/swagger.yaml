@@ -1,0 +1,369 @@
+swagger: '2.0'
+info:
+  description: API For FaceLook
+  version: '0.2.0'
+  title: Node Rest API documentation
+  termsOfService: 'http://swagger.io/terms/'
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+host: localhost:3000
+basePath: /
+schemes:
+- http
+
+paths:
+  /registration/register:
+    post:
+      tags:
+        - Registration Module
+      summary: register
+      description: API for New User
+      parameters:
+        - in: body
+          name: body
+          description: register Payload
+          required: true
+          schema:
+            $ref: '#/RequestDefinitions/RegisterModel'
+      produces:
+        - application/json
+      responses:
+        '201':
+          description:  User Created Successfully , Please check Your Mail To Verify Your Account
+          schema:
+            $ref: '#/ResponseDefinitions/DefaultApiResponse'
+        '409':
+          description: user already exist,try again
+        '500':
+          description: Internal Server Error
+
+  /registration/login:
+    post:
+      tags:
+        - Registration Module
+      summary: LogIn
+      description: API for LogIn
+      parameters:
+        - in: body
+          name: body
+          description: LogIn Payload
+          required: true
+          schema:
+            $ref: '#/RequestDefinitions/LogInModel'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Authorize successful
+          schema:
+            $ref: '#/ResponseDefinitions/LogInApiResponse'
+        '409':
+          description: You Didn`t Verify Your Account Yet,Please Check Your Mail Box And Verify It
+        '401':
+          description: Wrong Password
+        '500':
+          description: Internal Server Error
+
+  /registration/verifyAccount:
+    patch:
+      tags:
+        - Registration Module
+      summary: Verify User Account
+      description: API To Verify User Account
+      parameters:
+        - in: body
+          name: body
+          description: verify Account Payload
+          required: true
+          schema:
+            $ref: '#/RequestDefinitions/verifyAccountModel'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: active account Successfully , you can log in now
+          schema:
+            $ref: '#/ResponseDefinitions/verifyAccountResponse'
+        '500':
+          description: Internal Server Error
+  
+  /registration/getResetCodePassword:
+    patch:
+      tags:
+        - Registration Module
+      summary: Get Reset Code Password To Email For Update Password
+      description: API To Verify Get Reset Code Password
+      parameters:
+        - in: body
+          name: body
+          description: User Email Payload
+          required: true
+          schema:
+            $ref: '#/RequestDefinitions/getResetCodePassword'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: an email send to your mail
+          schema:
+            $ref: '#/ResponseDefinitions/DefaultApiResponse'
+        '500':
+          description: Internal Server Error         
+   
+  /registration/forgetPassword:
+    patch:
+      tags:
+        - Registration Module
+      summary: Update Your Password With The Reset Code
+      description: API To Update Your Password
+      parameters:
+        - in: body
+          name: body
+          description: Reset Code && New password Payload
+          required: true
+          schema:
+            $ref: '#/RequestDefinitions/forgetPassword'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: password change successfuly
+          schema:
+            $ref: '#/ResponseDefinitions/DefaultApiResponse'
+        '500':
+          description: Internal Server Error         
+
+
+
+
+
+  /product:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - Product Module
+      summary: Product API
+      description: API for creating product
+      parameters:
+        - in: body
+          name: body
+          description: Create Product Payload
+          required: true
+          schema:
+            $ref: '#/definitions/Product'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Product Created Successfully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Product Module
+      summary: Product API
+      description: API for fetching all products
+      parameters:
+        - name: skip
+          in: query
+          description: No.of record to be skipped for pagination
+          type: number
+          required: false
+        - name: limit
+          in: query
+          description: no. of record api should return for pagination
+          type: number
+          required: false
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Product fetched Successfully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  '/product/{id}':
+    get:
+      security:
+        - Bearer: []
+      tags:
+      - Product Module
+      summary: Fetch Product Detail
+      description: Fetch Product Detail
+      parameters:
+        - name: id
+          in: path
+          description: Product Id
+          type: string
+          required: true
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: Product Fetched Successfully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+    put:
+      security:
+        - Bearer: []
+      tags:
+      - Product Module
+      summary: Update Product
+      description: Update Product
+      parameters:
+        - name: id
+          in: path
+          description: Product Id
+          type: string
+          required: true
+        - in: body
+          name: body
+          description: Update Product Payload
+          required: true
+          schema:
+            $ref: '#/definitions/Product'
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: Product Updated Successfully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+    delete:
+      security:
+        - Bearer: []
+      tags:
+      - Product Module
+      summary: Remove Product
+      description: Remove Product
+      parameters:
+        - name: id
+          in: path
+          description: Product Id
+          type: string
+          required: true
+      produces:
+        - application/json
+      responses:
+        204:
+          description: Product Deleted Successfully
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+
+
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+
+
+
+
+RequestDefinitions:
+   RegisterModel:
+    properties:
+      name:
+        type: string
+        description: name of user
+      email:
+        type: string
+        description: email of user
+      password:
+        type: string
+        description: password of the user
+
+   LogInModel:
+    properties:
+      email:
+        type: string
+        description: email of user
+      password:
+        type: string
+        description: password of the user
+
+   verifyAccountModel:
+    properties:
+      id:
+        type: string
+        description: id of the user(get it from the snapshot)
+
+   getResetCodePassword:
+    properties:
+      email:
+        type: string
+        description: Email Of The User
+
+   forgetPassword:
+    properties:
+      ResetCode:
+        type: string
+        description: The Reset Code That Send To your mail
+      newPassword:
+        type: string
+        description: Your New Password
+
+
+
+
+
+
+
+ResponseDefinitions:
+  DefaultApiResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+
+  LogInApiResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object 
+        properties: 
+          token:
+            type: string
+
+  verifyAccountResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object 
+
+                  
+            
+
