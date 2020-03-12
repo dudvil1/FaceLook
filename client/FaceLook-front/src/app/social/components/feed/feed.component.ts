@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { postsFilterService } from "../../models/postsFilter.model";
+import { postsFilterService } from "../../service/postsFilter.model";
 import { postApiService } from '../../service/postApi.service';
 import { LocationService } from '../../../common/service/locationService.service';
 

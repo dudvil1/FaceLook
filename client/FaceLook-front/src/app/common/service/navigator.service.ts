@@ -1,10 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
+export interface INavigatorService {
+  goToRegister(),
+  goToLogin(),
+  goToHomePage(),
+  goToFriendsPage(),
+  goToSharePostPage(),
+  goToPostsPage(),
+  goToForgetPassword(),
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
-export class NavigatorService {
+export class NavigatorService implements INavigatorService {
 
   constructor(private router: Router) { }
 

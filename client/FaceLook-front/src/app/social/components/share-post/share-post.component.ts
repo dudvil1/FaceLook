@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { sharePostService } from "../../models/sharePost.model";
+import { sharePostService } from "../../service/sharePost.model";
 import { postApiService } from "../../service/postApi.service";
 import { LocationService } from "../../../common/service/locationService.service";
 import { NavigatorService } from "../../../common/service/navigator.service";
@@ -12,6 +12,7 @@ import { ToastrService } from "ngx-toastr";
   styleUrls: ["./share-post.component.css"]
 })
 export class SharePostComponent implements OnInit {
+
   imageUrl: string = "./assets/img/anonym.png";
   fileToUpload: File = null;
   postCreated: boolean = false;
