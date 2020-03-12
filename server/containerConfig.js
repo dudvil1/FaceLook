@@ -25,7 +25,7 @@ container.registerModule('jwtService',['jwt','moment'],require('./services/jwtSe
 container.registerModule('multerService',['multer'],require('./services/multerService'));
 container.registerModule('mailService',['nodemailer'],require('./services/mailService'));
 container.registerModule('passwordGeneretor',[],require('./services/passwordGeneretor'));
-container.registerModule('sql',[],require('./services/sqlService'),true);
+container.registerModule('sql',[],require('./services/sqlService'));
 
 //middlewares
 container.registerModule('authenticated',['jwtService'],require('./middlewares/authenticated'));
