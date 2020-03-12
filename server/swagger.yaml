@@ -13,6 +13,35 @@ schemes:
 - http
 
 paths:
+  /help:
+    get:
+      tags:
+        - Default Module
+      summary: Get The Default Message Of The Server
+      description: API for Basic Help + Version Of FaceLook Server
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Welcome To FaceLook
+          schema: 
+            $ref: '#/ResponseDefinitions/DefaultApiResponse'
+  
+  /status:
+    get:
+      tags:
+        - Default Module
+      summary: Get The status Of The Server
+      description: API for Version Of FaceLook Server
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: 
+          schema: 
+            $ref: '#/ResponseDefinitions/DefaultApiResponse'         
+
+
   /registration/register:
     post:
       tags:
@@ -278,9 +307,6 @@ securityDefinitions:
     name: Authorization
     in: header
 
-
-
-
 RequestDefinitions:
    RegisterModel:
     properties:
@@ -323,10 +349,6 @@ RequestDefinitions:
       newPassword:
         type: string
         description: Your New Password
-
-
-
-
 
 
 
