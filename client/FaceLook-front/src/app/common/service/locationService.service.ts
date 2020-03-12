@@ -19,7 +19,7 @@ export class LocationService {
         }
       },
       err =>{
-        // alert(err);
+        
       })
     );
   }

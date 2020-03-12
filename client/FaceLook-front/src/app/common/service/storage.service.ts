@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
 
-  private tokenKey = "token"
-  constructor() { }
+  constructor() {}
 
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey)
+    return localStorage.getItem(environment.tokenKey)
   }
 
   setToken(token: string) {
-    localStorage.setItem(this.tokenKey, token);
+    localStorage.setItem(environment.tokenKey, token);
   }
 }
