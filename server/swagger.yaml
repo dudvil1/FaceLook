@@ -1,67 +1,143 @@
 swagger: '2.0'
 info:
-  description: Node.js Rest API doc
-  version: '1.0.0'
+  description: API For FaceLook
+  version: '0.2.0'
   title: Node Rest API documentation
   termsOfService: 'http://swagger.io/terms/'
-  contact:
-    email: rapiddevpro@gmail.com
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-host: localhost:3002
-basePath: /api/v1
+host: localhost:3000
+basePath: /
 schemes:
 - http
+
 paths:
-  /user/login:
+  /registration/register:
     post:
       tags:
-        - User Module
-      summary: Login
-      description: API for Login
+        - Registration Module
+      summary: register
+      description: API for New User
       parameters:
         - in: body
           name: body
-          description: Login Payload
+          description: register Payload
           required: true
           schema:
-            $ref: '#/definitions/User'
+            $ref: '#/RequestDefinitions/RegisterModel'
+      produces:
+        - application/json
+      responses:
+        '201':
+          description:  User Created Successfully , Please check Your Mail To Verify Your Account
+          schema:
+            $ref: '#/ResponseDefinitions/DefaultApiResponse'
+        '409':
+          description: user already exist,try again
+        '500':
+          description: Internal Server Error
+
+  /registration/login:
+    post:
+      tags:
+        - Registration Module
+      summary: LogIn
+      description: API for LogIn
+      parameters:
+        - in: body
+          name: body
+          description: LogIn Payload
+          required: true
+          schema:
+            $ref: '#/RequestDefinitions/LogInModel'
       produces:
         - application/json
       responses:
         '200':
-          description: Login Successfully
+          description: Authorize successful
           schema:
-            $ref: '#/definitions/ApiResponse'
-        '400':
-          description: Invalid Fields
+            $ref: '#/ResponseDefinitions/LogInApiResponse'
+        '409':
+          description: You Didn`t Verify Your Account Yet,Please Check Your Mail Box And Verify It
+        '401':
+          description: Wrong Password
         '500':
           description: Internal Server Error
-  /user/signup:
-    post:
+
+  /registration/verifyAccount:
+    patch:
       tags:
-        - User Module
-      summary: Signup
-      description: API for Signup
+        - Registration Module
+      summary: Verify User Account
+      description: API To Verify User Account
       parameters:
         - in: body
           name: body
-          description: Signup Payload
+          description: verify Account Payload
           required: true
           schema:
-            $ref: '#/definitions/User'
+            $ref: '#/RequestDefinitions/verifyAccountModel'
       produces:
         - application/json
       responses:
         '200':
-          description: Signup Successfully
+          description: active account Successfully , you can log in now
           schema:
-            $ref: '#/definitions/ApiResponse'
-        '400':
-          description: Invalid Fields
+            $ref: '#/ResponseDefinitions/verifyAccountResponse'
         '500':
           description: Internal Server Error
+  
+  /registration/getResetCodePassword:
+    patch:
+      tags:
+        - Registration Module
+      summary: Get Reset Code Password To Email For Update Password
+      description: API To Verify Get Reset Code Password
+      parameters:
+        - in: body
+          name: body
+          description: User Email Payload
+          required: true
+          schema:
+            $ref: '#/RequestDefinitions/getResetCodePassword'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: an email send to your mail
+          schema:
+            $ref: '#/ResponseDefinitions/DefaultApiResponse'
+        '500':
+          description: Internal Server Error         
+   
+  /registration/forgetPassword:
+    patch:
+      tags:
+        - Registration Module
+      summary: Update Your Password With The Reset Code
+      description: API To Update Your Password
+      parameters:
+        - in: body
+          name: body
+          description: Reset Code && New password Payload
+          required: true
+          schema:
+            $ref: '#/RequestDefinitions/forgetPassword'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: password change successfuly
+          schema:
+            $ref: '#/ResponseDefinitions/DefaultApiResponse'
+        '500':
+          description: Internal Server Error         
+
+
+
+
+
   /product:
     post:
       security:
@@ -194,13 +270,31 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
+
+
 securityDefinitions:
   Bearer:
     type: apiKey
     name: Authorization
     in: header
-definitions:
-  User:
+
+
+
+
+RequestDefinitions:
+   RegisterModel:
+    properties:
+      name:
+        type: string
+        description: name of user
+      email:
+        type: string
+        description: email of user
+      password:
+        type: string
+        description: password of the user
+
+   LogInModel:
     properties:
       email:
         type: string
@@ -208,18 +302,36 @@ definitions:
       password:
         type: string
         description: password of the user
-  Product:
+
+   verifyAccountModel:
     properties:
-      name:
+      id:
         type: string
-        description: product name
-      price:
-        type: number
-        description: product price
-      brand:
+        description: id of the user(get it from the snapshot)
+
+   getResetCodePassword:
+    properties:
+      email:
         type: string
-        description: product brand
-  ApiResponse:
+        description: Email Of The User
+
+   forgetPassword:
+    properties:
+      ResetCode:
+        type: string
+        description: The Reset Code That Send To your mail
+      newPassword:
+        type: string
+        description: Your New Password
+
+
+
+
+
+
+
+ResponseDefinitions:
+  DefaultApiResponse:
     type: object
     properties:
       status:
@@ -228,3 +340,30 @@ definitions:
         type: string
       body:
         type: object
+
+  LogInApiResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object 
+        properties: 
+          token:
+            type: string
+
+  verifyAccountResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object 
+
+                  
+            
+

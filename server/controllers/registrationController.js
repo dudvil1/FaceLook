@@ -1,11 +1,12 @@
 module.exports = (db,mailer,bcrypt,jwt) => {
+
     async function register(req, res) {
         console.log("registration Controller: register call()");
         try {
             //check if user exist
             await db.find("Users", "email", req.body.email, users => {
                 if (users.length >= 1) {
-                    return res.status(401).json({
+                    return res.status(409).json({
                         message: "user already exist,try again"
                     });
                 }
@@ -19,8 +20,8 @@ module.exports = (db,mailer,bcrypt,jwt) => {
                 });
             });
         } catch (error) {
-            return res.status(401).json({
-                message: "Failure to create user"
+            return res.status(500).json({
+                message: "Internal Server Error"
             });
         }
     }
@@ -33,7 +34,7 @@ module.exports = (db,mailer,bcrypt,jwt) => {
                     const user = users[0]
                     //check the activation
                     if (!user.active) {
-                        return res.status(401).json({
+                        return res.status(409).json({
                             message:
                                 "You Didn`t Verify Your Account Yet,Please Check Your Mail Box And Verify It"
                         });
@@ -44,19 +45,18 @@ module.exports = (db,mailer,bcrypt,jwt) => {
                     if (bcrypt.checkPassword(req.body.password, user.password)) {
                         let token = jwt.createToken(user);
                         return res.status(200).json({
-                            message: "Auth successful",
-                            user: user,
+                            message: "Authorize successful", 
                             token: token
                         });
                     } else
                         return res.status(401).json({
-                            message: "Auth failed"
+                            message: "Worng Password"
                         });
                 }
             });
         } catch (error) {
-            return res.status(401).json({
-                message: "Auth failed"
+            return res.status(500).json({
+                message: "Internal Server Error"
             });
         }
     }
@@ -66,7 +66,9 @@ module.exports = (db,mailer,bcrypt,jwt) => {
         try {
             await db.find("Users", "_id", req.body.id, user => {
                 if (user.active) {
-                    res.status(200).json({});
+                    res.status(200).json({
+                        message:"Account Verify successfuly"                
+                    });
                 } else {
                     db.verifyAccount(req.body.id, result => {
                         console.log("registrationVerify:", result);
@@ -77,8 +79,8 @@ module.exports = (db,mailer,bcrypt,jwt) => {
                 }
             });
         } catch (error) {
-            return res.status(401).json({
-                message: "Auth failed"
+            return res.status(500).json({
+                message: "Internal Server Error"
             });
         }
     }
@@ -91,15 +93,15 @@ module.exports = (db,mailer,bcrypt,jwt) => {
     
                 if (bcrypt.checkPassword(req.body.user.resetCode, user[0].resetPasswordCode)) {
                     db.changePassword(user[0], req.body.user.newPassword, answer => {
-                        res.status(201).json({
+                        res.status(200).json({
                             message: "password change successfuly"
                         });
                     });
                 }
             });
         } catch (error) {
-            return res.status(401).json({
-                message: "Auth failed"
+            return res.status(500).json({
+                message: "Internal Server Error"
             });
         }
     }
@@ -111,13 +113,13 @@ module.exports = (db,mailer,bcrypt,jwt) => {
                 let priveteUser = user[0];
                 db.getResetCodePassword(priveteUser, userResetCode => {
                     mailer.forgotPasswordMail(userResetCode);
-                    return res.status(201).json({
-                        message: "ok"
+                    return res.status(200).json({
+                        message: "an email send to your mail"
                     });
                 });
             });
         } catch (error) {
-            return res.status(401).json({
+            return res.status(500).json({
                 message: "Failure to get Reset Code Password"
             });
         }
