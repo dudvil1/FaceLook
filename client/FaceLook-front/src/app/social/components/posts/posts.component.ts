@@ -10,32 +10,28 @@ import { IPost } from '../../../common/model/post';
   styleUrls: ['./posts.component.css']
 })
 export class PostsComponent implements OnInit {
-  
+
   posts: IPost[] = [];
   subscriptionGet: Subscription;
   subscriptionPost: Subscription;
-  postIdEmmited: string;
 
   constructor(private postApiService: postApiService) { }
-  
+
   ngOnInit(): void {
-    this.subscriptionGet = this.postApiService.getAllPostsAsPosts()
-      .subscribe((res)=>{
+    this.subscriptionGet = this.postApiService.getAllPosts()
+      .subscribe((res) => {
         this.posts = res;
-    })
+      })
   }
 
-  
+
   ngOnDestroy() {
     this.subscriptionGet.unsubscribe();
   }
 
-  setLikesOfPost(post:IPost){
-    if(post){
-      this.subscriptionPost = this.postApiService.updateLikes(post)
-      .subscribe((res)=>{
-        console.log(res);
-    })
+  setLikesOfPost(post: IPost) {
+    if (post) {
+      this.subscriptionPost = this.postApiService.updateLikes(post).subscribe()
     }
   }
 

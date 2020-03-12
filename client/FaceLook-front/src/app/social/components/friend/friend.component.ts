@@ -24,17 +24,19 @@ export class FriendComponent implements OnInit {
 
 
   updateFollow(friendId) {
-    this.friendApiService.updateFollow(this.currentUser._id,friendId).subscribe(
+    this.friendApiService.updateFollow(this.currentUser._id, friendId).subscribe(
       user => {
-        this.user = user
+        if (this.user._id == user._id)
+          this.user = user
       }
     )
   }
 
   AddFriend(friendId) {
-    this.friendApiService.addFriend(this.currentUser._id,friendId).subscribe(
+    this.friendApiService.addFriend(this.currentUser._id, friendId).subscribe(
       user => {
-        this.user = user
+        if (this.user._id == user._id)
+          this.user = user
       }
     )
   }

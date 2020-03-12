@@ -7,7 +7,7 @@ import { NavigatorService } from "../../../common/service/navigator.service";
 import { ToastrService, ToastrModule } from "ngx-toastr";
 import { FormsModule } from "@angular/forms";
 
-fdescribe("RegisterComponent", () => {
+describe("RegisterComponent", () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
 

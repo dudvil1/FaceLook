@@ -34,12 +34,12 @@ describe('FriendsComponent', () => {
 
   it('searchUsers() method set users property to array of user that match the searchQuery by name or email', () => {
     const query = "guykem"
-    
+
     component.searchQuery = query
     component.searchUsers()
 
     friendsApi.getAllUsers(component.searchQuery).subscribe(
-      users=>expect(component.users).toEqual([...users])
+      users => expect(component.users).toEqual([...users])
     )
 
   });
@@ -48,7 +48,7 @@ describe('FriendsComponent', () => {
     component.searchUsers()
 
     friendsApi.getAllUsers(component.searchQuery).subscribe(
-      users=>expect(component.users).toBeUndefined()
+      users => expect(component.users).toBeUndefined()
     )
   });
 });

@@ -43,7 +43,6 @@ export class LogInComponent implements OnInit {
 
         //check the response message
         if (this.response.message === "Auth successful") {
-          this.userService.userData = data["user"];
 
           this.StorageService.setToken(data["token"]);
           /* localStorage.setItem("token", data["token"]); */

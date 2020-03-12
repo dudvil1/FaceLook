@@ -10,10 +10,9 @@ import { ISuccessResponse } from '../../common/model/successResponse';
 
 export interface IPostApi {
   addPost(post: any): Observable<ISuccessResponse>,
-  getAllPosts(): Observable<IPost[]>,
+  getAllPosts(notifyMarkers?: boolean): Observable<IPost[]>,
   getFilterPosts(filters): Observable<IPost[]>,
-  updateLikes(post): Observable<ISuccessResponse>,
-  getAllPostsAsPosts(): Observable<IPost[]>
+  updateLikes(post): Observable<ISuccessResponse>
 }
 
 @Injectable()
@@ -33,13 +32,14 @@ export class postApiService implements IPostApi {
     );
   }
 
-  getAllPosts(): Observable<IPost[]> {
+  getAllPosts(notifyMarkers?: boolean): Observable<IPost[]> {
     const { socialUrl, getPosts } = this.apiConfig.socialApi
     const url = socialUrl + getPosts
 
     return this.httpClient.get<IPost[]>(url).pipe(
       tap((posts) => {
-        this.markersService.markers$.next(posts);
+        if (notifyMarkers)
+          this.markersService.markers$.next(posts);
       })
     );
   }
@@ -54,17 +54,11 @@ export class postApiService implements IPostApi {
       })
     );
   }
-  updateLikes(post:IPost): Observable<ISuccessResponse> {
+  updateLikes(post: IPost): Observable<ISuccessResponse> {
     const { socialUrl, updateLikes } = this.apiConfig.socialApi
     const url = socialUrl + updateLikes
 
     return this.httpClient.patch<ISuccessResponse>(url, { post });
   }
 
-  getAllPostsAsPosts(): Observable<IPost[]> {
-    const { socialUrl, getPosts } = this.apiConfig.socialApi
-    const url = socialUrl + getPosts
-
-    return this.httpClient.get<IPost[]>(url)
-  }
 }

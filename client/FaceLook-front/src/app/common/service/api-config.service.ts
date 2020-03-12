@@ -28,17 +28,19 @@ export interface RegistrationApiConfig {
   getResetCodePassword: string;
 }
 export interface ApiConfig {
-  baseUrl: string
-  friendApi: FriendApiConfig;
-  defaultApi: DefaultApiConfig;
-  registrationApi: RegistrationApiConfig;
-  socialApi: SocialApiConfig;
+  baseUrl: string,
+  imageUrl: string
+  friendApi: FriendApiConfig,
+  defaultApi: DefaultApiConfig,
+  registrationApi: RegistrationApiConfig,
+  socialApi: SocialApiConfig
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiConfigService implements ApiConfig {
+  imageUrl: string;
   baseUrl: string;
   friendApi: FriendApiConfig
   defaultApi: DefaultApiConfig
@@ -47,6 +49,7 @@ export class ApiConfigService implements ApiConfig {
 
   constructor() {
     this.baseUrl = environment.baseUrl;
+    this.imageUrl = `${this.baseUrl}/public/uploads/images/`
     this.setFriendsApi();
     this.setDefualtApi();
     this.setRegistrationApi();

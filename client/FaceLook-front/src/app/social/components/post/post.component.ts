@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { IPost } from '../../../common/model/post';
+import { ApiConfigService } from 'src/app/common/service/api-config.service';
 
 @Component({
   selector: 'app-post',
@@ -11,14 +12,15 @@ export class PostComponent implements OnInit {
   @Input() post: IPost;
   @Output() likesEmitter = new EventEmitter<IPost>();
 
-  imgPath: string = 'http://localhost:3000/public/uploads/images/';
+  imgPath: string;
 
   likeClicked: boolean = false;
 
-  constructor() { }
+  constructor(private apiConfig :ApiConfigService) {
+    this.imgPath = this.apiConfig.imageUrl
+   }
 
   ngOnInit(): void {
-    console.log(this.post)
   }
 
   
