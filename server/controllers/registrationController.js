@@ -48,7 +48,7 @@ module.exports = (db, mailer, bcrypt, jwt) => {
                         });
                     } else
                         return res.status(401).json({
-                            message: "Worng Password"
+                            message: "Wrong Password"
                         });
                 }
             });
