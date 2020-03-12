@@ -16,7 +16,7 @@ export class socialComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this._postApiService.getAllPosts().subscribe(res => {
+    this._postApiService.getAllPosts(true).subscribe(res => {
       console.log("POSTS-->", res);
     });
 

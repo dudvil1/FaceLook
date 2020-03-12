@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { sharePostService } from "../../models/sharePost.model";
 import { postApiService } from "../../service/postApi.service";
 import { LocationService } from "../../../common/service/locationService.service";
-import { NavigatorService } from "src/app/common/service/navigator.service";
+import { NavigatorService } from "../../../common/service/navigator.service";
 import { ToastrService } from "ngx-toastr";
 
 @Component({

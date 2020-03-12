@@ -10,21 +10,21 @@
             </div>
         </div>
     </div>
-    
+
 </div>
 
 <div class="fRight">
     <!-- option to edit an exisiting friend -->
     <div *ngIf="user.userId && user.friendId == currentUser._id">
         <div class="link-look-alike" (click)="updateFollow(user._id)" id={{user.userId}}>
-            
-            <span>{{user.isFollowed == 'True' ? 'Un-Follow':"Follow"}}</span>
+
+            <span>{{user.isFollowed ? 'Un-Follow':"Follow"}}</span>
         </div>
     </div>
     <!-- option to add new friend -->
     <div *ngIf="!user.userId || user.friendId != currentUser._id">
         <div class="link-look-alike" (click)="AddFriend(user._id)" id={{user.userId}}>
-            
+
             <span>Add Friend</span>
         </div>
     </div>

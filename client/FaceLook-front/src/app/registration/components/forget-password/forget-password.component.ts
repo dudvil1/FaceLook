@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { registrationApiService } from "../../service/api-service.service";
-import { UserService } from "../../models/user-service.service";
+import { UserService } from "../../service/user-service.service";
 import { ToastrService } from "ngx-toastr";
 import { Router, ActivatedRoute } from "@angular/router";
 import { NavigatorService } from "../../../common/service/navigator.service";

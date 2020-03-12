@@ -1,13 +1,13 @@
 const container = require('./container')
+require('dotenv').config()
 
 //node_modules services
 container.registerModule('http',[],require('http'),true);
 container.registerModule('express',[],require('express'),true);
 container.registerModule('bodyParser',[],require('body-parser'),true);
-container.register('morgan',[],require('morgan'),true);
+container.registerModule('morgan',[],require('morgan'),true);
 container.registerModule('cors',[],require('cors'),true);
 container.registerModule('path',[],require('path'));
-container.registerModule('sql',[],require('msnodesqlv8'),true);
 container.registerModule('mongoose',[],require('mongoose'),true);
 container.registerModule('bcryptjs',[],require('bcryptjs'),true);
 container.registerModule('jwt',[],require('jwt-simple'),true);
@@ -20,12 +20,14 @@ container.registerModule('YAML',[],require('yamljs'),true);
 //config services
 container.registerModule('dbConfig',[],require('./repository/DbConnection'));
 
+
 //simple services
 container.registerModule('bcrypt',['bcryptjs'],require('./services/bcryptService'));
 container.registerModule('jwtService',['jwt','moment'],require('./services/jwtService'));
 container.registerModule('multerService',['multer'],require('./services/multerService'));
 container.registerModule('mailService',['nodemailer'],require('./services/mailService'));
 container.registerModule('passwordGeneretor',[],require('./services/passwordGeneretor'));
+container.registerModule('sql',[],require('./services/sqlService'));
 
 //middlewares
 container.registerModule('authenticated',['jwtService'],require('./middlewares/authenticated'));

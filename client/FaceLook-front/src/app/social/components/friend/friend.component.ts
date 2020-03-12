@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { IUser } from 'src/app/common/model/user';
-import { JwtService } from 'src/app/common/service/jwt.service';
+import { IUser } from '../../../common/model/user';
+import { JwtService } from '../../../common/service/jwt.service';
 import { FriendApiService } from '../../service/friendApi.service';
 
 @Component({
@@ -15,7 +15,7 @@ export class FriendComponent implements OnInit {
 
   constructor(
     private jwtService: JwtService,
-    private userApiService: FriendApiService
+    private friendApiService: FriendApiService
   ) { }
 
   ngOnInit(): void {
@@ -24,17 +24,19 @@ export class FriendComponent implements OnInit {
 
 
   updateFollow(friendId) {
-    this.userApiService.updateFollow(this.currentUser._id,friendId).subscribe(
+    this.friendApiService.updateFollow(this.currentUser._id, friendId).subscribe(
       user => {
-        this.user = user
+        if (this.user._id == user._id)
+          this.user = user
       }
     )
   }
 
   AddFriend(friendId) {
-    this.userApiService.addFriend(this.currentUser._id,friendId).subscribe(
+    this.friendApiService.addFriend(this.currentUser._id, friendId).subscribe(
       user => {
-        this.user = user
+        if (this.user._id == user._id)
+          this.user = user
       }
     )
   }
