@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PostsComponent } from './posts.component';
 import { PostComponent } from '../post/post.component';
-import { postApiService } from '../../service/postApi.service';
+import { PostApiService } from '../../service/postApi.service';
 import { PostsApiMockService } from '../../test/services/postApiMockService';
 import { ApiConfigService } from '../../../common/service/api-config.service';
 import { Subscription, of } from 'rxjs';
@@ -10,7 +10,7 @@ import { IPost } from 'src/app/common/model/post';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-fdescribe('PostsComponent', () => {
+describe('PostsComponent', () => {
   let component: PostsComponent;
   let fixture: ComponentFixture<PostsComponent>;
   let postApi: PostsApiMockService
@@ -22,7 +22,7 @@ fdescribe('PostsComponent', () => {
         PostComponent
       ],
       providers: [
-        { provide: postApiService, useClass: PostsApiMockService },
+        { provide: PostApiService, useClass: PostsApiMockService },
         { provide: ApiConfigService, useValue: { imageUrl: '' } }
       ]
     }).compileComponents();
@@ -30,7 +30,7 @@ fdescribe('PostsComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PostsComponent);
-    postApi = TestBed.get(postApiService);
+    postApi = TestBed.get(PostApiService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

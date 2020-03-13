@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 
-import { postApiService } from "../../service/postApi.service";
+import { PostApiService } from "../../service/postApi.service";
 import { IPost } from '../../../common/model/post';
 
 @Component({
@@ -15,7 +15,7 @@ export class PostsComponent implements OnInit {
   subscriptionGet: Subscription;
   subscriptionPost: Subscription;
 
-  constructor(private postApiService: postApiService) { }
+  constructor(private postApiService: PostApiService) { }
 
   ngOnInit(): void {
     this.subscriptionGet = this.postApiService.getAllPosts()

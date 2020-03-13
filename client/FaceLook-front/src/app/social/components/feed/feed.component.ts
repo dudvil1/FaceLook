@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { postsFilterService } from "../../service/postsFilter.model";
-import { postApiService } from '../../service/postApi.service';
+import { PostApiService } from '../../service/postApi.service';
 import { LocationService } from '../../../common/service/locationService.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { LocationService } from '../../../common/service/locationService.service
 })
 export class FeedComponent implements OnInit {
   constructor(public postsFilterService: postsFilterService,
-    private _postApiService: postApiService,
+    private _postApiService: PostApiService,
     private locationService: LocationService) { }
 
   ngOnInit() { }

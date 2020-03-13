@@ -14,7 +14,11 @@ export class PostsApiMockService implements IPostApi {
     ]
 
     addPost(post: any): Observable<ISuccessResponse> {
-        throw new Error("Method not implemented.");
+        const response: ISuccessResponse = {
+            message: `Action 
+        ${this.posts.find(p => p.post_id = post.post_id) ? 'Fail' : "Success"}`
+        }
+        return of(response)
     }
     getAllPosts(notifyMarkers?: boolean): Observable<IPost[]> {
         return of(this.posts)
@@ -23,7 +27,7 @@ export class PostsApiMockService implements IPostApi {
         throw new Error("Method not implemented.");
     }
     updateLikes(post: any): Observable<ISuccessResponse> {
-        const response: ISuccessResponse = { message: `Action ${this.posts.find(p => p.post_id = post.post_id) ? "Success":"Fail"}` }
+        const response: ISuccessResponse = { message: `Action ${this.posts.find(p => p.post_id = post.post_id) ? "Success" : "Fail"}` }
         return of(response)
     }
 

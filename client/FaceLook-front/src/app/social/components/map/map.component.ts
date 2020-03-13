@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, AfterViewInit, Input } from "@angular/core";
 import { GoogleMapsModule } from "@angular/google-maps";
 
 import { LocationService } from "../../../common/service/locationService.service";
-import { postApiService } from "../../service/postApi.service";
+import { PostApiService } from "../../service/postApi.service";
 import { IPost } from '../../../common/model/post';
 
 @Component({
@@ -16,7 +16,7 @@ export class MapComponent implements AfterViewInit {
   constructor(
     public locationService: LocationService,
     public mapsModule: GoogleMapsModule,
-    private postApiService: postApiService
+    private postApiService: PostApiService
   ) { }
 
   @Input() markers: any;

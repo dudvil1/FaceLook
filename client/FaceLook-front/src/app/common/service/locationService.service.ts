@@ -12,9 +12,8 @@ export class LocationService implements ILocationService {
   constructor() {
     this.getLocation();
   }
-
-  //need async????
-  async getLocation(): Promise<{ lat: number; lng: number }> {
+  
+  getLocation(): Promise<{ lat: number; lng: number }> {
     return new Promise(
       resolve => navigator.geolocation.getCurrentPosition((location) => {
         if (resolve) {

@@ -7,11 +7,11 @@ export class JwtMockService implements IJwtService {
     constructor() { }
 
     getUserId(): string | null {
-       return this.user._id
+        return this.user ? this.user._id : "1"
     }
 
     getUser(): IUser | null {
-        return this.user
+        return this.user || { _id: '1', active: true, email: '', name: "guy", role: '' }
     }
 
     setUser(user: IUser) {

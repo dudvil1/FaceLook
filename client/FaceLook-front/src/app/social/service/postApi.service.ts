@@ -16,7 +16,7 @@ export interface IPostApi {
 }
 
 @Injectable()
-export class postApiService implements IPostApi {
+export class PostApiService implements IPostApi {
   constructor(
     private markersService: markerCollectionsService,
     private httpClient: HttpClient,

@@ -21,7 +21,7 @@ import { FeedComponent } from "./social/components/feed/feed.component";
 import { MapComponent } from "./social/components/map/map.component";
 import { SharePostComponent } from './social/components/share-post/share-post.component';
 import { FriendsComponent } from './social/components/friends/friends.component';
-import { postApiService } from './social/service/postApi.service';
+import { PostApiService } from './social/service/postApi.service';
 import { HeaderComponent } from './header/header/header.component';
 import { PostsComponent } from './social/components/posts/posts.component';
 import { PostComponent } from './social/components/post/post.component';
@@ -69,7 +69,7 @@ import { FriendApiService } from './social/service/friendApi.service';
   ],
   providers: [
     registrationApiService,
-    postApiService,
+    PostApiService,
     FriendApiService,
     {
       provide: HTTP_INTERCEPTORS,

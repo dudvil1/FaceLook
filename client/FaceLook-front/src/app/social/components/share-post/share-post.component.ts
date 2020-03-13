@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { sharePostService } from "../../service/sharePost.model";
-import { postApiService } from "../../service/postApi.service";
+import { PostApiService } from "../../service/postApi.service";
 import { LocationService } from "../../../common/service/locationService.service";
 import { NavigatorService } from "../../../common/service/navigator.service";
 import { ToastrService } from "ngx-toastr";
@@ -18,7 +18,7 @@ export class SharePostComponent implements OnInit {
   postCreated: boolean = false;
 
   constructor(
-    public postApi: postApiService,
+    public postApi: PostApiService,
     public shareModel: sharePostService,
     private location: LocationService,
     private navigateService: NavigatorService,
@@ -40,6 +40,7 @@ export class SharePostComponent implements OnInit {
   }
 
   async createPost() {
+    debugger;
     const postLocation = await this.location.getLocation();
     const formData: FormData = new FormData();
     formData.append("image", this.fileToUpload);
