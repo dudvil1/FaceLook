@@ -163,142 +163,94 @@ paths:
         '500':
           description: Internal Server Error         
 
-
-
-
-
-  /product:
+  /social/addPost:
     post:
       security:
         - Bearer: []
       tags:
-        - Product Module
-      summary: Product API
-      description: API for creating product
+        - Post Module
+      summary: Adding New Post
+      description: API for creating New Post
       parameters:
         - in: body
           name: body
-          description: Create Product Payload
+          description: Create Post Payload
           required: true
           schema:
-            $ref: '#/definitions/Product'
+            $ref: '#/RequestDefinitions/PostRequest'
       produces:
         - application/json
       responses:
         '200':
-          description: Product Created Successfully
+          description: post Created Successfully
           schema:
-            $ref: '#/definitions/ApiResponse'
+            $ref: '#/ResponseDefinitions/DefaultApiResponse'
         '400':
           description: Invalid Fields
         '500':
           description: Internal Server Error
+
+  /social/getPosts:
     get:
       security:
         - Bearer: []
       tags:
-        - Product Module
-      summary: Product API
-      description: API for fetching all products
-      parameters:
-        - name: skip
-          in: query
-          description: No.of record to be skipped for pagination
-          type: number
-          required: false
-        - name: limit
-          in: query
-          description: no. of record api should return for pagination
-          type: number
-          required: false
+        - Post Module
+      summary: Getting All The Posts
+      description: API for Get All Posts
       produces:
         - application/json
       responses:
         '200':
-          description: Product fetched Successfully
+          description: Get The Post successfuly
           schema:
-            $ref: '#/definitions/ApiResponse'
-        '400':
-          description: Invalid Fields
+            $ref: '#/ResponseDefinitions/getPostsResponse'
         '500':
-          description: Internal Server Error
-  '/product/{id}':
+          description: Internal Server Error          
+  
+  /social/filterPosts/{filters}:
     get:
       security:
         - Bearer: []
       tags:
-      - Product Module
-      summary: Fetch Product Detail
-      description: Fetch Product Detail
-      parameters:
-        - name: id
-          in: path
-          description: Product Id
-          type: string
-          required: true
-      produces:
-      - application/json
-      responses:
-        '200':
-          description: Product Fetched Successfully
-          schema:
-            $ref: '#/definitions/ApiResponse'
-        '400':
-          description: Invalid Fields
-        '500':
-          description: Internal Server Error
-    put:
-      security:
-        - Bearer: []
-      tags:
-      - Product Module
-      summary: Update Product
-      description: Update Product
-      parameters:
-        - name: id
-          in: path
-          description: Product Id
-          type: string
-          required: true
-        - in: body
-          name: body
-          description: Update Product Payload
-          required: true
-          schema:
-            $ref: '#/definitions/Product'
-      produces:
-      - application/json
-      responses:
-        '200':
-          description: Product Updated Successfully
-          schema:
-            $ref: '#/definitions/ApiResponse'
-        '400':
-          description: Invalid Fields
-        '500':
-          description: Internal Server Error
-    delete:
-      security:
-        - Bearer: []
-      tags:
-      - Product Module
-      summary: Remove Product
-      description: Remove Product
-      parameters:
-        - name: id
-          in: path
-          description: Product Id
-          type: string
-          required: true
+        - Post Module
+      summary: Getting The Compatible Posts
+      description: API for Getting All The Posts That Compatible with filter
       produces:
         - application/json
       responses:
-        204:
-          description: Product Deleted Successfully
-        '400':
-          description: Invalid Fields
+        '200':
+          description: Get The Posts successfuly
+          schema:
+            $ref: '#/ResponseDefinitions/getPostsResponse'
         '500':
           description: Internal Server Error
+  
+  /social/updateLikes:
+    patch:
+      security:
+        - Bearer: []
+      tags:
+        - Post Module
+      summary: Likeing a Post
+      description: API for Adding Like For Post
+      parameters:
+        - in: body
+          name: body
+          description: post Payload
+          required: true
+          schema:
+            $ref: '#/RequestDefinitions/PostRequest'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Post-Like updated successfuly
+          schema:
+            $ref: '#/ResponseDefinitions/DefaultApiResponse'
+        '500':
+          description: Internal Server Error
+ 
 
 
 securityDefinitions:
@@ -350,7 +302,26 @@ RequestDefinitions:
         type: string
         description: Your New Password
 
-
+   PostRequest:
+    properties:
+      image:
+        type: file
+        description: Image Of The Post
+      title:
+        type: string
+        description: Image Of The Post
+      text:
+        type: string
+        description: Text Of The Post
+      location Latitude:
+        type: string
+        description: The location Latitude Of The Post
+      location Longtitude:
+        type: string
+        description: The location Langtitude Of The Post
+      date:
+        type: string
+        description: The Date Of The Post Time
 
 ResponseDefinitions:
   DefaultApiResponse:
@@ -376,6 +347,41 @@ ResponseDefinitions:
           token:
             type: string
 
+  getPostsResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      body:
+        type: array
+        items:
+         type: object
+         properties: 
+          post_id:
+           type: string
+           description: Id Of The Post
+          publisher_id:
+           type: string
+           description: Id Of The Publisher
+          image:
+           type: string
+           description: Image url   
+          text:
+           type: string
+           description: Text Of The Post
+          date:
+           type: string
+           description: Date Of The Post
+          latitude:
+           type: string
+           description: Location Latitude Of The Post
+          longtitude:
+           type: string
+           description: Location longtitude Of The Post
+          likes:
+           type: string
+           description: Likes Number Of The Post
+   
   verifyAccountResponse:
     type: object
     properties:
@@ -384,7 +390,8 @@ ResponseDefinitions:
       message:
         type: string
       body:
-        type: object 
+        type: object       
+
 
                   
             

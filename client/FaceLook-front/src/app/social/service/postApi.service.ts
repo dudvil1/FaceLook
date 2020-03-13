@@ -76,16 +76,9 @@ export  class postApiService {
           likes: post.likes,
           date: post.date,
         }));
-
-        // this.markersService.markers$.next(markersArr);
         return postsArr;
       })
     );
-
-    // return this.httpClient.get(this.url + "getPosts").toPromise()
-    // .then(collection => {
-    //     this.markersService.markerCollections = collection as any[];
-    // })
   }
 
 }
