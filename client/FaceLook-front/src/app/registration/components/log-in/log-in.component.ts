@@ -1,12 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { ToastrService } from "ngx-toastr";
-import { Router, ActivatedRoute } from "@angular/router";
-import { NgForm } from "@angular/forms";
+import { ActivatedRoute } from "@angular/router";
 import { registrationApiService } from "../../service/api-service.service";
 import { UserService } from "../../service/user-service.service";
 import { NavigatorService } from '../../../common/service/navigator.service';
 import { StorageService} from '../../../common/service/storage.service';
-import { from } from 'rxjs';
 
 @Component({
   selector: "app-log-in",
@@ -23,7 +21,6 @@ export class LogInComponent implements OnInit {
     public userService: UserService,
     private toastr: ToastrService,
     private StorageService:StorageService,
-    private router: Router,
     private route: ActivatedRoute
   ) {}
 

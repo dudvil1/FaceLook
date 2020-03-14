@@ -1,3 +1,4 @@
 export interface ISuccessResponse {
-    message: string
+    message: string,
+    token?: string
 }

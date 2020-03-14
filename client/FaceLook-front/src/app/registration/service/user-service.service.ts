@@ -5,11 +5,11 @@ import { Injectable } from '@angular/core';
 })
 export class UserService {
 
-  public userData : any;
+  public userData: any;
 
   constructor() { }
 
-  resetData(){
+  resetData() {
     this.userData = {};
   }
 }

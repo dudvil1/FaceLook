@@ -6,6 +6,9 @@ import { registrationApiService } from "../../service/api-service.service";
 import { NavigatorService } from "../../../common/service/navigator.service";
 import { ToastrService, ToastrModule } from "ngx-toastr";
 import { FormsModule } from "@angular/forms";
+import { RegistrationApiMockService } from '../../test/services/registrationApiMock';
+import { NavigatorMockService } from 'src/app/common/test/service/navigatorMockService';
+import { ToastrMockservice } from 'src/app/common/test/service/toastrMockService';
 
 describe("RegisterComponent", () => {
   let component: RegisterComponent;
@@ -18,23 +21,30 @@ describe("RegisterComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [RegisterComponent],
-      imports: [FormsModule, ToastrModule.forRoot()],
+      declarations: [
+        RegisterComponent
+      ],
+      imports: [
+        FormsModule,
+        ToastrModule.forRoot()
+      ],
       providers: [
-        ToastrService,
         UserService,
-        { provide: registrationApiService, useValue: {} },
-        { provide: NavigatorService, useValue: {} }
+        { provide: registrationApiService, useClass: RegistrationApiMockService },
+        { provide: ToastrService, useClass: ToastrMockservice },
+        { provide: NavigatorService, useClass: NavigatorMockService }
       ]
     }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RegisterComponent);
+    //component services
     navigatorService = TestBed.get(NavigatorService);
     toastrService = TestBed.get(ToastrService);
     userService = TestBed.get(UserService);
     RegistrationApiService = TestBed.get(registrationApiService);
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -55,7 +65,7 @@ describe("RegisterComponent", () => {
 
     component.ngOnInit();
 
-    expect(spyUserService.resetData.calls.count()).toBe(1,"resetData() from UserService Should be call once");
+    expect(spyUserService.resetData.calls.count()).toBe(1, "resetData() from UserService Should be call once");
 
     component = new RegisterComponent(
       navigatorService,

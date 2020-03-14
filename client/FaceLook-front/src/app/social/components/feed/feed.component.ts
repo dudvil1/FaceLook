@@ -9,7 +9,8 @@ import { LocationService } from '../../../common/service/locationService.service
   styleUrls: ["./feed.component.css"]
 })
 export class FeedComponent implements OnInit {
-  constructor(public postsFilterService: postsFilterService,
+  constructor(
+    public postsFilterService: postsFilterService,
     private _postApiService: PostApiService,
     private locationService: LocationService) { }
 

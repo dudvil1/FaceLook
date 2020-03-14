@@ -1,6 +1,6 @@
 import { ILocationService } from '../../service/locationService.service';
 
-export class LocationService implements ILocationService {
+export class LocationMockService implements ILocationService {
   constructor() {
     this.getLocation();
   }

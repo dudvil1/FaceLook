@@ -11,6 +11,7 @@ import { NavigatorService } from 'src/app/common/service/navigator.service';
 import { FormsModule } from '@angular/forms';
 import { of } from 'rxjs';
 import { LocationService } from '../../../common/service/locationService.service';
+import { LocationMockService } from 'src/app/common/test/service/locationMockService';
 
 describe('SharePostComponent', () => {
   let component: SharePostComponent;
@@ -29,7 +30,7 @@ describe('SharePostComponent', () => {
       ],
       providers: [
         sharePostService,
-        LocationService,
+        { provide: LocationService, useClass: LocationMockService },
         { provide: PostApiService, useClass: PostsApiMockService },
         { provide: ToastrService, useClass: ToastrMockservice },
         { provide: NavigatorService, useClass: NavigatorMockService },
@@ -82,8 +83,10 @@ describe('SharePostComponent', () => {
       const spyShareModel = spyOn(component.shareModel, 'resetdata')
 
       await component.createPost();
+
       expect(spyPostApi).toHaveBeenCalledWith(formData)
       observableRes.subscribe(() => {
+        debugger;
         expect(component.postCreated).toBeTruthy("after response from api post create should be true");
         expect(spyShareModel).toHaveBeenCalled();
         expect(spytoastrService).toHaveBeenCalled();

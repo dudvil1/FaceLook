@@ -4,25 +4,11 @@ export class NavigatorMockService implements INavigatorService {
 
   constructor() { }
 
-  goToRegister() {
-
-  }
-  goToLogin() {
-
-  }
-  goToHomePage() {
-
-  }
-  goToFriendsPage() {
-
-  }
-  goToSharePostPage() {
-
-  }
-  goToPostsPage() {
-
-  }
-  goToForgetPassword() {
-
-  }
+  goToRegister = () => { }
+  goToLogin = () => { }
+  goToHomePage = () => { }
+  goToFriendsPage = () => { }
+  goToSharePostPage = () => { }
+  goToPostsPage = () => { }
+  goToForgetPassword = () => { }
 }

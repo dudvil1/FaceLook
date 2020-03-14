@@ -15,12 +15,13 @@ export class ForgetPasswordComponent implements OnInit {
     private ApiService: registrationApiService,
     public userService: UserService,
     private toastr: ToastrService,
-    private router: Router,
     private route: ActivatedRoute,
     private NavigatorService: NavigatorService
-  ) {}
+  ) {
+    this.userService.resetData()
+  }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   private confirmPassword() {
     if (
@@ -34,20 +35,18 @@ export class ForgetPasswordComponent implements OnInit {
   forgetPassword() {
     console.log("forgetPassword call()");
 
-    if (this.confirmPassword()) {
-
-       if(this.route.snapshot.routeConfig.path === "forgetpassword/:id"){
-        this.route.params.subscribe(params => {
-          let result = {
-            ...params,
-            user:this.userService.userData
-          }
-          this.ApiService.updatePassword(result).subscribe(res => {
-            this.toastr.success("success to update your password");
-            this.NavigatorService.goToLogin();
-          })
+    if (this.confirmPassword() && this.route.snapshot.routeConfig.path === "forgetpassword/:id") {
+      this.route.params.subscribe(params => {
+        let result = {
+          ...params,
+          user: this.userService.userData
+        }
+        this.ApiService.updatePassword(result).subscribe(res => {
+          this.toastr.success("success to update your password");
+          this.NavigatorService.goToLogin();
         })
-      }
+      })
     }
-    }
+
+  }
 }

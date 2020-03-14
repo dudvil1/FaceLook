@@ -12,7 +12,7 @@ import { IPost } from 'src/app/common/model/post';
 import { Observable, combineLatest } from 'rxjs';
 
 
-fdescribe("PostApiService", () => {
+describe("PostApiService", () => {
   let service: PostApiService;
   let httpClient: HttpClient
   let httpTestingController: HttpTestingController

@@ -15,8 +15,7 @@ export class MapComponent implements AfterViewInit {
 
   constructor(
     public locationService: LocationService,
-    public mapsModule: GoogleMapsModule,
-    private postApiService: PostApiService
+    public mapsModule: GoogleMapsModule
   ) { }
 
   @Input() markers: any;
