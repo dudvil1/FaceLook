@@ -64,7 +64,7 @@ module.exports = (db, mailer, bcrypt, jwt) => {
             db.find("Users", "_id", req.body.id, user => {
                 if (user && user.active) {
                     res.status(200).json({
-                        message: "Account Verify successfuly"
+                        message: "active account Successfully , you can log in now"
                     });
                 } 
                 else if(user){
@@ -76,8 +76,8 @@ module.exports = (db, mailer, bcrypt, jwt) => {
                     });
                 }
                 else {
-                    res.status(400).json({
-                        message: "user id did not found"
+                    res.status(404).json({
+                        message: "User did not found"
                     });
                 }
             });

@@ -85,6 +85,8 @@ paths:
           description: active account Successfully , you can log in now
           schema:
             $ref: '#/ResponseDefinitions/verifyAccountResponse'
+        '404':
+          description: User did not found
         '500':
           description: Internal Server Error
   
