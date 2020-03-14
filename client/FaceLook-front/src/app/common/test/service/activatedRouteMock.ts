@@ -1,7 +1,11 @@
+import { Observable, of } from 'rxjs'
+
 export interface IActivatedRouteMock {
     snapshot: Snapshot,
+    params: Observable<any>
     setSnapshot(snapshot: Snapshot),
-    setSnapshotPath(path: string)
+    setSnapshotPath(path: string),
+    setParams(param: any)
 }
 interface Snapshot {
     routeConfig: {
@@ -11,12 +15,17 @@ interface Snapshot {
 
 export class ActivatedRouteMock implements IActivatedRouteMock {
     snapshot: Snapshot
+    params: Observable<any>
+    private param: any
 
     setSnapshot(snapshot: Snapshot) {
         this.snapshot = snapshot
     }
     setSnapshotPath(path: string) {
         this.snapshot.routeConfig.path = path
+    }
+    setParams(param: any) {
+        this.param = param
     }
 
     constructor() {
@@ -25,5 +34,7 @@ export class ActivatedRouteMock implements IActivatedRouteMock {
                 path: ''
             }
         }
+        this.params = of(this.param)
     }
+
 }

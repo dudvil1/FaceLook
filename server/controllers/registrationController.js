@@ -4,8 +4,8 @@ module.exports = (db, mailer, bcrypt, jwt) => {
         console.log("registration Controller: register call()");
         try {
             //check if user exist
-            db.find("Users", "email", req.body.email, users => {
-                if (users.length >= 1) {
+            db.find("Users", "email", req.body.email, user => {
+                if (user) {
                     return res.status(409).json({
                         message: "user already exist,try again"
                     });
@@ -31,7 +31,6 @@ module.exports = (db, mailer, bcrypt, jwt) => {
             //try find request user
             db.find("Users", "email", req.body.email, user => {
                 if (user) {
-                    const user = user
                     //check the activation
                     if (!user.active) {
                         return res.status(409).json({
@@ -43,7 +42,7 @@ module.exports = (db, mailer, bcrypt, jwt) => {
                     if (bcrypt.checkPassword(req.body.password, user.password)) {
                         let token = jwt.createToken(user);
                         return res.status(200).json({
-                            message: "Authorize successful", 
+                            message: "Authorize successful",
                             token: token
                         });
                     } else
@@ -63,16 +62,22 @@ module.exports = (db, mailer, bcrypt, jwt) => {
 
         try {
             db.find("Users", "_id", req.body.id, user => {
-                if (user.active) {
+                if (user && user.active) {
                     res.status(200).json({
-                        message:"Account Verify successfuly"                
+                        message: "Account Verify successfuly"
                     });
-                } else {
+                } 
+                else if(user){
                     db.verifyAccount(req.body.id, result => {
                         console.log("registrationVerify:", result);
                         res.status(200).json({
                             message: "active account Successfully , you can log in now"
                         });
+                    });
+                }
+                else {
+                    res.status(400).json({
+                        message: "user id did not found"
                     });
                 }
             });

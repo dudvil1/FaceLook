@@ -6,8 +6,14 @@ module.exports = (sql, connectionString, mongoose, bcrypt, passwordGeneretor) =>
         user.password = bcrypt.createHashPassword(user.password);
         user._id = new mongoose.Types.ObjectId();
 
-        const query = `INSERT INTO Users VALUES( '${user._id}','${user.name}' , '${user.password}' , 'user' , '${user.email}' , '0')`;
-        sql.add(connectionString, query, callback);
+        const query = `INSERT INTO Users VALUES( '${user._id}','${user.name}' , '${user.password}' , 'user' , '${user.email}' , '0',${null})`;
+        sql.add(connectionString, query, (isSuccess) => {
+            if (isSuccess)
+                callback(user)
+            else {
+                callback(isSuccess)
+            }
+        });
     }
     function verifyAccount(userId, callback) {
         console.log("dbManeger: verifyAccount call()");
@@ -60,14 +66,12 @@ module.exports = (sql, connectionString, mongoose, bcrypt, passwordGeneretor) =>
         user.resetCode = passwordGeneretor.generatePassword();
         user.resetCodeBcrypt = bcrypt.createHashPassword(user.resetCode);
 
-        console.log("after user", user);
-
         const query = `UPDATE Users
                          SET password = '' , resetPasswordCode = '${user.resetCodeBcrypt}'
                          WHERE email = '${user.email}'`;
-        sql.getOne(connectionString, query, (success) => {
+        sql.update(connectionString, query, (success) => {
             if (success) {
-                callback(resetCode)
+                callback(user)
             }
             else {
                 callback(undefined)

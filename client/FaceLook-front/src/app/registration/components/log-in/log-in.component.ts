@@ -1,10 +1,11 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ToastrService } from "ngx-toastr";
 import { ActivatedRoute } from "@angular/router";
 import { registrationApiService } from "../../service/api-service.service";
 import { UserService } from "../../service/user-service.service";
 import { NavigatorService } from '../../../common/service/navigator.service';
-import { StorageService} from '../../../common/service/storage.service';
+import { StorageService } from '../../../common/service/storage.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: "app-log-in",
@@ -12,21 +13,24 @@ import { StorageService} from '../../../common/service/storage.service';
   styleUrls: ["./log-in.component.css"]
 })
 
-export class LogInComponent implements OnInit {
-  response: any = {};
+export class LogInComponent implements OnInit, OnDestroy {
 
+  subscriptionParams: Subscription;
   constructor(
-    private navigateService:NavigatorService,
+    private navigateService: NavigatorService,
     private api: registrationApiService,
     public userService: UserService,
     private toastr: ToastrService,
-    private StorageService:StorageService,
+    private storageService: StorageService,
     private route: ActivatedRoute
-  ) {}
+  ) { }
+  ngOnDestroy(): void {
+    this.subscriptionParams ? this.subscriptionParams.unsubscribe() : () => { }
+  }
 
   ngOnInit() {
-      this.verifyAccountIfNecessary();
-      this.userService.resetData();
+    this.verifyAccountIfNecessary();
+    this.userService.resetData();
   }
 
   login() {
@@ -34,22 +38,10 @@ export class LogInComponent implements OnInit {
     //api call
     this.api.login(this.userService.userData).subscribe(
       data => {
-        console.log("Successfull", data);
-        this.response = data;
-        console.log("Response: ", this.response.message);
+        this.storageService.setToken(data.token);
+        this.toastr.success(data.message, "Success");
 
-        //check the response message
-        if (this.response.message === "Auth successful") {
-
-          this.StorageService.setToken(data["token"]);
-          /* localStorage.setItem("token", data["token"]); */
-
-          //give client message
-          this.toastr.success(data["message"], "Success");
-
-          //route to the feed
-          this.navigateService.goToHomePage()
-        }
+        this.navigateService.goToHomePage()
       },
       error => {
         this.toastr.error("problam with your account, please try again");
@@ -59,21 +51,19 @@ export class LogInComponent implements OnInit {
 
   verifyAccountIfNecessary() {
     console.log("verifyAccount Call()");
-
-    if (this.route.snapshot.routeConfig.path === "login/:id") {
-      this.route.params.subscribe(params =>
+    
+    this.subscriptionParams = this.route.params.subscribe(params => {
+      if (Object.keys(params).length) {
         this.api.verifyAccount(params).subscribe(
           res => {
-            if (res["message"] === "active account Successfully , you can log in now") {
-              this.toastr.success(res["message"]);
-            }
+            this.toastr.success(res.message);
           },
           err => {
             this.toastr.error("problam with your account, please try again");
           }
         )
-      );
-    }
+      }
+    });
   }
 
   onforgotPassword() {
@@ -93,7 +83,7 @@ export class LogInComponent implements OnInit {
     }
   }
 
-  goToRegisterPage(){
+  goToRegisterPage() {
     this.navigateService.goToRegister();
   }
 }
