@@ -41,7 +41,6 @@ paths:
           schema: 
             $ref: '#/ResponseDefinitions/DefaultApiResponse'         
 
-
   /registration/register:
     post:
       tags:
@@ -216,6 +215,9 @@ paths:
         - Post Module
       summary: Getting The Compatible Posts
       description: API for Getting All The Posts That Compatible with filter
+      parameters:
+        - in: params
+          name: params
       produces:
         - application/json
       responses:
@@ -251,6 +253,82 @@ paths:
         '500':
           description: Internal Server Error
  
+  /friend/addFriend:
+   post:
+     security:
+      - Bearer: []
+     tags: 
+       - Friend Module
+     summary: Adding New Friend
+     description: API For Adding New Friend To The Friend List    
+     parameters:
+        - in: body
+          name: body
+          description: User && Friend Id's
+          required: true
+          schema:
+             $ref: '#/RequestDefinitions/FriendRequest'
+     produces:
+       - application/json
+     responses:
+        '200': 
+          schema:
+            $ref: '#/ResponseDefinitions/AddFriendResponse'   
+        '401':
+          description: Failure to Add Friend
+        '500':
+          description: Internal Server Error              
+
+  /friend/searchUsers/{data}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Friend Module
+      summary: Search an User
+      description: Api For Searching sn User
+      parameters: 
+        - in: params
+          name: params
+          description: Some Letters To Search People 
+          required: true
+          schema:
+            $ref: '#/RequestDefinitions/'
+          produces:
+            - application/json
+      responses:
+            '201':
+               schema:
+                 $ref: '#/ResponseDefinitions/getPostsResponse'
+            '500':
+              description: Internal Server Error     
+                
+  /friend/updateFollowFriend:
+    post:
+      security:
+       Bearer: []
+      tags: 
+       - Friend Module
+      summary: Follow/Stop Follow  User
+      description: Api For Follow Unfollow User
+      parameters: 
+        - in: body
+          name: body
+          description: User && Friend Id's
+          schema: 
+             $ref: '#/RequestDefinitions/FriendRequest'
+          produces:
+            - application/json
+      responses:
+        '200':
+          schema:
+             $ref: '#/ResponseDefinitions/getPostsResponse'
+        '401':
+          description: Failure to Follow Friend
+        '500':
+          description: Internal Server Error       
+
+
 
 
 securityDefinitions:
@@ -323,6 +401,15 @@ RequestDefinitions:
         type: string
         description: The Date Of The Post Time
 
+   FriendRequest:
+    properties: 
+      userId:
+       type: string
+       description: Id of The User
+      FriendId:
+        type: string
+        description: Id of The Friend That The User Try To Connect      
+
 ResponseDefinitions:
   DefaultApiResponse:
     type: object
@@ -390,7 +477,17 @@ ResponseDefinitions:
       message:
         type: string
       body:
-        type: object       
+        type: object    
+
+  AddFriendResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      body:
+        type: object
+        properties:
+          user: object
 
 
                   

@@ -1,5 +1,6 @@
 module.exports = (express, friendController, md_auth) => {
   const api = express.Router();
+  
   api.get(
     "/searchUsers/:data",
     md_auth.ensureAuth,

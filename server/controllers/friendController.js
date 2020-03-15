@@ -1,4 +1,5 @@
 module.exports = db => {
+  
   function searchUsers(req, res) {
     try {
       const { filter, userId } = JSON.parse(req.params.data);
@@ -10,8 +11,8 @@ module.exports = db => {
         userId
       );
     } catch (error) {
-      return res.status(401).json({
-        message: "Failure, try again"
+      return res.status(500).json({
+        message: "Internal Server Error"
       });
     }
   }
@@ -25,13 +26,13 @@ module.exports = db => {
           });
         } else {
           return res.status(401).json({
-            message: "Failure to Add Friend"
+            message: "Failure to Follow Friend"
           });
         }
       });
     } catch (error) {
-      return res.status(401).json({
-        message: "Failure, try again"
+      return res.status(500).json({
+        message: "Internal Server Error"
       });
     }
   }
@@ -51,8 +52,8 @@ module.exports = db => {
         }
       });
     } catch (error) {
-      return res.status(401).json({
-        message: "Failure to Add Friend"
+      return res.status(500).json({
+        message: "Internal Server Error"
       });
     }
   }
