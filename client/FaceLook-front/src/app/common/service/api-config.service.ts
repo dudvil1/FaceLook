@@ -59,7 +59,7 @@ export class ApiConfigService implements ApiConfig {
   private setSocialApi() {
     this.socialApi = {
       socialUrl: `${this.baseUrl}/social`,
-      addPost: `/createPost`,
+      addPost: `/addPost`,
       getPosts: `/getPosts`,
       filterPosts: (filter) => {
         return `/filterPosts/${filter}`;

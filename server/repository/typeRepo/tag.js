@@ -1,17 +1,26 @@
 module.exports = (sql, connectionString, mongoose, baseRepo) => {
-  function addTag(tagText, callback) {
+  function addTag(tag, callback) {
     console.log("dbManeger: addTag call()");
 
-    baseRepo.find("Tags", "Text", tagText, result => {
-      if (result) {
+    baseRepo.find("Tags", "Text", tag.tags, result => {
+      if (!result) {
         tag.tag_id = new mongoose.Types.ObjectId();
         const query = `INSERT INTO Tags
-                       VALUES( '${tag.tag_id}', '${tagText}')`;
+                       VALUES( '${tag.tag_id}', '${tag.tags}')`;
 
-        sql.add(connectionString, query, callback)
+        sql.add(connectionString, query, (success) => {
+          if (success) {
+            callback(tag)
+          }
+          else {
+            callback(undefined)
+          }
+        });
       }
-      else
-        callback({});
+      else {
+        tag.tag_id = result.tag_id
+        callback(tag);
+      }
     });
   }
 

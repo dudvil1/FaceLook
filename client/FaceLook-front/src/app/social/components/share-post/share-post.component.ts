@@ -5,6 +5,7 @@ import { PostApiService } from "../../service/postApi.service";
 import { LocationService } from "../../../common/service/locationService.service";
 import { NavigatorService } from "../../../common/service/navigator.service";
 import { ToastrService } from "ngx-toastr";
+import { SocketService } from 'src/app/common/service/socket.service';
 
 @Component({
   selector: "app-share-post",
@@ -22,8 +23,11 @@ export class SharePostComponent implements OnInit {
     public shareModel: sharePostService,
     private location: LocationService,
     private navigateService: NavigatorService,
-    private toastr: ToastrService
-  ) {}
+    private toastr: ToastrService,
+    private socket:SocketService
+  ) {
+    
+  }
 
   ngOnInit() {}
 
@@ -40,7 +44,6 @@ export class SharePostComponent implements OnInit {
   }
 
   async createPost() {
-    debugger;
     const postLocation = await this.location.getLocation();
     const formData: FormData = new FormData();
     formData.append("image", this.fileToUpload);
@@ -53,6 +56,7 @@ export class SharePostComponent implements OnInit {
 
     this.postApi.addPost(formData).subscribe(res => {
       debugger;
+      this.socket.emit('addPost')
       this.postCreated = true;
       this.shareModel.resetdata();
       this.toastr.success(res["message"]);

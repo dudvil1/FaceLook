@@ -9,7 +9,8 @@ module.exports = (db) => {
 
     try {
       db.addPost(req.body, postResult => {
-        db.addTag(req.body.tag, tagResult => {
+        db.addTag(postResult, tagResult => {
+          console.log("tagResult", tagResult)
           db.addPost_Tag(tagResult, result => {
             return res.status(201).json({
               message: "post Created Successfully"

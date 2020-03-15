@@ -8,7 +8,14 @@ module.exports = (sql, connectionString, mongoose) => {
         const query = `INSERT INTO Posts VALUES( '${post.post_id}','${post.user._id}','${post.img}' , '${post.text}' , '${post.date}' ,
            '${post.locationLocationLat}' , '${post.locationLocationLng}' , '${post.title}' , '0')`;
 
-        sql.add(connectionString, query, callback);
+        sql.add(connectionString, query, (success) => {
+            if (success) {
+                callback(post)
+            }
+            else {
+                callback(undefined)
+            }
+        });
     }
     function addPost_Tag(post_tag, callback) {
         console.log("dbManeger: Post_Tag call()");
