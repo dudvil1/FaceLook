@@ -1,5 +1,6 @@
 
 module.exports = (db) => {
+
   function addPost(req, res) {
     console.log("postController: addPost call()");
     req.body.user = req.user;
@@ -19,10 +20,9 @@ module.exports = (db) => {
         });
       });
     } catch (error) {
-      console.log(error);
+      return res.status(500).json({
+        message: "Internal Server Error"
 
-      return res.status(401).json({
-        message: "Failure to create post"
       });
     }
   }
@@ -31,40 +31,43 @@ module.exports = (db) => {
 
     try {
       db.getAllPosts(posts => {
+        console.log(posts);
+        
         res.status(201).json(posts);
       });
     } catch (error) {
-      return res.status(401).json({
-        message: "Failure, try again"
+      return res.status(500).json({
+        message: "Internal Server Error"
       });
     }
   }
-  function getFilterPosts(req, res) {
 
+  function getFilterPosts(req, res) {
     try {
+      console.log("postController: getFilterPosts call()");
       const filters = JSON.parse(req.params.filters);
       db.getFilterPosts(filters, posts => {
         res.status(201).json(posts);
       });
     } catch (error) {
-
-      return res.status(401).json({
-        message: "Failure, try again"
+      return res.status(500).json({
+        message: "Internal Server Error"
       });
     }
   }
-  function updateLikes(req, res) {
+
+  async function updateLikes(req, res) {
     try {
-      db.updateLikes(req.body.post, (data) => {
-        res.status(201).json({
-          message: "Post Like updated successfuly"
+      console.log("postController: updateLikes call()");
+
+      await db.updateLikes(req.body.post, (data) => {
+        res.status(200).json({
+          message: "Post-Like updated successfuly"
         })
       })
     } catch (error) {
-      console.log("ERROR: postController: updateLikes ==>");
-      console.log(error.message);
-      return res.status(401).json({
-        message: "Failure, try again"
+      return res.status(500).json({
+        message: "Internal Server Error"
       })
     }
   }
