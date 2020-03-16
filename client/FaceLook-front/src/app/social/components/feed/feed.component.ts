@@ -27,7 +27,11 @@ export class FeedComponent implements OnInit {
         };
       }
 
-      this._postApiService.getFilterPosts(this.postsFilterService.postsData).subscribe();
+      console.log(this.postsFilterService.postsData)
+
+      this._postApiService.getFilterPosts(this.postsFilterService.postsData).subscribe(
+        posts=>console.log(posts)
+      );
     }
   }
 }

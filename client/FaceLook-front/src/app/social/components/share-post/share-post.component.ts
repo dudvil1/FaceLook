@@ -55,11 +55,10 @@ export class SharePostComponent implements OnInit {
     formData.append("date", new Date().toString());
 
     this.postApi.addPost(formData).subscribe(res => {
-      debugger;
-      this.socket.emit('addPost')
+      this.socket.addPost()
       this.postCreated = true;
       this.shareModel.resetdata();
-      this.toastr.success(res["message"]);
+      this.toastr.success(res.message);
       setTimeout(() => {
         this.navigateService.goToPostsPage();
       }, 2000);

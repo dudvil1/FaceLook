@@ -29,7 +29,7 @@ module.exports = (sql, connectionString, mongoose) => {
         console.log("dbmaneger: getFilterPosts call()");
         filterQuery = getFilterQuery(filters);
 
-        const query = `select *
+        const query = `select DISTINCT Posts.*
                           from Posts 
                           LEFT JOIN Post_Tag on Posts.post_id = Post_Tag.post_id
                           LEFT JOIN Tags on Tags.tag_id = Post_Tag.tag_id
@@ -57,7 +57,7 @@ module.exports = (sql, connectionString, mongoose) => {
             WHERE post_id = '${post.post_id}';
           `;
 
-        sql.updateOne(connectionString, query, callback);
+        sql.update(connectionString, query, callback);
     }
 
     return {

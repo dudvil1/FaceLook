@@ -3,6 +3,7 @@ import { Observable, Subscription } from 'rxjs';
 
 import { PostApiService } from "../../service/postApi.service";
 import { IPost } from '../../../common/model/post';
+import { SocketService } from 'src/app/common/service/socket.service';
 
 @Component({
   selector: 'app-posts',
@@ -15,7 +16,10 @@ export class PostsComponent implements OnInit {
   subscriptionGet: Subscription;
   subscriptionPost: Subscription;
 
-  constructor(private postApiService: PostApiService) { }
+  constructor(
+    private postApiService: PostApiService,
+    private socket: SocketService
+  ) { }
 
   ngOnInit(): void {
     this.subscriptionGet = this.postApiService.getAllPosts()
@@ -31,7 +35,9 @@ export class PostsComponent implements OnInit {
 
   setLikesOfPost(post: IPost) {
     if (post) {
-      this.subscriptionPost = this.postApiService.updateLikes(post).subscribe()
+      this.subscriptionPost = this.postApiService.updateLikes(post).subscribe(
+        () => this.socket.updateLike(post)
+      )
     }
   }
 

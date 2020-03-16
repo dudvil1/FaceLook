@@ -1,6 +1,7 @@
 const container = require('./containerConfig')
 const http = container.get('http');
 const app = container.get('app');
+const dbManager = container.get('dbManager');
 const port = process.env.port || 3000;
 
 const server = http.createServer(app);
@@ -14,12 +15,17 @@ server.listen(port, function () {
 
 io.on("connection", socket => {
   socket.on('addPost', () => {
-    console.log("hello")
-    io.emit('hello', { message: 'hello' })
+    dbManager.getAllPosts((posts) => {
+      socket.broadcast.emit('addPostChange', posts)
+    })
   });
-  
-  
- })
+
+  socket.on('updateLike', (post) => {
+    socket.broadcast.emit('updateLikeChange', post)
+  });
+
+
+})
 
 
 
