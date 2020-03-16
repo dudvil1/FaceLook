@@ -11,6 +11,7 @@ import { AgmCoreModule } from '@agm/core';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { AgmDirectionModule } from 'agm-direction';
 import { JwtModule } from "@auth0/angular-jwt";
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 import { AppComponent } from "./app.component";
 import { LogInComponent } from "./registration/components/log-in/log-in.component";
@@ -21,16 +22,17 @@ import { FeedComponent } from "./social/components/feed/feed.component";
 import { MapComponent } from "./social/components/map/map.component";
 import { SharePostComponent } from './social/components/share-post/share-post.component';
 import { FriendsComponent } from './social/components/friends/friends.component';
-import { postApiService } from './social/service/postApi.service';
+import { PostApiService } from './social/service/postApi.service';
 import { HeaderComponent } from './header/header/header.component';
 import { PostsComponent } from './social/components/posts/posts.component';
 import { PostComponent } from './social/components/post/post.component';
 import { FriendComponent } from './social/components/friend/friend.component';
 import { FriendApiService } from './social/service/friendApi.service';
 
- function getToken() {
+function getToken() {
   return localStorage.getItem('token');
 }
+const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
 @NgModule({
   declarations: [
@@ -57,6 +59,7 @@ import { FriendApiService } from './social/service/friendApi.service';
         tokenGetter: getToken
       }
     }),
+    SocketIoModule.forRoot(config),
     AppRoutingModule,
     HttpClientModule,
     GoogleMapsModule,
@@ -69,7 +72,7 @@ import { FriendApiService } from './social/service/friendApi.service';
   ],
   providers: [
     registrationApiService,
-    postApiService,
+    PostApiService,
     FriendApiService,
     {
       provide: HTTP_INTERCEPTORS,
@@ -79,4 +82,4 @@ import { FriendApiService } from './social/service/friendApi.service';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

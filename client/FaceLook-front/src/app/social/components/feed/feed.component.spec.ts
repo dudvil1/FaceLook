@@ -1,6 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FeedComponent } from './feed.component';
+import { LocationService } from 'src/app/common/service/locationService.service';
+import { LocationMockService } from 'src/app/common/test/service/locationMockService';
+import { PostApiService } from '../../service/postApi.service';
+import { PostsApiMockService } from '../../test/services/postApiMockService';
+import { postsFilterService } from '../../service/postsFilter.model';
+import { FormsModule } from '@angular/forms';
 
 describe('FeedComponent', () => {
   let component: FeedComponent;
@@ -8,9 +14,19 @@ describe('FeedComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FeedComponent ]
+      declarations: [
+        FeedComponent
+      ],
+      imports:[
+        FormsModule
+      ],
+      providers: [
+        { provide: LocationService, useClass: LocationMockService },
+        { provide: PostApiService, useClass: PostsApiMockService },
+        { provide: postsFilterService, useClass: postsFilterService }
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

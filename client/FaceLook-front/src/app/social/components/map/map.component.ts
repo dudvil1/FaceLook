@@ -2,9 +2,8 @@ import { Component, OnInit, Inject, AfterViewInit, Input } from "@angular/core";
 import { GoogleMapsModule } from "@angular/google-maps";
 
 import { LocationService } from "../../../common/service/locationService.service";
-import { postApiService } from "../../service/postApi.service";
-import { markerCollectionsService } from "../../service/marker-collection.service";
-import { ToastInjector } from "ngx-toastr";
+import { PostApiService } from "../../service/postApi.service";
+import { IPost } from '../../../common/model/post';
 
 @Component({
   selector: "app-map",
@@ -16,8 +15,7 @@ export class MapComponent implements AfterViewInit {
 
   constructor(
     public locationService: LocationService,
-    public mapsModule: GoogleMapsModule,
-    private postApiService: postApiService
+    public mapsModule: GoogleMapsModule
   ) { }
 
   @Input() markers: any;
@@ -34,7 +32,7 @@ export class MapComponent implements AfterViewInit {
       });
   }
 
-  myMap(postMarkers) {
+  myMap(postMarkers:IPost[]) {
     let mapProp = GoogleMapHandler.createMapProp(this.userCurrentLocation)
 
     //init the map and props
@@ -50,7 +48,7 @@ export class MapComponent implements AfterViewInit {
 
     postMarkers.forEach(post => {
       //create post location coordinates
-      let postLocation = { lat: +post.lat, lng: +post.lng };
+      let postLocation = { lat: +post.latitude, lng: +post.longitude };
       //create post props
       let postMarker = GoogleMapHandler.createMapMarker(postLocation,
         post.title,

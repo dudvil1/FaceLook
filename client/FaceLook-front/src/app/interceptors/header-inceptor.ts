@@ -3,14 +3,10 @@ import {
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
-  HttpErrorResponse,
   HttpRequest
 } from '@angular/common/http';
 
-import { Observable, from} from 'rxjs'
-import { throwError } from 'rxjs';
-import { of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable} from 'rxjs'
 
 
 

@@ -1,10 +1,11 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { sharePostService } from "../../models/sharePost.model";
-import { postApiService } from "../../service/postApi.service";
+import { sharePostService } from "../../service/sharePost.model";
+import { PostApiService } from "../../service/postApi.service";
 import { LocationService } from "../../../common/service/locationService.service";
-import { NavigatorService } from "src/app/common/service/navigator.service";
+import { NavigatorService } from "../../../common/service/navigator.service";
 import { ToastrService } from "ngx-toastr";
+import { SocketService } from 'src/app/common/service/socket.service';
 
 @Component({
   selector: "app-share-post",
@@ -12,17 +13,21 @@ import { ToastrService } from "ngx-toastr";
   styleUrls: ["./share-post.component.css"]
 })
 export class SharePostComponent implements OnInit {
+
   imageUrl: string = "./assets/img/anonym.png";
   fileToUpload: File = null;
   postCreated: boolean = false;
 
   constructor(
-    public postApi: postApiService,
+    public postApi: PostApiService,
     public shareModel: sharePostService,
     private location: LocationService,
     private navigateService: NavigatorService,
-    private toastr: ToastrService
-  ) {}
+    private toastr: ToastrService,
+    private socket:SocketService
+  ) {
+    
+  }
 
   ngOnInit() {}
 
@@ -50,6 +55,8 @@ export class SharePostComponent implements OnInit {
     formData.append("date", new Date().toString());
 
     this.postApi.addPost(formData).subscribe(res => {
+      debugger;
+      this.socket.emit('addPost')
       this.postCreated = true;
       this.shareModel.resetdata();
       this.toastr.success(res["message"]);

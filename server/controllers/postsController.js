@@ -1,14 +1,17 @@
 
 module.exports = (db) => {
 
-  async function addPost(req, res) {
+  function addPost(req, res) {
     console.log("postController: addPost call()");
     req.body.user = req.user;
     req.body.img = req.image;
-  
+
+    console.log(req.body)
+
     try {
-      await db.addPost(req.body, postResult => {
+      db.addPost(req.body, postResult => {
         db.addTag(postResult, tagResult => {
+          console.log("tagResult", tagResult)
           db.addPost_Tag(tagResult, result => {
             return res.status(201).json({
               message: "post Created Successfully"
@@ -19,12 +22,13 @@ module.exports = (db) => {
     } catch (error) {
       return res.status(500).json({
         message: "Internal Server Error"
+
       });
     }
   }
   function getAllPosts(req, res) {
     console.log("postController: getAllPosts call()");
-  
+
     try {
       db.getAllPosts(posts => {
         console.log(posts);
@@ -46,7 +50,6 @@ module.exports = (db) => {
         res.status(201).json(posts);
       });
     } catch (error) {
-  
       return res.status(500).json({
         message: "Internal Server Error"
       });

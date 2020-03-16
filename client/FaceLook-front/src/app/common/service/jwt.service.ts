@@ -2,11 +2,15 @@ import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { StorageService } from './storage.service';
 import { IUser } from '../model/user';
+export interface IJwtService {
+  getUserId(): string | null,
+  getUser(): IUser | null
+}
 
 @Injectable({
   providedIn: 'root'
 })
-export class JwtService {
+export class JwtService implements IJwtService {
 
   constructor(
     private jwtHelper: JwtHelperService,
@@ -21,7 +25,7 @@ export class JwtService {
     return null
   }
 
-  getUser():IUser | null{
+  getUser(): IUser | null {
     const token = this.storage.getToken();
     if (token) {
       const user: IUser = this.getUserFromToken(token)
@@ -30,8 +34,8 @@ export class JwtService {
     return null
   }
 
-  private getUserFromToken(token):IUser{
-    const tokenData =  this.jwtHelper.decodeToken(token)
+  private getUserFromToken(token): IUser {
+    const tokenData = this.jwtHelper.decodeToken(token)
     const user: IUser = tokenData
     return user
   }

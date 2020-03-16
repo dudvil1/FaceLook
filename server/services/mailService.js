@@ -1,21 +1,9 @@
-// const nodemailer = require("nodemailer");
-
-// let transporter = nodemailer.createTransport({
-//   service: "gmail",
-//   auth: {
-//     user: "dudvil1@gmail.com",
-//     pass: "hfvndvoetwhkwwgw"
-//   },
-//   tls: {
-//     rejectUnauthorized: false
-//   }
-// });
 module.exports = (nodemailer) => {
   let transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "dudvil1@gmail.com",
-      pass: "hfvndvoetwhkwwgw"
+      user: process.env.MAILER_USER,
+      pass: process.env.MAILER_PASSWORD
     },
     tls: {
       rejectUnauthorized: false
@@ -23,7 +11,7 @@ module.exports = (nodemailer) => {
   });
   async function verifyAccountMail(mailOptions) {
     console.log("verifyAccountMail() call");
-  
+
     await transporter.sendMail({
       to: mailOptions.email,
       subject: "verfiy account for FaceLook",
@@ -32,7 +20,7 @@ module.exports = (nodemailer) => {
   }
   async function forgotPasswordMail(mailOptions) {
     console.log("forgotPasswordMail() call", mailOptions);
-  
+
     await transporter.sendMail({
       to: mailOptions.email,
       subject: "reset code for FaceLook",

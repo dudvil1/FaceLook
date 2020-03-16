@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
-import { NavigatorService } from 'src/app/common/service/navigator.service';
+import { NavigatorService } from '../../common/service/navigator.service';
 
 @Component({
   selector: 'app-header',
