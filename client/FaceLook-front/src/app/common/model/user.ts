@@ -3,5 +3,9 @@ export interface IUser {
     name: string,
     role: string,
     email: string,
-    active: boolean
+    active: boolean,
+    userId?:string,
+    friendId?:string,
+    isFollowed?:boolean,
 }
+

@@ -4,7 +4,7 @@ import { markerCollectionsService } from "../service/marker-collection.service"
 import { tap, map } from 'rxjs/operators';
 import { ApiConfigService } from '../../common/service/api-config.service';
 import { Observable } from 'rxjs';
-import { IPost, PostExpend } from '../../common/model/post';
+import { IPost } from '../../common/model/post';
 import { ReturnStatement } from '@angular/compiler';
 import { ISuccessResponse } from '../../common/model/successResponse';
 
@@ -42,11 +42,11 @@ export class PostApiService implements IPostApi {
     );
   }
 
-  getFilterPosts(filters): Observable<PostExpend[]> {
+  getFilterPosts(filters): Observable<IPost[]> {
     const { socialUrl, filterPosts } = this.apiConfig.socialApi
     const url = socialUrl + filterPosts(JSON.stringify(filters))
 
-    return this.httpClient.get<PostExpend[]>(url).pipe(
+    return this.httpClient.get<IPost[]>(url).pipe(
       tap((posts) => {
         this.markersService.markers$.next(posts);
       })

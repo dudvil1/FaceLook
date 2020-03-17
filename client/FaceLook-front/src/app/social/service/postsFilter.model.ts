@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IPost, PostExpend } from 'src/app/common/model/post';
+import { IPost } from 'src/app/common/model/post';
 
 interface IPostData{
   fromFilter?:string,
@@ -27,14 +27,14 @@ export class postsFilterService {
     this.postsData = {};
   }
 
-  isPostMatch(post: PostExpend): boolean {
+  isPostMatch(post: IPost): boolean {
     if (this.postsData.fromFilter && post.date < this.postsData.fromFilter) {
       return false
     }
     if (this.postsData.ToFilter && post.date > this.postsData.ToFilter) {
       return false
     }
-    if (this.postsData.publisher && post.name != this.postsData.publisher) {
+    if (this.postsData.publisher && post.name && (post.name != this.postsData.publisher)) {
        return false
     }
     //TODO:
