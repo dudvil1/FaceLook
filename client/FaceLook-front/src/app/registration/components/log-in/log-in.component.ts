@@ -34,7 +34,6 @@ export class LogInComponent implements OnInit, OnDestroy {
   }
 
   login() {
-    console.log("login.component.ts: sign() called");
     //api call
     this.api.login(this.userService.userData).subscribe(
       data => {
@@ -50,7 +49,6 @@ export class LogInComponent implements OnInit, OnDestroy {
   }
 
   verifyAccountIfNecessary() {
-    console.log("verifyAccount Call()");
     
     this.subscriptionParams = this.route.params.subscribe(params => {
       if (Object.keys(params).length) {
@@ -69,7 +67,6 @@ export class LogInComponent implements OnInit, OnDestroy {
   onforgotPassword() {
     if (!this.userService.userData.email) alert("enter Your Email First");
     else {
-      console.log("getResetCodePassword call()");
       //api call
       this.api.getResetCodePassword(this.userService.userData.email).subscribe(
         res => {
