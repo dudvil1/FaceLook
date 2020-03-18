@@ -28,13 +28,13 @@ module.exports = () => {
     sql: "blue",
     debug: "gray" }
 
-   /*  winston.addColors(colors); */
+  winston.addColors(colors);
   const logger = createLogger({
     level: 'silly',
     handleExceptions: true,
     format: format.combine(
       format.simple(),
-      format.colorize(colors),
+      format.colorize({colors:true}),
       format.align(),
       format.timestamp({
         format: "YYYY-MM-DD HH:mm:ss"
