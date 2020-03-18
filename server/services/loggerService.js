@@ -1,5 +1,5 @@
 module.exports = () => {
-  const { createLogger, format, transports } = require("winston");
+  const { winston,createLogger, format, transports } = require("winston");
   require("winston-daily-rotate-file");
   const fs = require("fs");
   const path = require("path");
@@ -20,20 +20,29 @@ module.exports = () => {
     maxSize: `${fileSizeToRotate}m`,
     maxFiles: `${numberOfDaysToKeepLog}d`
   });
+ const colors = {
+    error: "red",
+    warn: "darkred",
+    info: "black",
+    http: "green",
+    sql: "blue",
+    debug: "gray" }
 
+   /*  winston.addColors(colors); */
   const logger = createLogger({
     level: 'silly',
     handleExceptions: true,
     format: format.combine(
-      format.colorize({ all: true }),
+      format.simple(),
+      format.colorize(),
       format.align(),
       format.timestamp({
         format: "YYYY-MM-DD HH:mm:ss"
       }),
       format.printf(
         info =>
-          console.log(info[Symbol(level)]),
-          `${info.timestamp}| ${info.level}: ${info.message}`
+        console.log(Symbol.for('level')),
+          `${info.timestamp}| ${info.level}: ${JSON.stringify(info.message)}`
       ) 
     ),
     transports: [dailyRotateFileTransport]
