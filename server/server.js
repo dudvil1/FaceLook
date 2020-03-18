@@ -9,7 +9,7 @@ const io = require('socket.io')(server);
 
 server.listen(port, function () {
   console.log('Server run - listen port 3000...');
-  logger.info('test');
+  logger.info('kjhlkjlkj');
 });
 
 io.on("connection", socket => {

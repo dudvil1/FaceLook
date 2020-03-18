@@ -1,5 +1,5 @@
 module.exports = () => {
-  const { winston,createLogger, format, transports } = require("winston");
+  const { createLogger, format, transports } = require("winston");
   require("winston-daily-rotate-file");
   const fs = require("fs");
   const path = require("path");
@@ -28,26 +28,23 @@ module.exports = () => {
     sql: "blue",
     debug: "gray" }
 
-  winston.addColors(colors);
   const logger = createLogger({
-    level: 'silly',
     handleExceptions: true,
     format: format.combine(
-      format.simple(),
-      format.colorize({colors:true}),
-      format.align(),
+    
+      format.json(),
       format.timestamp({
         format: "YYYY-MM-DD HH:mm:ss"
       }),
       format.printf(
         info =>
-
           `${info.timestamp}| ${info.level}: ${JSON.stringify(info.message)}`
       ) 
     ),
-    transports: [dailyRotateFileTransport]
+    transports: [dailyRotateFileTransport,new transports.Console({ level: 'warn' })]
   });
-  
+  logger.error('asdasd');
+  logger.warn('a11111');
   function stream() {
     logger.stream = {
       write: message => {
@@ -56,7 +53,7 @@ module.exports = () => {
     };
   }
   function info(message) {
-    logger.info(message);
+    logger.warn(message);
   }
   function info(message, obj) {
     logger.info(message, {
