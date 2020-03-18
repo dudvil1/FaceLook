@@ -4,6 +4,7 @@ module.exports = (express, bodyParser, morgan, cors, path, defaultRoute, friendR
 
   app.use(cors());
   app.use(morgan("dev"));
+  app.use(morgan('combined', { stream: loggerService.stream() }));
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
 

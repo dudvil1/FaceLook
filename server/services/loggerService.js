@@ -1,11 +1,9 @@
 module.exports = () => {
-
   const { createLogger, format, transports } = require("winston");
   require("winston-daily-rotate-file");
   const fs = require("fs");
   const path = require("path");
 
-  const env = process.env.NODE_ENV || "development";
   const logDir = "logs";
   const datePatternConfiguration = {
     default: "YYYY-MM-DD",
@@ -14,10 +12,6 @@ module.exports = () => {
   };
   numberOfDaysToKeepLog = 30;
   fileSizeToRotate = 1;
-
-  if (!fs.existsSync(logDir)) {
-    fs.mkdirSync(logDir);
-  }
 
   const dailyRotateFileTransport = new transports.DailyRotateFile({
     filename: `${logDir}/%DATE%-FaceLook.log`,
@@ -28,40 +22,53 @@ module.exports = () => {
   });
 
   const logger = createLogger({
-    level: env === "development" ? "verbose" : "info",
+    level: 'silly',
     handleExceptions: true,
     format: format.combine(
-      format.colorize(),
+      format.colorize({ all: true }),
       format.align(),
       format.timestamp({
         format: "YYYY-MM-DD HH:mm:ss"
       }),
       format.printf(
         info =>
-          `${info.timestamp}[${info.label}] ${info.level}: ${JSON.stringify(info.message)}`
-      )
+          console.log(info[Symbol(level)]),
+          `${info.timestamp}| ${info.level}: ${info.message}`
+      ) 
     ),
-    transports: [
-      new transports.Console({
-        level: "info",
-        handleExceptions: true,
-        format: format.combine(
-          format.label({ label: path.basename(module.parent.filename) }),
-          format.colorize(),
-          format.printf(
-            info =>
-              `${info.timestamp}[${info.label}] ${info.level}: ${info.message}`
-          )
-        )
-      }),
-      dailyRotateFileTransport
-    ]
+    transports: [dailyRotateFileTransport]
   });
-
-  logger.stream = {
-    write: message => {
-      logger.info(message);
-    }
-  }; 
-  return logger;
+  
+  function stream() {
+    logger.stream = {
+      write: message => {
+        logger.info(message);
+      }
+    };
+  }
+  function info(message) {
+    logger.info(message);
+  }
+  function info(message, obj) {
+    logger.info(message, {
+      obj
+    });
+  } 
+  function warn(message) {
+    logger.warn(message);
+  }
+  function warn(message, obj) {
+    logger.warn(message, {
+      obj
+    });
+  }
+  function error(message) {
+    logger.error(message);
+  }
+  function error(message, obj) {
+    logger.error(message, {
+      obj
+    });
+  }
+  return { info, warn, error, stream };
 };
