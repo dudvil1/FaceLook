@@ -34,14 +34,14 @@ module.exports = () => {
     handleExceptions: true,
     format: format.combine(
       format.simple(),
-      format.colorize(),
+      format.colorize(colors),
       format.align(),
       format.timestamp({
         format: "YYYY-MM-DD HH:mm:ss"
       }),
       format.printf(
         info =>
-        console.log(Symbol.for('level')),
+
           `${info.timestamp}| ${info.level}: ${JSON.stringify(info.message)}`
       ) 
     ),
