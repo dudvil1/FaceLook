@@ -31,8 +31,6 @@ module.exports = () => {
   const logger = createLogger({
     handleExceptions: true,
     format: format.combine(
-    
-      format.json(),
       format.timestamp({
         format: "YYYY-MM-DD HH:mm:ss"
       }),
@@ -43,8 +41,7 @@ module.exports = () => {
     ),
     transports: [dailyRotateFileTransport,new transports.Console({ level: 'warn' })]
   });
-  logger.error('asdasd');
-  logger.warn('a11111');
+
   function stream() {
     logger.stream = {
       write: message => {
@@ -53,7 +50,7 @@ module.exports = () => {
     };
   }
   function info(message) {
-    logger.warn(message);
+    logger.info(message);
   }
   function info(message, obj) {
     logger.info(message, {
