@@ -2,7 +2,6 @@ import { Component, OnInit, Inject, AfterViewInit, Input } from "@angular/core";
 import { GoogleMapsModule } from "@angular/google-maps";
 
 import { LocationService } from "../../../common/service/locationService.service";
-import { PostApiService } from "../../service/postApi.service";
 import { IPost } from '../../../common/model/post';
 
 @Component({
