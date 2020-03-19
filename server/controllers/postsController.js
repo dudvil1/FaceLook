@@ -8,16 +8,16 @@ module.exports = (db) => {
 
     try {
       db.addPost(req.body, postResult => {
-        // db.addTag(postResult, tagResult => {
-        //   console.log("tagResult", tagResult)
-        //   db.addPost_Tag(tagResult, result => {
+        db.addTag(postResult, tagResult => {
+          console.log("tagResult", tagResult)
+          db.addPost_Tag(tagResult, result => {
 
         console.log(postResult)
             return res.status(201).json({
               message: "post Created Successfully"
             });
-        //   });
-        // });
+          });
+        });
       });
     } catch (error) {
       return res.status(500).json({
