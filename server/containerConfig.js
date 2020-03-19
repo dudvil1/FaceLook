@@ -17,12 +17,14 @@ container.registerModule('multer',[],require('multer'),true);
 container.registerModule('swaggerUi',[],require('swagger-ui-express'),true);
 container.registerModule('YAML',[],require('yamljs'),true);
 
+
 //config services
 container.registerModule('dbConfig',[],require('./repository/DbConnection'));
 
 
 //simple services
 container.registerModule('bcrypt',['bcryptjs'],require('./services/bcryptService'));
+container.registerModule('loggerService',[],require('./services/loggerService'));
 container.registerModule('jwtService',['jwt','moment'],require('./services/jwtService'));
 container.registerModule('multerService',['multer'],require('./services/multerService'));
 container.registerModule('mailService',['nodemailer'],require('./services/mailService'));
@@ -58,6 +60,6 @@ container.registerModule('socialRoutes',['express','postsController','authentica
 
 
 //app
-container.registerModule("app",['express','bodyParser','morgan','cors','path','defaultRoutes','friendRoutes','registrationtRoutes','socialRoutes','swaggerUi','YAML'],require('./app'));
+container.registerModule("app",['express','bodyParser','morgan','cors','path','defaultRoutes','friendRoutes','registrationtRoutes','socialRoutes','swaggerUi','YAML','loggerService'],require('./app'));
 
 module.exports = container

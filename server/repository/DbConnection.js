@@ -1,1 +1,3 @@
-module.exports =  connectionString =process.env.SQL_CONNECTION_STRING;
+const connectionString =process.env.SQL_CONNECTION_STRING
+
+module.exports = connectionString;
