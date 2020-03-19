@@ -20,31 +20,35 @@ module.exports = () => {
     maxSize: `${fileSizeToRotate}m`,
     maxFiles: `${numberOfDaysToKeepLog}d`
   });
- const colors = {
+  const colors = {
     error: "red",
     warn: "darkred",
     info: "black",
     http: "green",
     sql: "blue",
-    debug: "gray" }
+    debug: "gray"
+  }
 
   const logger = createLogger({
     handleExceptions: true,
     format: format.combine(
-    
+
       format.json(),
       format.timestamp({
         format: "YYYY-MM-DD HH:mm:ss"
       }),
       format.printf(
-        info =>
-          `${info.timestamp}| ${info.level}: ${JSON.stringify(info.message)}`
-      ) 
+        info => {
+          const { location, data } = info[Symbol.for('splat')][0]
+          const locationString = location ? `Location - ${location}` : ''
+          const objString = data ? `data - ${JSON.stringify(data)}` : '';
+          return `${info.timestamp}| ${info.level}: ${JSON.stringify(info.message)}\t${locationString}\t${objString}\n`
+        }
+      )
     ),
-    transports: [dailyRotateFileTransport,new transports.Console({ level: 'warn' })]
+    transports: [dailyRotateFileTransport, new transports.Console({ level: 'warn' })]
   });
-  logger.error('asdasd');
-  logger.warn('a11111');
+
   function stream() {
     logger.stream = {
       write: message => {
@@ -52,29 +56,14 @@ module.exports = () => {
       }
     };
   }
-  function info(message) {
-    logger.warn(message);
-  }
   function info(message, obj) {
-    logger.info(message, {
-      obj
-    });
-  } 
-  function warn(message) {
-    logger.warn(message);
+    logger.info(message, obj);
   }
   function warn(message, obj) {
-    logger.warn(message, {
-      obj
-    });
-  }
-  function error(message) {
-    logger.error(message);
+    logger.warn(message, obj);
   }
   function error(message, obj) {
-    logger.error(message, {
-      obj
-    });
+    logger.error(message, obj);
   }
   return { info, warn, error, stream };
 };

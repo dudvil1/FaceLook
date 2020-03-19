@@ -9,7 +9,7 @@ const io = require('socket.io')(server);
 
 server.listen(port, function () {
   console.log('Server run - listen port 3000...');
-  logger.info('kjhlkjlkj');
+  logger.info('kjhlkjlkj', { location: __filename, data: { port, function: 'server.listen' } });
 });
 
 io.on("connection", socket => {
@@ -18,7 +18,7 @@ io.on("connection", socket => {
       socket.broadcast.emit('addPostChange', posts)
     })
   });
-  
+
   socket.on('updateLike', (post) => {
     socket.broadcast.emit('updateLikeChange', post)
   });
