@@ -4,7 +4,7 @@ module.exports = (sql, connectionString) => {
     console.log("dbManeger: find call()");
 
     const query = `SELECT * FROM ${table} WHERE ${key} = '${userKey}'`;
-
+    
     sql.getOne(connectionString,query,callback)
 
   };
