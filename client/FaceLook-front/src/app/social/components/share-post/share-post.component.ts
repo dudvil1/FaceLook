@@ -33,7 +33,6 @@ export class SharePostComponent implements OnInit {
 
   handleFileInput(file: FileList) {
     this.fileToUpload = file.item(0);
-    console.log("file", this.fileToUpload);
 
     //Show image preview
     var reader = new FileReader();

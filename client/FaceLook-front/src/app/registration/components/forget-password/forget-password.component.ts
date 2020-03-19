@@ -39,8 +39,6 @@ export class ForgetPasswordComponent implements OnInit, OnDestroy {
   }
 
   forgetPassword() {
-    console.log("forgetPassword call()");
-
     this.subscriptionParams = this.route.params.subscribe(params => {
       if (this.confirmPassword() && Object.keys(params).length) {
         let result = {

@@ -27,9 +27,7 @@ export class PostApiService implements IPostApi {
     const { socialUrl, addPost } = this.apiConfig.socialApi
     const url = socialUrl + addPost
 
-    return this.httpClient.post<ISuccessResponse>(url, post).pipe(
-      tap(res => console.log(res))
-    );
+    return this.httpClient.post<ISuccessResponse>(url, post).pipe();
   }
 
   getAllPosts(notifyMarkers?: boolean): Observable<IPost[]> {

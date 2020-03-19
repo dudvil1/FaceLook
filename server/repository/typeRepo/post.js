@@ -29,7 +29,7 @@ module.exports = (sql, connectionString, mongoose) => {
         console.log("dbmaneger: getFilterPosts call()");
         filterQuery = getFilterQuery(filters);
 
-        const query = `select DISTINCT Posts.*
+        const query = `select DISTINCT Posts.*,Users.name
                           from Posts 
                           LEFT JOIN Post_Tag on Posts.post_id = Post_Tag.post_id
                           LEFT JOIN Tags on Tags.tag_id = Post_Tag.tag_id
@@ -43,10 +43,11 @@ module.exports = (sql, connectionString, mongoose) => {
 
         console.log("dbmaneger: getAllPost call()");
 
-        const query = `select *
-                          from Posts 
-                          --join Post_Tag on Posts.post_id = Post_Tag.post_id
-                          --join Tags on Tags.tag_id = Post_Tag.tag_id`;
+        const query = `select DISTINCT Posts.*,Users.name
+                        from Posts 
+                        LEFT JOIN Post_Tag on Posts.post_id = Post_Tag.post_id
+                        LEFT JOIN Tags on Tags.tag_id = Post_Tag.tag_id
+                        INNER JOIN Users on Users._id = Posts.publisher_id`;
 
         sql.getMany(connectionString, query, callback);
     }
@@ -88,12 +89,12 @@ function getFilterQuery(filters) {
     filterQuery = ["Where"];
 
     if (fromFilter) {
-        filterQuery.push(`CAST(Posts.date as datetime)>='${fromFilter}'`)
+        filterQuery.push(`CAST(Posts.date as datetime2)>='${fromFilter}'`)
         filterQuery.push(`And `)
     }
 
     if (ToFilter) {
-        filterQuery.push(`CAST(Posts.date as datetime)<='${ToFilter}'`)
+        filterQuery.push(`CAST(Posts.date as datetime2)<='${ToFilter}'`)
         filterQuery.push(`And`)
     }
 

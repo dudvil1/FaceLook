@@ -30,6 +30,7 @@ container.registerModule('multerService',['multer'],require('./services/multerSe
 container.registerModule('mailService',['nodemailer'],require('./services/mailService'));
 container.registerModule('passwordGeneretor',[],require('./services/passwordGeneretor'));
 container.registerModule('sql',[],require('./services/sqlService'));
+container.registerModule('socketService',['dbManager'],require('./services/socketService'));
 
 //middlewares
 container.registerModule('authenticated',['jwtService'],require('./middlewares/authenticated'));

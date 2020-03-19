@@ -69,7 +69,6 @@ export class MapComponent implements AfterViewInit {
       let isOpen = false;
       // OPEN infoWindow
       postMarker.addListener("click", () => {
-        console.log(googleMap);
         if (isOpen) {
           infowindow.close();
           isOpen = false;

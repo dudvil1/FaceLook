@@ -3,6 +3,7 @@ import { Socket } from 'ngx-socket-io';
 import { markerCollectionsService } from 'src/app/social/service/marker-collection.service';
 import { postsFilterService } from 'src/app/social/service/postsFilter.model';
 import { IPost } from '../model/post';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -13,7 +14,7 @@ export class SocketService extends Socket {
     private markerCollection: markerCollectionsService,
     private postsFilter: postsFilterService,
   ) {
-    super({ url: 'http://localhost:3000' })
+    super({ url: environment.baseUrl })
     this.connect()
     this.listening()
   }

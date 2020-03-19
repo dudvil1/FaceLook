@@ -6,8 +6,6 @@ module.exports = (db) => {
     req.body.user = req.user;
     req.body.img = req.image;
 
-    console.log(req.body)
-
     try {
       db.addPost(req.body, postResult => {
         db.addTag(postResult, tagResult => {
@@ -31,8 +29,6 @@ module.exports = (db) => {
 
     try {
       db.getAllPosts(posts => {
-        console.log(posts);
-        
         res.status(201).json(posts);
       });
     } catch (error) {
