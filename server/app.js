@@ -1,12 +1,12 @@
-module.exports = (express, bodyParser, morgan, cors, path, defaultRoute, friendRoute, registrationRoute, socialRoute, swaggerUi, YAML) => {
+module.exports = (express, bodyParser, morgan, cors, path, defaultRoute, friendRoute, registrationRoute, socialRoute, swaggerUi, YAML , loggerService) => {
   app = express();
   const swaggerDocument = YAML.load('./swagger.yaml');
 
   app.use(cors());
   app.use(morgan("dev"));
+  app.use(morgan('combined', { stream: loggerService.stream() }));
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
-  app.use('/public', express.static(path.join(__dirname, 'public')));
 
   app.use(function (req, res, next) {
     console.log("header-interceptor: Start setting headers.");
@@ -25,6 +25,7 @@ module.exports = (express, bodyParser, morgan, cors, path, defaultRoute, friendR
   });
 
   // ROUTES
+  app.use('/public', express.static(path.join(__dirname, 'public')));
   app.use("/", defaultRoute);
   app.use("/registration", registrationRoute);
   app.use("/social", socialRoute);
@@ -49,5 +50,4 @@ module.exports = (express, bodyParser, morgan, cors, path, defaultRoute, friendR
   });
 
   return app
-
 } 
