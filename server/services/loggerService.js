@@ -20,14 +20,6 @@ module.exports = () => {
     maxSize: `${fileSizeToRotate}m`,
     maxFiles: `${numberOfDaysToKeepLog}d`
   });
-  const colors = {
-    error: "red",
-    warn: "darkred",
-    info: "black",
-    http: "green",
-    sql: "blue",
-    debug: "gray"
-  }
 
   const logger = createLogger({
     handleExceptions: true,
