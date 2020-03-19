@@ -30,6 +30,7 @@ container.registerModule('multerService',['multer'],require('./services/multerSe
 container.registerModule('mailService',['nodemailer'],require('./services/mailService'));
 container.registerModule('passwordGeneretor',[],require('./services/passwordGeneretor'));
 container.registerModule('sql',[],require('./services/sqlService'));
+container.registerModule('elasticsearchService',[],require('./services/elasticsearchService'));
 container.registerModule('socketService',['dbManager'],require('./services/socketService'));
 
 //middlewares
@@ -37,7 +38,7 @@ container.registerModule('authenticated',['jwtService'],require('./middlewares/a
 
 //base Repositories
 container.registerModule('baseRepo',['sql','dbConfig'],require('./repository/typeRepo/base'));
-container.registerModule('postRepo',['sql','dbConfig','mongoose'],require('./repository/typeRepo/post'));
+container.registerModule('postRepo',['elasticsearchService','dbConfig','mongoose'],require('./repository/typeRepo/post'));
 container.registerModule('tagRepo',['sql','dbConfig','mongoose','baseRepo'],require('./repository/typeRepo/tag'));
 container.registerModule('userRepo',['sql','dbConfig','mongoose','bcrypt','passwordGeneretor'],require('./repository/typeRepo/user'));
 container.registerModule('userFriendRepo',['sql','dbConfig'],require('./repository/typeRepo/userFriend'));

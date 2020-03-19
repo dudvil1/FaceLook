@@ -1,21 +1,48 @@
 module.exports = (sql, connectionString, mongoose) => {
     function addPost(post, callback) {
-        console.log("dbManeger: addPost call()");
+        // console.log("dbManeger: addPost call()");
 
-        post.post_id = new mongoose.Types.ObjectId();
-        post.date = formatDate(new Date());
+        // post.post_id = new mongoose.Types.ObjectId();
+        // post.date = formatDate(new Date());
 
-        const query = `INSERT INTO Posts VALUES( '${post.post_id}','${post.user._id}','${post.img}' , '${post.text}' , '${post.date}' ,
-           '${post.locationLocationLat}' , '${post.locationLocationLng}' , '${post.title}' , '0')`;
+        // const query = `INSERT INTO Posts VALUES( '${post.post_id}','${post.user._id}','${post.img}' , '${post.text}' , '${post.date}' ,
+        //    '${post.locationLocationLat}' , '${post.locationLocationLng}' , '${post.title}' , '0')`;
 
-        sql.add(connectionString, query, (success) => {
-            if (success) {
-                callback(post)
+        // sql.add(connectionString, query, (success) => {
+        //     if (success) {
+        //         callback(post)
+        //     }
+        //     else {
+        //         callback(undefined)
+        //     }
+        // });
+        const queryUser = {
+            index: 'posts',
+            id: post.user.userId,
+            body: {
+                ...post.user,
+                "user_post": "user"
             }
-            else {
-                callback(undefined)
+        }
+
+        const queryPost = {
+            index: 'posts',
+            id: post.post.postId,
+            routing: post.user.userId,
+            body: {
+                ...post.post,
+                "user_post": {
+                    name: "post",
+                    parent: post.user.userId
+                }
             }
-        });
+        }
+
+        sql.add(queryUser, user => {
+            sql.add(queryPost, post => {
+                callback(post ? queryPost.body : post)
+            })
+        })
     }
     function addPost_Tag(post_tag, callback) {
         console.log("dbManeger: Post_Tag call()");
@@ -41,15 +68,27 @@ module.exports = (sql, connectionString, mongoose) => {
     }
     function getAllPosts(callback) {
 
-        console.log("dbmaneger: getAllPost call()");
+        // console.log("dbmaneger: getAllPost call()");
 
-        const query = `select DISTINCT Posts.*,Users.name
-                        from Posts 
-                        LEFT JOIN Post_Tag on Posts.post_id = Post_Tag.post_id
-                        LEFT JOIN Tags on Tags.tag_id = Post_Tag.tag_id
-                        INNER JOIN Users on Users._id = Posts.publisher_id`;
+        // const query = `select DISTINCT Posts.*,Users.name
+        //                 from Posts 
+        //                 LEFT JOIN Post_Tag on Posts.post_id = Post_Tag.post_id
+        //                 LEFT JOIN Tags on Tags.tag_id = Post_Tag.tag_id
+        //                 INNER JOIN Users on Users._id = Posts.publisher_id`;
 
-        sql.getMany(connectionString, query, callback);
+        // sql.getMany(connectionString, query, callback);
+
+        const query = {
+            index: 'posts',
+            body: {
+                "query": {
+                    "exists": {
+                        "field": "postId"
+                    }
+                }
+            }
+        }
+        sql.getMany(query, callback)
     }
     function updateLikes(post, callback) {
         const query = `

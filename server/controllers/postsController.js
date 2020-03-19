@@ -3,19 +3,21 @@ module.exports = (db) => {
 
   function addPost(req, res) {
     console.log("postController: addPost call()");
-    req.body.user = req.user;
-    req.body.img = req.image;
+    // req.body.user = req.user;
+    // req.body.img = req.image;
 
     try {
       db.addPost(req.body, postResult => {
-        db.addTag(postResult, tagResult => {
-          console.log("tagResult", tagResult)
-          db.addPost_Tag(tagResult, result => {
+        // db.addTag(postResult, tagResult => {
+        //   console.log("tagResult", tagResult)
+        //   db.addPost_Tag(tagResult, result => {
+
+        console.log(postResult)
             return res.status(201).json({
               message: "post Created Successfully"
             });
-          });
-        });
+        //   });
+        // });
       });
     } catch (error) {
       return res.status(500).json({
@@ -29,6 +31,7 @@ module.exports = (db) => {
 
     try {
       db.getAllPosts(posts => {
+        console.log("posts",posts)
         res.status(201).json(posts);
       });
     } catch (error) {
