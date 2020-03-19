@@ -7,5 +7,7 @@ export interface IPost {
     latitude: string,
     longitude: string,
     title: string,
-    likes: number 
+    likes: number,
+    name?: string,
+    tags?: string[],
 }

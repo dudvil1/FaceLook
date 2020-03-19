@@ -20,9 +20,7 @@ export class socialComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._postApiService.getAllPosts(true).subscribe(res => {
-      console.log("POSTS-->", res);
-    });
+    this._postApiService.getAllPosts(true).subscribe();
 
     this.markers = this._markerCollection.markers$
   }
