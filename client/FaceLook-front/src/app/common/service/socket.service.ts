@@ -6,10 +6,15 @@ import { IPost } from '../model/post';
 import { environment } from 'src/environments/environment';
 
 
+export interface ISocketService{
+  addPost(),
+  updateLike(post: IPost)
+}
+
 @Injectable({
   providedIn: 'root'
 })
-export class SocketService extends Socket {
+export class SocketService extends Socket implements ISocketService{
   constructor(
     private markerCollection: markerCollectionsService,
     private postsFilter: postsFilterService,
