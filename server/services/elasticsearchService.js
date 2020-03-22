@@ -15,7 +15,6 @@ client.ping({
 });
 
 
-
 exports.add = async (query, callback) => {
     try {
         const isExist = await client.exists(query)

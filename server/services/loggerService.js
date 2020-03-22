@@ -21,7 +21,8 @@ module.exports = () => {
     maxSize: `${fileSizeToRotate}m`,
     maxFiles: `${numberOfDaysToKeepLog}d`
   });
-  const logger = createLogger({
+
+  const errorLogger = createLogger({
     handleExceptions: true,
     format: format.combine(
       format.json(),
@@ -40,24 +41,64 @@ module.exports = () => {
     transports: [dailyRotateFileTransport]
   });
 
+
+  const warnLogger = createLogger({
+    handleExceptions: true,
+    format: format.combine(
+      format.json(),
+      format.timestamp({
+        format: "YYYY-MM-DD HH:mm:ss"
+      }),
+      format.printf(
+        info => {
+          const { location, data } = info[Symbol.for('splat')][0]
+          const locationString = location ? `Location - ${location}` : ''
+          const objString = data ? `data - ${JSON.stringify(data)}` : '';
+          return `${info.timestamp}| ${info.level}: ${JSON.stringify(info.message)}\t${locationString}\t${objString}\n`    
+        }
+      )
+    ),
+    transports: [dailyRotateFileTransport]
+  });
+
+  const infoLogger = createLogger({
+    handleExceptions: true,
+    format: format.combine(
+      format.json(),
+      format.timestamp({
+        format: "YYYY-MM-DD HH:mm:ss"
+      }),
+      format.printf(
+        info => {
+          const { location, data } = info[Symbol.for('splat')][0]
+          const locationString = location ? `Location - ${location}` : ''
+          const objString = data ? `data - ${JSON.stringify(data)}` : '';
+          return `${info.timestamp}| ${info.level}: ${JSON.stringify(info.message)}\t${locationString}\t${objString}\n`    
+        }
+      )
+    ),
+    transports: [dailyRotateFileTransport]
+  });
+
+
   function stream() {
-    logger.stream = {
+    infoLogger.stream = {
       write: message => {
-        logger.info(message);
+        infoLogger.info(message);
       }
     };
   }
 
   function info(message, obj) {
-    logger.info(message, obj);
+    infoLogger.info(message, obj);
   }
 
   function warn(message, obj) {
-    logger.warn(message, obj);
+    warnLogger.warn(message, obj);
   }
 
   function error(message, obj) {
-    logger.error(message, obj);
+    errorLogger.error(message, obj);
   }
 
   return { info, warn, error, stream };

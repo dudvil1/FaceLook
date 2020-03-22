@@ -19,7 +19,7 @@ container.registerModule('YAML',[],require('yamljs'),true);
 
 
 //config services
-container.registerModule('dbConfig',[],require('./repository/DbConnection'));
+container.registerModule('dbConfig',[],require('./repository/DbConnection')); 
 
 
 //simple services
@@ -30,7 +30,7 @@ container.registerModule('multerService',['multer'],require('./services/multerSe
 container.registerModule('mailService',['nodemailer'],require('./services/mailService'));
 container.registerModule('passwordGeneretor',[],require('./services/passwordGeneretor'));
 container.registerModule('sql',[],require('./services/sqlService'));
-container.registerModule('elasticsearchService',[],require('./services/elasticsearchService'));
+container.registerModule('elasticsearchService',[],require('./services/elasticsearchService')); 
 container.registerModule('socketService',['dbManager'],require('./services/socketService'));
 
 //middlewares
@@ -47,7 +47,7 @@ container.registerModule('userFriendRepo',['sql','dbConfig'],require('./reposito
 container.registerModule('dbManager',['userRepo','baseRepo','tagRepo','postRepo','userFriendRepo'],require('./repository/dbmaneger'));
 
 //controllers
-container.registerModule('defaultController',["moment"],require('./controllers/defaultController'));
+container.registerModule('defaultController',["moment"],require('./controllers/defaultController')); 
 container.registerModule('friendController',["dbManager"],require('./controllers/friendController'));
 container.registerModule('postsController',["dbManager"],require('./controllers/postsController'));
 container.registerModule('registrationController',["dbManager",'mailService','bcrypt','jwtService'],require('./controllers/registrationController'));
