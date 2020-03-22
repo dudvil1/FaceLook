@@ -9,11 +9,14 @@ import { Subscription, of } from 'rxjs';
 import { IPost } from 'src/app/common/model/post';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
+import { SocketService } from 'src/app/common/service/socket.service';
+import { SocketMockService } from 'src/app/common/test/service/socketMockService';
 
 describe('PostsComponent', () => {
   let component: PostsComponent;
   let fixture: ComponentFixture<PostsComponent>;
   let postApi: PostsApiMockService
+  let socketService: SocketService
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -23,6 +26,7 @@ describe('PostsComponent', () => {
       ],
       providers: [
         { provide: PostApiService, useClass: PostsApiMockService },
+        { provide: SocketService, useClass: SocketMockService },
         { provide: ApiConfigService, useValue: { imageUrl: '' } }
       ]
     }).compileComponents();
@@ -31,6 +35,7 @@ describe('PostsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PostsComponent);
     postApi = TestBed.get(PostApiService);
+    socketService = TestBed.get(SocketService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -96,7 +101,7 @@ describe('PostsComponent', () => {
     const postApiSpy = jasmine.createSpyObj('postApiService', ['updateLikes'])
     postApiSpy.updateLikes.and.returnValue(of({}))
 
-    component = new PostsComponent(postApiSpy)
+    component = new PostsComponent(postApiSpy,socketService)
     component.setLikesOfPost(post);
     expect(postApiSpy.updateLikes.calls.count()).toEqual(expectedAmount)
   }

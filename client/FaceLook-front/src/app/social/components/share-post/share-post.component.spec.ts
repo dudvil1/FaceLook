@@ -12,6 +12,8 @@ import { FormsModule } from '@angular/forms';
 import { of } from 'rxjs';
 import { LocationService } from '../../../common/service/locationService.service';
 import { LocationMockService } from 'src/app/common/test/service/locationMockService';
+import { SocketService } from 'src/app/common/service/socket.service';
+import { SocketMockService } from 'src/app/common/test/service/socketMockService';
 
 describe('SharePostComponent', () => {
   let component: SharePostComponent;
@@ -19,6 +21,7 @@ describe('SharePostComponent', () => {
   let sharePost: sharePostService
   let postApi: PostApiService
   let toastrService: ToastrService
+  let socketService: SocketService
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -33,6 +36,7 @@ describe('SharePostComponent', () => {
         { provide: LocationService, useClass: LocationMockService },
         { provide: PostApiService, useClass: PostsApiMockService },
         { provide: ToastrService, useClass: ToastrMockservice },
+        { provide: SocketService, useClass: SocketMockService },
         { provide: NavigatorService, useClass: NavigatorMockService },
       ]
     })
