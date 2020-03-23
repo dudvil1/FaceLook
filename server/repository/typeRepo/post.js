@@ -1,14 +1,15 @@
 module.exports = (sql, connectionString, mongoose) => {
+
     function addPost(post, callback) {
         console.log("dbManeger: addPost call()");
 
         post.post_id = new mongoose.Types.ObjectId();
         post.date = formatDate(new Date());
-
-        const query = `INSERT INTO Posts VALUES( '${post.post_id}','${post.user._id}','${post.img}' , '${post.text}' , '${post.date}' ,
+        
+        const query = `INSERT INTO Posts VALUES( '${post.post_id}','${post.user._id}','${post.img}', '${post.text}' , '${post.date}' ,
            '${post.locationLocationLat}' , '${post.locationLocationLng}' , '${post.title}' , '0')`;
-
-        sql.add(connectionString, query, (success) => {
+         
+        sql.add(connectionString, query, success => {
             if (success) {
                 callback(post)
             }
@@ -16,33 +17,6 @@ module.exports = (sql, connectionString, mongoose) => {
                 callback(undefined)
             }
         });
-        // const queryUser = {
-        //     index: 'posts',
-        //     id: post.user.userId,
-        //     body: {
-        //         ...post.user,
-        //         "user_post": "user"
-        //     }
-        // }
-
-        // const queryPost = {
-        //     index: 'posts',
-        //     id: post.post.postId,
-        //     routing: post.user.userId,
-        //     body: {
-        //         ...post.post,
-        //         "user_post": {
-        //             name: "post",
-        //             parent: post.user.userId
-        //         }
-        //     }
-        // }
-
-        // sql.add(queryUser, user => {
-        //     sql.add(queryPost, post => {
-        //         callback(post ? queryPost.body : post)
-        //     })
-        // })
     }
     function addPost_Tag(post_tag, callback) {
         console.log("dbManeger: Post_Tag call()");
@@ -77,18 +51,6 @@ module.exports = (sql, connectionString, mongoose) => {
                         INNER JOIN Users on Users._id = Posts.publisher_id`;
 
         sql.getMany(connectionString, query, callback);
-
-        // const query = {
-        //     index: 'posts',
-        //     body: {
-        //         "query": {
-        //             "exists": {
-        //                 "field": "postId"
-        //             }
-        //         }
-        //     }
-        // }
-        // sql.getMany(query, callback)
     }
     function updateLikes(post, callback) {
         const query = `

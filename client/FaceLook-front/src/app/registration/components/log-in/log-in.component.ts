@@ -49,7 +49,7 @@ export class LogInComponent implements OnInit, OnDestroy {
   }
 
   verifyAccountIfNecessary() {
-    
+
     this.subscriptionParams = this.route.params.subscribe(params => {
       if (Object.keys(params).length) {
         this.api.verifyAccount(params).subscribe(
@@ -65,7 +65,7 @@ export class LogInComponent implements OnInit, OnDestroy {
   }
 
   onforgotPassword() {
-    if (!this.userService.userData.email) alert("enter Your Email First");
+    if (!this.userService.userData.email) alert("Enter Your Email First");
     else {
       //api call
       this.api.getResetCodePassword(this.userService.userData.email).subscribe(

@@ -14,6 +14,7 @@ export interface ISocketService{
 @Injectable({
   providedIn: 'root'
 })
+
 export class SocketService extends Socket implements ISocketService{
   constructor(
     private markerCollection: markerCollectionsService,
@@ -29,6 +30,7 @@ export class SocketService extends Socket implements ISocketService{
   }
 
   updateLike(post: IPost) {
+    debugger
     this.emit('updateLike', post)
   }
 
@@ -43,10 +45,12 @@ export class SocketService extends Socket implements ISocketService{
         this.markerCollection.markers$.next(allPosts)
       }
     })
-
     this.on('updateLikeChange', (post) => {
+      debugger
+      console.log(this.markerCollection.markers$);
+
       const markers = this.markerCollection.markers$.getValue()
-      const oldPost = markers.find(p => p.post_id = post.post_id).likes
+      const oldPost = markers.find(p => p.post_id = post.post_id)
       if (oldPost) {
         const newMarkers = markers.filter(p => p != oldPost)
         this.markerCollection.markers$.next([...newMarkers, post])

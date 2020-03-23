@@ -115,9 +115,6 @@ class GoogleMapHandler {
              <h1>${title}</h1>
           </div>
           <p>${text}</p>
-          <div class="likes_div likes_div_SELECTOR" id=${id}>
-            <span id="like_${id}">${likes}</span> Likes 
-            <img src="./assets/img/like.png" class="like_icon" />
           </div>
         </div>`
 
@@ -146,7 +143,7 @@ class GoogleMapHandler {
     <html>
       <head>
         ${this.getStyle()}
-      </head>  
+      </head>
       <body>
       ${content}
     </body>
