@@ -2,36 +2,51 @@
 module.exports = (db, mailer, bcrypt, jwt, logger) => {
     const filename = __filename.slice(__dirname.length + 1);
 
+    function logDebug(funcName, data, response) {
+        logger.debug(`registration Controller: ${funcName} call()`
+            + response ? `- response: ${response}` : '', { location: filename, data: data });
+    }
+
+    function logError(funcName, data, response) {
+        logger.error(`registration Controller: ${funcName} call()`
+            + response ? `- response: ${response}` : '', { location: filename, data: data });
+    }
+
+    function messageResponse(res, message, status) {
+        return res.status(status).json({
+            message: message
+        });
+    }
+
     function register(req, res) {
-        console.log("registration Controller: register call()");
         try {
-            logger.debug(`register call()`, { location: filename, data: { body: req.body.email } });
+            let message = ''
+            let status = ''
+            logDebug('register', req.body.email)
             db.find("Users", "email", req.body.email, user => {
                 if (user) {
-                    logger.debug(`registration Controller: register call() - finish processing for ${user.email} response: status: 409`,
-                        { location: filename });
-                    return res.status(409).json({
-                        message: "user already exist,try again"
-                    });
+                    message = "user already exist,try again"
+                    status = 409
+                    logDebug(`register ${message}`, req.body.email, `status ${status}`)
+                    return messageResponse(res, message, status)
                 }
                 db.addUser(req.body, result => {
                     mailer.verifyAccountMail(result);
-                    logger.debug(`registration Controller: register call() - finish processing for ${result.email} response: status: 201`,
-                        { location: filename });
-                    return res.status(201).json({
-                        message:
-                            "User Created Successfully , Please check Your Mail To Verify Your Account"
-                    });
+
+                    message = "User Created Successfully , Please check Your Mail To Verify Your Account"
+                    status = 201
+                    logDebug(`register ${message}`, req.body.email, `status ${status}`)
+                    return messageResponse(res, message, status)
                 });
             });
         } catch (error) {
-            logger.error(`registration Controller: register call() - catch error - response: status: 500`,
-                { location: filename, err: error });
-            return res.status(500).json({
-                message: "Internal Server Error"
-            });
+            message = "Internal Server Error"
+            status = 500
+            logError(`register ${message}`, req.body.email, `status ${status}`)
+            return messageResponse(res, message, status)
         }
     }
+    
     function login(req, res) {
         console.log("registration Controller: login call()");
         try {
