@@ -3,9 +3,8 @@ module.exports = (db, mailer, bcrypt, jwt, logger) => {
     const filename = __filename.slice(__dirname.length + 1);
 
     function register(req, res) {
-        console.log("registration Controller: register call()");
         try {
-            logger.debug(`register call()`, { location: filename, data: { body: req.body.email } });
+            logger.debug(`register call()`, { location: filename, data: { body: req.body.email }});
             db.find("Users", "email", req.body.email, user => {
                 if (user) {
                     logger.debug(`registration Controller: register call() - finish processing for ${user.email} response: status: 409`,
@@ -25,8 +24,8 @@ module.exports = (db, mailer, bcrypt, jwt, logger) => {
                 });
             });
         } catch (error) {
-            logger.error(`registration Controller: register call() - catch error - response: status: 500`,
-                { location: filename, err: error });
+            logger.error(`register call() - catch error - response: status: 500`,
+                            { location: filename, err: error });
             return res.status(500).json({
                 message: "Internal Server Error"
             });

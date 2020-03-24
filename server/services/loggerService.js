@@ -22,6 +22,23 @@ module.exports = () => {
       maxSize: `${fileSizeToRotate}m`,
       maxFiles: `${numberOfDaysToKeepLog}d`
     });
+  const baseLogger = createLogger({
+    handleExceptions: true,
+    format: format.combine(
+      format.json(),
+      format.timestamp({
+        format: "YYYY-MM-DD HH:mm:ss"
+      }),
+      format.printf(info => {
+        const { location, data } = info[Symbol.for("splat")][0];
+        const locationString = location ? `Location - ${location}` : "";
+        const objString = data ? `data - ${JSON.stringify(data)}` : "";
+        return `${info.timestamp}| ${info.level}: ${JSON.stringify(
+          info.message
+        )}\t${locationString}\t${objString}\n`;
+      })
+    ),
+  });
 
   const errorLogger = createLogger({
     handleExceptions: true,
