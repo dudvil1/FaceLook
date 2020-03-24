@@ -1,4 +1,4 @@
-module.exports = (sql, connectionString, mongoose) => {
+module.exports = (sql,  mongoose) => {
 
     function addPost(post, callback) {
         console.log("dbManeger: addPost call()");
@@ -9,7 +9,7 @@ module.exports = (sql, connectionString, mongoose) => {
         const query = `INSERT INTO Posts VALUES( '${post.post_id}','${post.user._id}','${post.img}', '${post.text}' , '${post.date}' ,
            '${post.locationLocationLat}' , '${post.locationLocationLng}' , '${post.title}' , '0')`;
          
-        sql.add(connectionString, query, success => {
+        sql.add( query, success => {
             if (success) {
                 callback(post)
             }
@@ -23,7 +23,7 @@ module.exports = (sql, connectionString, mongoose) => {
 
         const query = `INSERT INTO Post_Tag VALUES( '${post_tag.post_id}', '${post_tag.tag_id}')`;
 
-        sql.add(connectionString, query, callback);
+        sql.add( query, callback);
     }
     function getFilterPosts(filters, callback) {
 
@@ -38,10 +38,9 @@ module.exports = (sql, connectionString, mongoose) => {
                           
                           ${filterQuery}`;
 
-        sql.getMany(connectionString, query, callback);
+        sql.getMany( query, callback);
     }
-    function getAllPosts(callback) {
-
+   async function getAllPosts(callback) {
         console.log("dbmaneger: getAllPost call()");
 
         const query = `select DISTINCT Posts.*,Users.name
@@ -50,7 +49,7 @@ module.exports = (sql, connectionString, mongoose) => {
                         LEFT JOIN Tags on Tags.tag_id = Post_Tag.tag_id
                         INNER JOIN Users on Users._id = Posts.publisher_id`;
 
-        sql.getMany(connectionString, query, callback);
+                        sql.getMany( query, callback);
     }
     function updateLikes(post, callback) {
         const query = `
@@ -59,7 +58,7 @@ module.exports = (sql, connectionString, mongoose) => {
             WHERE post_id = '${post.post_id}';
           `;
 
-        sql.update(connectionString, query, callback);
+        sql.update( query, callback);
     }
 
     return {
