@@ -47,10 +47,10 @@ container.registerModule('userFriendRepo',['sql','dbConfig'],require('./reposito
 container.registerModule('dbManager',['userRepo','baseRepo','tagRepo','postRepo','userFriendRepo'],require('./repository/dbmaneger'));
 
 //controllers
-container.registerModule('defaultController',["moment"],require('./controllers/defaultController')); 
-container.registerModule('friendController',["dbManager"],require('./controllers/friendController'));
-container.registerModule('postsController',["dbManager"],require('./controllers/postsController'));
-container.registerModule('registrationController',["dbManager",'mailService','bcrypt','jwtService'],require('./controllers/registrationController'));
+container.registerModule('defaultController',["moment",'loggerService'],require('./controllers/defaultController')); 
+container.registerModule('friendController',["dbManager",'loggerService'],require('./controllers/friendController'));
+container.registerModule('postsController',["dbManager",'loggerService'],require('./controllers/postsController'));
+container.registerModule('registrationController',["dbManager",'mailService','bcrypt','jwtService','loggerService'],require('./controllers/registrationController'));
 
 //routes
 container.registerModule('defaultRoutes',['express','defaultController'],require('./routes/default'));

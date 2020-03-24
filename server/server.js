@@ -6,9 +6,11 @@ const socketService = container.get('socketService');
 const port = process.env.port || 3000;
 const server = http.createServer(app);
 const io = require('socket.io')(server);
+const filename = __filename.slice(__dirname.length + 1);
 
 server.listen(port, function () {
-  logger.info('kjhlkjlkj', { location: __filename, data: { port, function: 'server.listen' } });
+   logger.info(`server listening in port: ${port}`, { location: filename}); 
+
 });
 
 io.on("connection", socket => {
