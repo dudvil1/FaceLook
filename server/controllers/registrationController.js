@@ -27,7 +27,7 @@ module.exports = (db, mailer, bcrypt, jwt, logger) => {
                 if (user) {
                     message = "user already exist,try again"
                     status = 409
-                    logDebug(`register ${message}`, req.body.email, `status ${status}`)
+                    logDebug(`register`, req.body.email, `status ${status} message ${message}`)
                     return messageResponse(res, message, status)
                 }
                 db.addUser(req.body, result => {
@@ -35,7 +35,7 @@ module.exports = (db, mailer, bcrypt, jwt, logger) => {
 
                     message = "User Created Successfully , Please check Your Mail To Verify Your Account"
                     status = 201
-                    logDebug(`register ${message}`, req.body.email, `status ${status}`)
+                    logDebug(`register`, req.body.email, `status ${status} message ${message}`)
                     return messageResponse(res, message, status)
                 });
             });
@@ -46,7 +46,7 @@ module.exports = (db, mailer, bcrypt, jwt, logger) => {
             return messageResponse(res, message, status)
         }
     }
-    
+
     function login(req, res) {
         console.log("registration Controller: login call()");
         try {
