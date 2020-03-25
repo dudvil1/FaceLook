@@ -1,4 +1,4 @@
-const container = require('./containerConfig')().then(
+require('./containerConfig')().then(
   container => {
     const http = container.get('http');
     const app = container.get('app');

@@ -4,7 +4,7 @@ module.exports = (sql,  mongoose) => {
         console.log("dbManeger: addPost call()");
 
         post.post_id = new mongoose.Types.ObjectId();
-        post.date = formatDate(new Date());
+        post.date = formatDate(post.date);
         
         const query = `INSERT INTO Posts VALUES( '${post.post_id}','${post.user._id}','${post.img}', '${post.text}' , '${post.date}' ,
            '${post.locationLocationLat}' , '${post.locationLocationLng}' , '${post.title}' , '0')`;
