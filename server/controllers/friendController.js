@@ -1,4 +1,4 @@
-module.exports = db => {
+module.exports = (db, logger) => {
   
   function searchUsers(req, res) {
     try {
@@ -36,7 +36,6 @@ module.exports = db => {
       });
     }
   }
-  
   function addFriend(req, res) {
     const { userId, friendId } = req.body;
 

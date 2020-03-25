@@ -1,5 +1,5 @@
 
-module.exports = (db) => {
+module.exports = (db, logger) => {
 
   function addPost(req, res) {
     console.log("postController: addPost call()");
@@ -31,7 +31,6 @@ module.exports = (db) => {
 
     try {
       db.getAllPosts(posts => {
-        console.log("posts",posts)
         res.status(201).json(posts);
       });
     } catch (error) {
@@ -40,7 +39,6 @@ module.exports = (db) => {
       });
     }
   }
-
   function getFilterPosts(req, res) {
     try {
       console.log("postController: getFilterPosts call()");
@@ -54,7 +52,6 @@ module.exports = (db) => {
       });
     }
   }
-
   async function updateLikes(req, res) {
     try {
       console.log("postController: updateLikes call()");
