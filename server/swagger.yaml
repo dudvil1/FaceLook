@@ -333,10 +333,9 @@ paths:
 
 
 openapi: 3.0.0
-# 1) Define the security scheme type (HTTP bearer)
 components:
   securitySchemes:
-    Bearer:            # arbitrary name for the security scheme
+    Bearer:            
       type: http
       scheme: bearer
       bearerFormat: JWT
