@@ -8,7 +8,7 @@ describe('mailSevice Tests', function () {
   let sendMailSpy
 
   beforeEach(() => {
-    sendMail = sinon.spy();
+    sendMailSpy = sinon.spy();
     nodemailerService = {
       createTransport: function (...params) {
         return {
@@ -32,17 +32,17 @@ describe('mailSevice Tests', function () {
 
   it('test for verifyAccountMail function with valid parameters (email && _id)', function () {
     mailService.verifyAccountMail({ email: "guy", _id: "1234" })
-    expect(sendMail).to.have.been.calledOnce
+    expect(sendMailSpy).to.have.been.calledOnce
   });
 
   it('test for verifyAccountMail function with empty object', function () {
     mailService.verifyAccountMail({})
-    expect(sendMail).to.not.have.been.called
+    expect(sendMailSpy).to.not.have.been.called
   });
 
   it('test for verifyAccountMail function with undefined', function () {
     mailService.verifyAccountMail()
-    expect(sendMail).to.not.have.been.called
+    expect(sendMailSpy).to.not.have.been.called
   });
 
 });
