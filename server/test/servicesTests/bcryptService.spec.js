@@ -1,26 +1,16 @@
 const { assert, should, expect, sinon } = require('../baseTest');
 
-const bcrypt = require('../../services/bcryptService');
+const bcryptService = require('../../services/bcryptService');
+const bcrypt = require('bcryptjs');
 
 describe('bcryptService Tests', function() {
-    let bcryptObj
-    let bcryptService
-    let bcryptSpy
-
-    beforeEach(() => {
-        bcryptSpy = sinon.spy();
-        bcryptObj = {
-            hashSync: function (firstPassword, secondPassword) {
-            return {
-               
-            }
-          },
-          compareSync: function(firstPassword, secondPassword) {
-             return{
-
-             }
-          }
-        }
-        bcryptService = bcrypt(bcryptObj);
-      })
+    
+    it('check the HashSync function',function(){
+      let Password = '1234';
+      bcryptService.createHashPassword(Password);
+      console.log(bcryptPassword);
+      
+      expect(bcryptPassword).to.not.be.eql(Password);
+    })
+   
 });

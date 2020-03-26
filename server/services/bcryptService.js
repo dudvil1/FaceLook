@@ -9,7 +9,7 @@ module.exports = (bcrypt) => {
 
   function createHashPassword(password) {
     console.log("bycrptService: createHashPassword call()");
-
+    
     return bcrypt.hashSync(password,hashKey);
   }
 

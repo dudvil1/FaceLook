@@ -14,5 +14,5 @@ module.exports = (multer) => {
 
   const upload = multer({ storage: store });
 
-  return upload
+  return upload;
 }
