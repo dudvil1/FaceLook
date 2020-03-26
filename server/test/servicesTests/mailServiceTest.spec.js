@@ -44,5 +44,4 @@ describe('mailSevice Tests', function () {
     mailService.verifyAccountMail()
     expect(sendMailSpy).to.not.have.been.called
   });
-
 });

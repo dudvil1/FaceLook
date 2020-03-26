@@ -1,1 +1,2 @@
-require("./mailServiceTest.spec")
+require("./mailServiceTest.spec");
+require("./bcryptService.spec");
