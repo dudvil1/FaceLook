@@ -12,7 +12,7 @@ describe('mailSevice Tests', function () {
     nodemailerService = {
       createTransport: function (...params) {
         return {
-          sendMail: sendMail
+          sendMail: sendMailSpy
         }
       }
     }
