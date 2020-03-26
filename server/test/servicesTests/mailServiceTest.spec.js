@@ -4,7 +4,7 @@ const mail = require('../../services/mailService');
 
 describe('mailSevice Tests', function () {
   let nodemailerService
-  let sendMailCounter = 0
+  let sendMailCounter
   let mailService
 
   beforeEach(() => {
@@ -23,8 +23,8 @@ describe('mailSevice Tests', function () {
   })
 
   it('test for verifyAccountMail function', function () {
-    mailService.verifyAccountMail()
-    assert.equal(sendMailCounter, 1);
+    sinon.assert.calledWith(mySpy, "sendMail");
+    mailService = mail(nodemailerService)
   });
 
 
