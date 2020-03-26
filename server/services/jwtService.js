@@ -1,5 +1,5 @@
 module.exports = (jwt, moment) => {
-    const secret = process.env.JWT_SECRET;
+    var secret = process.env.JWT_SECRET || 'secret';
 
     createToken = (user) => {
         user.expired = moment().add(3, 'days').unix();
