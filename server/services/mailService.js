@@ -18,6 +18,7 @@ module.exports = (nodemailer) => {
       html: `<p>please verify your account in http://localhost:4200/login/${mailOptions._id}</p>`
     });
   }
+  
   async function forgotPasswordMail(mailOptions) {
     console.log("forgotPasswordMail() call", mailOptions);
 
