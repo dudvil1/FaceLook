@@ -22,7 +22,7 @@ describe('mailSevice Tests', function () {
   it('test onInit createTransport with gmail service', function (done) {
     nodemailerService = {
       createTransport: function (param) {
-        const { service, } = param
+        const { service } = param
         expect(service).to.equal('gmail')
         done()
       }
