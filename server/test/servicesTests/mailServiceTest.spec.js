@@ -4,28 +4,23 @@ const mail = require('../../services/mailService');
 
 describe('mailSevice Tests', function () {
   let nodemailerService
-  let sendMailCounter
   let mailService
 
   beforeEach(() => {
-    sendMailCounter = 0
-    nodemailerService = {
-      createTransport: function (...params) {
-        return {
-          sendMail: function (...params) {
-            sendMailCounter += 1;
-          }
-        }
-      }
-    }
-
-    mailService = mail(nodemailerService)
   })
 
   it('test for verifyAccountMail function', function () {
-    sinon.assert.calledWith(mySpy, "sendMail");
+    const sendMail = sinon.spy();
+    nodemailerService = {
+      createTransport: function (...params) {
+        return {
+          sendMail: sendMail
+        }
+      }
+    }
     mailService = mail(nodemailerService)
+    mailService.verifyAccountMail({ email: "", _id: "" })
+    expect(sendMail).to.have.been.calledOnce
   });
-
 
 });
