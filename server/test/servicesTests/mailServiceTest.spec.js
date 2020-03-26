@@ -7,41 +7,102 @@ describe('mailSevice Tests', function () {
   let mailService
   let sendMailSpy
 
-  beforeEach(() => {
-    sendMailSpy = sinon.spy();
-    nodemailerService = {
+  function nodemailerWithTransport(createTransport) {
+    return {
+      createTransport: createTransport
+    }
+  }
+
+  function nodemailerWithSendMail(sendMail) {
+    return {
       createTransport: function (...params) {
         return {
-          sendMail: sendMailSpy
+          sendMail: sendMail
         }
       }
     }
+  }
+
+  beforeEach(() => {
+    sendMailSpy = sinon.spy();
+    nodemailerService = nodemailerWithSendMail(sendMailSpy)
+
     mailService = mail(nodemailerService)
   })
+  it('test onInit createTransport with auth obj', function (done) {
+    nodemailerService = nodemailerWithTransport((params) => {
+      const { auth } = params
 
-  it('test onInit createTransport with gmail service', function (done) {
-    nodemailerService = {
-      createTransport: function (param) {
-        const { service } = param
-        expect(service).to.equal('gmail')
-        done()
-      }
-    }
+      expect(auth).to.not.be.undefined
+      expect(auth).to.be.haveOwnProperty('user')
+      expect(auth).to.be.haveOwnProperty('pass')
+      done()
+    })
     mailService = mail(nodemailerService)
   });
 
-  it('test for verifyAccountMail function with valid parameters (email && _id)', function () {
+  it('test onInit createTransport with gmail service', function (done) {
+    nodemailerService = nodemailerWithTransport((param) => {
+      const { service } = param
+      expect(service).to.equal('gmail')
+      done()
+    })
+    mailService = mail(nodemailerService)
+  });
+
+  it('test sendMail() is called once for verifyAccountMail() with valid param (email && _id)', function () {
     mailService.verifyAccountMail({ email: "guy", _id: "1234" })
     expect(sendMailSpy).to.have.been.calledOnce
   });
 
-  it('test for verifyAccountMail function with empty object', function () {
+  it('test sendMail() is`nt called for verifyAccountMail() with empty object', function () {
     mailService.verifyAccountMail({})
     expect(sendMailSpy).to.not.have.been.called
   });
 
-  it('test for verifyAccountMail function with undefined', function () {
+  it('test sendMail() is`nt called for verifyAccountMail() with undefined', function () {
     mailService.verifyAccountMail()
+    expect(sendMailSpy).to.not.have.been.called
+  });
+
+  it('test sendMail() is called with the received email for verifyAccountMail()', function (done) {
+    const obj = {
+      email: 'ggg@ggg.com',
+      _id: '12343423'
+    }
+    nodemailerService = nodemailerWithSendMail(({ to }) => {
+      expect(to).to.equal(obj.email)
+      done()
+    })
+    mailService = mail(nodemailerService)
+    mailService.verifyAccountMail(obj)
+  });
+
+  it('test sendMail() is called with the received email for forgotPasswordMail()', function (done) {
+    const obj = {
+      email: 'ggg@ggg.com',
+      _id: '12343423'
+    }
+    nodemailerService = nodemailerWithSendMail(({ to }) => {
+      expect(to).to.equal(obj.email)
+      done()
+    })
+    mailService = mail(nodemailerService)
+    mailService.forgotPasswordMail(obj)
+  });
+
+  it('test sendMail() is called once for forgotPasswordMail() with valid param (email && _id)', function () {
+    mailService.forgotPasswordMail({ email: "guy", _id: "1234" })
+    expect(sendMailSpy).to.have.been.calledOnce
+  });
+
+  it('test sendMail() is`nt called for forgotPasswordMail() with empty object', function () {
+    mailService.forgotPasswordMail({})
+    expect(sendMailSpy).to.not.have.been.called
+  });
+
+  it('test sendMail() is`nt called for verifyAccountMail() with undefined', function () {
+    mailService.forgotPasswordMail()
     expect(sendMailSpy).to.not.have.been.called
   });
 
