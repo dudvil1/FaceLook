@@ -1,6 +1,4 @@
 module.exports = (nodemailer) => {
-
-  console.log(nodemailer)
   let transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -12,13 +10,14 @@ module.exports = (nodemailer) => {
     }
   });
   async function verifyAccountMail(mailOptions) {
-    console.log("verifyAccountMail() call");
 
-    await transporter.sendMail({
-      to: mailOptions.email,
-      subject: "verfiy account for FaceLook",
-      html: `<p>please verify your account in http://localhost:4200/login/${mailOptions._id}</p>`
-    });
+    if (mailOptions && mailOptions.email && mailOptions._id) {
+      await transporter.sendMail({
+        to: mailOptions.email,
+        subject: "verfiy account for FaceLook",
+        html: `<p>please verify your account in http://localhost:4200/login/${mailOptions._id}</p>`
+      });
+    }
   }
 
   async function forgotPasswordMail(mailOptions) {
