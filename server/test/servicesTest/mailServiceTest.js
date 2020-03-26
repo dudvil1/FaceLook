@@ -1,4 +1,4 @@
-const baseTest = require('../baseTest')
+const baseTest = require('../base')
 const {should , expect , sinon }= baseTest;
 
 const mail = require('../../services/mailService');
