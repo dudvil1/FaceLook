@@ -1,4 +1,4 @@
-swagger: '2.0'
+swagger: '3.0'
 info:
   description: API For FaceLook
   version: '0.2.0'
@@ -332,12 +332,15 @@ paths:
 
 
 
+openapi: 3.0.0
+# 1) Define the security scheme type (HTTP bearer)
+components:
+  securitySchemes:
+    Bearer:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 
-securityDefinitions:
-  Bearer:
-    type: apiKey
-    name: Authorization
-    in: header
 
 RequestDefinitions:
    RegisterModel:

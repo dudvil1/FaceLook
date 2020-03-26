@@ -3,29 +3,23 @@ module.exports = (db, logger) => {
 
   function addPost(req, res) {
     console.log("postController: addPost call()");
-     req.body.user = req.user;
-     req.body.img = req.image;
+    req.body.user = req.user;
+    req.body.img = req.image;
 
     try {
       db.addPost(req.body, postResult => {
-        // db.addTag(postResult, tagResult => {
-        //   console.log("tagResult", tagResult)
-        //   db.addPost_Tag(tagResult, result => {
-
-        console.log(postResult)
-            return res.status(201).json({
-              message: "post Created Successfully"
-            });
-        //   });
-        // });
+        return res.status(201).json({
+          message: "post Created Successfully",
+          post: postResult
+        });
       });
     } catch (error) {
       return res.status(500).json({
         message: "Internal Server Error"
-
       });
     }
   }
+
   function getAllPosts(req, res) {
     console.log("postController: getAllPosts call()");
 
@@ -56,7 +50,7 @@ module.exports = (db, logger) => {
     try {
       console.log("postController: updateLikes call()");
 
-      await db.updateLikes(req.body.post, (data) => {
+      await db.updateLikes(req.body, (data) => {
         res.status(200).json({
           message: "Post-Like updated successfuly"
         })

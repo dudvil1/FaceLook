@@ -47,17 +47,17 @@ export class MapComponent implements AfterViewInit {
 
     postMarkers.forEach(post => {
       //create post location coordinates
-      let postLocation = { lat: +post.latitude, lng: +post.longitude };
+      let postLocation = { lat: +post.location.lat, lng: +post.location.lon };
       //create post props
       let postMarker = GoogleMapHandler.createMapMarker(postLocation,
         post.title,
         {
-          url: "http://localhost:3000/public/uploads/images/" + post.image,
+          url: "http://localhost:3000/public/uploads/images/" + post.image.url,
           scaledSize: new google.maps.Size(50, 50, "px", "px")
         })
       //add props to map
       postMarker.setMap(googleMap);
-      let bubbleDiv = GoogleMapHandler.createBubbleContent(post.title, post.text, post.post_id, post.likes)
+      let bubbleDiv = GoogleMapHandler.createBubbleContent(post.title, post.text, post.postId, post.likes.amount)
 
       //add bubbles to the map
       let infowindow = new google.maps.InfoWindow({
@@ -125,7 +125,7 @@ class GoogleMapHandler {
     return `
      <style>
        .info_content {
-         background-color: black;
+         background-color: antiquewhite;
        }
        h1 {
          color: red;

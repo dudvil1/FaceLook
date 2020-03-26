@@ -4,6 +4,7 @@ import { Observable, Subscription } from 'rxjs';
 import { PostApiService } from "../../service/postApi.service";
 import { IPost } from '../../../common/model/post';
 import { SocketService } from 'src/app/common/service/socket.service';
+import { JwtService } from 'src/app/common/service/jwt.service';
 
 @Component({
   selector: 'app-posts',
@@ -18,6 +19,7 @@ export class PostsComponent implements OnInit {
 
   constructor(
     private postApiService: PostApiService,
+    private jwtServiceHelper: JwtService,
     private socket: SocketService
   ) { }
 
@@ -35,7 +37,7 @@ export class PostsComponent implements OnInit {
 
   setLikesOfPost(post: IPost) {
     if (post) {
-      this.subscriptionPost = this.postApiService.updateLikes(post).subscribe(
+      this.subscriptionPost = this.postApiService.updateLikes({ post: post, userId: this.jwtServiceHelper.getUserId() }).subscribe(
         () => this.socket.updateLike(post)
       )
     }

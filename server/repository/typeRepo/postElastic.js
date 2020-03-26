@@ -21,24 +21,49 @@ module.exports = (sql, mongoose) => {
         });
     }
 
-    function addPost_Tag(post_tag, callback) {
-        callback(false)
-    }
     function getFilterPosts(filters, callback) {
-
         callback([])
     }
     async function getAllPosts(callback) {
-        callback([])
+        const query = {
+            index: 'posts',
+            body: {
+                query: {
+                    exists: {
+                        field: "postId"
+                    }
+                }
+            }
+        }
+
+        sql.getMany(query, (posts) => {
+            callback(posts ? posts : [])
+        });
     }
-    function updateLikes(post, callback) {
-        callback(false)
+    function updateLikes(data, callback) {
+        try {
+            const query = {
+                index: 'posts',
+                id: data.post.postId,
+                body: {
+                    script: sql.createScript().scriptAppendArray('likes.users', data.userId)
+                        .scriptIncrement('likes.amount', 1).script
+                }
+            }
+            sql.update(query, (success) => {
+                callback(success ? success : undefined)
+            });
+        } catch (error) {
+            console.log(error);
+
+        }
+
     }
+
 
     return {
         getFilterPosts,
         addPost,
-        addPost_Tag,
         getAllPosts,
         updateLikes
     }

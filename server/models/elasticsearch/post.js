@@ -13,13 +13,13 @@ module.exports = class Post {
         this.title = title;
         this.image = {
             url: imageUrl,
-            tags: imageTags ? (imageTags.length ? imageTags : [imageTags]) : []
+            tags: imageTags ? (Array.isArray(imageTags) ? imageTags : [imageTags]) : []
         };
         this.likes = {
             amount: 0,
             users: []
         };
         this.text = text
-        this.tags = tags ? (tags.length ? tags : [tags]) : []
+        this.tags = tags ? (Array.isArray(tags) ? tags : [tags]) : []
     }
 }

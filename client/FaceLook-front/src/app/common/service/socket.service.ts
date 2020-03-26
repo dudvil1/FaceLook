@@ -50,7 +50,7 @@ export class SocketService extends Socket implements ISocketService{
       console.log(this.markerCollection.markers$);
 
       const markers = this.markerCollection.markers$.getValue()
-      const oldPost = markers.find(p => p.post_id = post.post_id)
+      const oldPost = markers.find(p => p.postId = post.postId)
       if (oldPost) {
         const newMarkers = markers.filter(p => p != oldPost)
         this.markerCollection.markers$.next([...newMarkers, post])

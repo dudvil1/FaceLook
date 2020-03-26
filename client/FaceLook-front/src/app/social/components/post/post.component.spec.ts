@@ -10,7 +10,7 @@ describe('PostComponent', () => {
 
   let componentInputPost: IPost = {
     date: '2020-03-03', image: 'img.jpg', latitude: '35', likes: 10,
-    longitude: '32', post_id: '1', publisher_id: '1', text: 'img', title: 'img1'
+    longitude: '32', postId: '1', publisher_id: '1', text: 'img', title: 'img1'
   }
 
   beforeEach(async(() => {
