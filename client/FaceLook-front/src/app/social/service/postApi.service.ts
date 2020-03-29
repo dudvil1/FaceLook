@@ -53,8 +53,15 @@ export class PostApiService implements IPostApi {
     );
   }
   updateLikes(data: { post: IPost, userId: string }): Observable<ISuccessResponse> {
-    const { socialUrl, updateLikes } = this.apiConfig.socialApi
-    const url = socialUrl + updateLikes
+    const { socialUrl, addLike } = this.apiConfig.socialApi
+    const url = socialUrl + addLike
+
+    return this.httpClient.patch<ISuccessResponse>(url, data);
+  }
+
+  removeLikes(data: { post: IPost, userId: string }): Observable<ISuccessResponse> {
+    const { socialUrl, removeLike } = this.apiConfig.socialApi
+    const url = socialUrl + removeLike
 
     return this.httpClient.patch<ISuccessResponse>(url, data);
   }

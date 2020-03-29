@@ -33,8 +33,11 @@ module.exports = (userRepo, baseRepo, tagRepo, postRepo, userFriendRepo) => {
   function getAllPosts(callback) {
     return postRepo.getAllPosts(callback)
   }
-  function updateLikes(post, callback) {
-    return postRepo.updateLikes(post, callback)
+  function addLike(data, callback) {
+    return postRepo.addLike(data, callback)
+  }
+  function removeLike(data, callback) {
+    return postRepo.removeLike(data, callback)
   }
   function updateFollow(friendId, userId, callback) {
     return userFriendRepo.updateFollow(friendId, userId, callback)
@@ -61,7 +64,8 @@ module.exports = (userRepo, baseRepo, tagRepo, postRepo, userFriendRepo) => {
     addTag,
     addPost_Tag,
     getAllPosts,
-    updateLikes,
+    addLike,
+    removeLike,
     getUsers,
     addUser_Friend,
     updateFollow

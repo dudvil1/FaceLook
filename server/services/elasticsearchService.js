@@ -37,54 +37,92 @@ exports.createScript = () => {
     return {
         script: {
             lang: "painless",
-            inline: ""
+            inline: "",
+            params: {
+
+            }
         },
         scriptAppendArray: function (field, value) {
-            this.script.inline += `ctx._source.${field}.add(${value});`
+            const { keys } = getObjKeys(value)
+            if (keys) {
+                setScriptWithParams(this.script, `ctx._source.${field}.add(params.${keys[0]});`, value);
+            }
+            else {
+                setScript(this.script, `ctx._source.${field}.add(${validScriptValue(value)});`)
+            }
             return this
         },
         scriptRemove: function (field, value) {
-            this.script.inline += `ctx._source.${field}.remove(ctx._source.${field}.indexOf(${value}));`
+            const { keys } = getObjKeys(value)
+            if (keys) {
+                setScriptWithParams(this.script, `ctx._source.${field}.remove(ctx._source.${field}.indexOf(params.${keys[0]}));`, value);
+            }
+            else {
+                setScript(this.script, `ctx._source.${field}.remove(ctx._source.${field}.indexOf(${validScriptValue(value)}));`)
+            }
             return this
         },
         scriptIncrement: function (field, value) {
-            this.script.inline += `ctx._source.${field} +=${value};`
+            const { keys } = getObjKeys(value)
+            if (keys) {
+                setScriptWithParams(this.script, `ctx._source.${field} += params.${keys[0]};`, value);
+            }
+            else {
+                setScript(this.script, `ctx._source.${field} += ${validScriptValue(value)};`)
+            }
             return this
         },
         scriptDecrement: function (field, value) {
-            this.script.inline += `ctx._source.${field} -=${value};`
+            const { keys } = getObjKeys(value)
+            if (keys) {
+                setScriptWithParams(this.script, `ctx._source.${field} -= params.${keys[0]};`, value);
+            }
+            else {
+                setScript(this.script, `ctx._source.${field} -= ${validScriptValue(value)};`)
+            }
             return this
         }
+
     }
+}
+
+function validScriptValue(value) {
+    return typeof (value) == "string" ? `'${value}'` : value
+}
+
+function setScript(script, inline) {
+    script.inline += inline;
+}
+function setScriptWithParams(script, inline, value) {
+    script.inline += inline;
+    script.params = {
+        ...script.params,
+        ...value
+    };
+}
+function getObjKeys(obj) {
+    if (typeof (obj) != "string" && Object.keys(obj).length > 0)
+        return { keys: Object.keys(obj) }
+    return {}
 }
 
 exports.update = async (query, callback) => {
     try {
         const response = await client.update(query)
-        if (response) {
-            console.log(response)
-            callback(true)
-        }
-        else {
-            callback(isExist)
-        }
+        callback(response)
     } catch (error) {
-        console.log(error.message)
+        console.log("error  ", error.message)
+        callback(false)
     }
 }
 
 exports.getOne = async (query, callback) => {
     try {
-        const response = await client.search(query);
-
-        const result = response.hits.hits.map(hit => hit._source)[0]
-        if (result)
-            callback(result)
-        else
-            callback(undefined)
-
+        const response = await client.get(query);
+        callback(response._source)
     } catch (error) {
         console.log(error.message)
+        callback(undefined)
     }
 }
 
@@ -92,13 +130,10 @@ exports.getMany = async (query, callback) => {
     try {
         const response = await client.search(query);
         const result = response.hits.hits.map(hit => hit._source)
-        console.log(result)
-        if (result)
-            callback(result)
-        else
-            callback(undefined)
+        callback(result)
     } catch (error) {
         console.log(error)
+        callback([])
     }
 }
 

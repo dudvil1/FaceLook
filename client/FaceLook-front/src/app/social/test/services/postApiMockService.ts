@@ -6,11 +6,11 @@ import { ISuccessResponse } from '../../../common/model/successResponse';
 
 export class PostsApiMockService implements IPostApi {
     posts: IPost[] = [
-        { date: '2020-03-03', image: 'img.jpg', latitude: '35', likes: 10, longitude: '32.1', postId: '1', publisher_id: '1', text: 'img', title: 'img1' },
-        { date: '2020-01-03', image: 'img1.jpg', latitude: '34.5', likes: 31, longitude: '32.2', postId: '2', publisher_id: '1', text: 'img 2', title: 'img2' },
-        { date: '2020-02-03', image: 'img2.jpg', latitude: '34.9', likes: 78, longitude: '32.1', postId: '3', publisher_id: '1', text: 'img 3', title: 'img3' },
-        { date: '2020-04-03', image: 'img3.jpg', latitude: '35.1', likes: 34, longitude: '32.12', postId: '4', publisher_id: '1', text: 'img 4', title: 'img4' },
-        { date: '2020-05-03', image: 'img4.jpg', latitude: '35.8', likes: 11, longitude: '32.6', postId: '5', publisher_id: '1', text: 'img 5', title: 'img5' }
+        { publishDate: new Date('2020-03-03'), image: { url: 'img1.jpg', tags: [] }, likes: { amount: 1, users: ['123'] }, postId: '1', tags: [], text: 'img', title: 'img1', location: { lat: '', lon: '' } },
+        { publishDate: new Date('2020-01-03'), image: { url: 'img2.jpg', tags: [] }, likes: { amount: 1, users: ['123'] }, postId: '2', tags: [], text: 'img 2', title: 'img2', location: { lat: '', lon: '' } },
+        { publishDate: new Date('2020-02-03'), image: { url: 'img3.jpg', tags: [] }, likes: { amount: 1, users: ['123'] }, postId: '3', tags: [], text: 'img 3', title: 'img3', location: { lat: '', lon: '' } },
+        { publishDate: new Date('2020-04-03'), image: { url: 'img4.jpg', tags: [] }, likes: { amount: 1, users: ['123'] }, postId: '4', tags: [], text: 'img 4', title: 'img4', location: { lat: '', lon: '' } },
+        { publishDate: new Date('2020-05-03'), image: { url: 'img5.jpg', tags: [] }, likes: { amount: 1, users: ['123'] }, postId: '5', tags: [], text: 'img 5', title: 'img5', location: { lat: '', lon: '' } }
     ]
 
     addPost(post: any): Observable<ISuccessResponse> {

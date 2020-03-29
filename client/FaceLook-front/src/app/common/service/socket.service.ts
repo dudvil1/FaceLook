@@ -30,7 +30,6 @@ export class SocketService extends Socket implements ISocketService{
   }
 
   updateLike(post: IPost) {
-    debugger
     this.emit('updateLike', post)
   }
 
@@ -46,7 +45,6 @@ export class SocketService extends Socket implements ISocketService{
       }
     })
     this.on('updateLikeChange', (post) => {
-      debugger
       console.log(this.markerCollection.markers$);
 
       const markers = this.markerCollection.markers$.getValue()

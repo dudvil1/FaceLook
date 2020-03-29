@@ -12,7 +12,8 @@ export interface SocialApiConfig {
   addPost: string;
   getPosts: string;
   filterPosts(filter: string): string;
-  updateLikes: string;
+  addLike: string;
+  removeLike: string;
 }
 export interface DefaultApiConfig {
   defualtUrl: string
@@ -64,7 +65,8 @@ export class ApiConfigService implements ApiConfig {
       filterPosts: (filter) => {
         return `/filterPosts/${filter}`;
       },
-      updateLikes: `/updateLikes`,
+      addLike: `/addLike`,
+      removeLike: `/removeLike`,
     };
   }
 

@@ -37,8 +37,17 @@ export class PostsComponent implements OnInit {
 
   setLikesOfPost(post: IPost) {
     if (post) {
-      this.subscriptionPost = this.postApiService.updateLikes({ post: post, userId: this.jwtServiceHelper.getUserId() }).subscribe(
-        () => this.socket.updateLike(post)
+      const data = { post: post, userId: this.jwtServiceHelper.getUserId() }
+      const observableLike = post.likes.users.find(u => u == this.jwtServiceHelper.getUserId()) ?
+        this.postApiService.removeLikes(data) :
+        this.postApiService.updateLikes(data)
+        
+      this.subscriptionPost = observableLike.subscribe(
+        (res) => {
+          const index = this.posts.indexOf(this.posts.find(p => p.postId == res.post.postId))
+          this.posts[index] = res.post;
+          this.socket.updateLike(post)
+        }
       )
     }
   }

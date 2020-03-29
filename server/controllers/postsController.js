@@ -46,13 +46,31 @@ module.exports = (db, logger) => {
       });
     }
   }
-  async function updateLikes(req, res) {
+  async function addLike(req, res) {
     try {
       console.log("postController: updateLikes call()");
 
-      await db.updateLikes(req.body, (data) => {
+      await db.addLike(req.body, (post) => {
         res.status(200).json({
-          message: "Post-Like updated successfuly"
+          message: "Post-Like updated successfuly",
+          post: post
+        })
+      })
+    } catch (error) {
+      return res.status(500).json({
+        message: "Internal Server Error"
+      })
+    }
+  }
+
+  async function removeLike(req, res) {
+    try {
+      console.log("postController: removeLike call()");
+
+      await db.removeLike(req.body, (post) => {
+        res.status(200).json({
+          message: "Post-Like updated successfuly",
+          post: post
         })
       })
     } catch (error) {
@@ -64,7 +82,8 @@ module.exports = (db, logger) => {
   return {
     addPost,
     getAllPosts,
-    updateLikes,
-    getFilterPosts
+    addLike,
+    getFilterPosts,
+    removeLike
   }
 }

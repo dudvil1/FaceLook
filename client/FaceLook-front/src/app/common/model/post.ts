@@ -24,9 +24,12 @@ export interface IPost {
         amount: number,
         users: string[]
     },
-    location: any,
+    location: {
+        lat: string,
+        lon: string
+    },
     text: string,
-    tags: string,
+    tags: string[],
     username?: string,
     userId?: string,
     email?: string

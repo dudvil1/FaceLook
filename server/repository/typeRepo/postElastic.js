@@ -24,7 +24,7 @@ module.exports = (sql, mongoose) => {
     function getFilterPosts(filters, callback) {
         callback([])
     }
-    async function getAllPosts(callback) {
+    function getAllPosts(callback) {
         const query = {
             index: 'posts',
             body: {
@@ -40,22 +40,44 @@ module.exports = (sql, mongoose) => {
             callback(posts ? posts : [])
         });
     }
-    function updateLikes(data, callback) {
+    function addLike(data, callback) {
         try {
             const query = {
                 index: 'posts',
                 id: data.post.postId,
+                type: '_doc',
                 body: {
-                    script: sql.createScript().scriptAppendArray('likes.users', data.userId)
-                        .scriptIncrement('likes.amount', 1).script
+                    script: sql.createScript().scriptAppendArray('likes.users', { userId: data.userId })
+                        .scriptIncrement('likes.amount', { amount: 1 }).script
                 }
             }
+            
             sql.update(query, (success) => {
-                callback(success ? success : undefined)
+                returnPostOnSuccess(success, query, sql, callback);
             });
         } catch (error) {
             console.log(error);
 
+        }
+
+    }
+
+    function removeLike(data, callback) {
+        try {
+            const query = {
+                index: 'posts',
+                id: data.post.postId,
+                type: '_doc',
+                body: {
+                    script: sql.createScript().scriptRemove('likes.users', { userId: data.userId })
+                        .scriptDecrement('likes.amount', { amount: 1 }).script
+                }
+            }
+            sql.update(query, (success) => {
+                returnPostOnSuccess(success, query, sql, callback);
+            });
+        } catch (error) {
+            callback(undefined)
         }
 
     }
@@ -65,7 +87,20 @@ module.exports = (sql, mongoose) => {
         getFilterPosts,
         addPost,
         getAllPosts,
-        updateLikes
+        addLike,
+        removeLike
+    }
+}
+
+function returnPostOnSuccess(success, query, sql, callback) {
+    if (success) {
+        query.body = undefined;
+        sql.getOne(query, (post) => {
+            callback(post);
+        });
+    }
+    else {
+        callback(undefined);
     }
 }
 
