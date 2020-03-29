@@ -1,7 +1,6 @@
 const PostModule = require('../../models/elasticsearch/post')
 
 module.exports = (sql, mongoose) => {
-
     function addPost(post, callback) {
         post.post_id = new mongoose.Types.ObjectId();
         post.date = formatDate(post.date);
@@ -20,21 +19,22 @@ module.exports = (sql, mongoose) => {
             callback(success ? newPost : undefined)
         });
     }
-
     function getFilterPosts(filters, callback) {
-        callback([])
+        const body = getQueryByFilters(filters)
+        const query = getBaseQuery(body)
+        sql.getMany(query, (posts) => {
+            callback(posts ? posts : [])
+        });
     }
     function getAllPosts(callback) {
-        const query = {
-            index: 'posts',
-            body: {
-                query: {
-                    exists: {
-                        field: "postId"
-                    }
+        const body = {
+            query: {
+                exists: {
+                    field: 'postId'
                 }
             }
         }
+        const query = getBaseQuery(body)
 
         sql.getMany(query, (posts) => {
             callback(posts ? posts : [])
@@ -42,16 +42,11 @@ module.exports = (sql, mongoose) => {
     }
     function addLike(data, callback) {
         try {
-            const query = {
-                index: 'posts',
-                id: data.post.postId,
-                type: '_doc',
-                body: {
-                    script: sql.createScript().scriptAppendArray('likes.users', { userId: data.userId })
-                        .scriptIncrement('likes.amount', { amount: 1 }).script
-                }
+            const body = {
+                script: sql.createScript().scriptAppendArray('likes.users', { userId: data.userId })
+                    .scriptIncrement('likes.amount', { amount: 1 }).script
             }
-            
+            const query = getBaseQuery(body, data.post.postId, '_doc')
             sql.update(query, (success) => {
                 returnPostOnSuccess(success, query, sql, callback);
             });
@@ -61,18 +56,14 @@ module.exports = (sql, mongoose) => {
         }
 
     }
-
     function removeLike(data, callback) {
         try {
-            const query = {
-                index: 'posts',
-                id: data.post.postId,
-                type: '_doc',
-                body: {
-                    script: sql.createScript().scriptRemove('likes.users', { userId: data.userId })
-                        .scriptDecrement('likes.amount', { amount: 1 }).script
-                }
+            const body = {
+                script: sql.createScript().scriptRemove('likes.users', { userId: data.userId })
+                    .scriptDecrement('likes.amount', { amount: 1 }).script
             }
+            const query = getBaseQuery(body, data.post.postId, '_doc')
+
             sql.update(query, (success) => {
                 returnPostOnSuccess(success, query, sql, callback);
             });
@@ -81,14 +72,64 @@ module.exports = (sql, mongoose) => {
         }
 
     }
-
-
     return {
         getFilterPosts,
         addPost,
         getAllPosts,
         addLike,
         removeLike
+    }
+}
+
+function getQueryByFilters(filters) {
+    console.log(filters)
+    let allFilters = [
+        filters.fromFilter ? { "range": { "publishDate": { "gte": filters.fromFilter } } } : undefined,
+        filters.toFilter ? { "range": { "publishDate": { "lte": filters.toFilter } } } : undefined,
+        (filters.userTags && Array.isArray(filters.userTags)) ? { "match": { "tags": filters.userTags[0] } } : (filters.userTags ? { "match": { "tags": filters.userTags } } : undefined),
+        (filters.imageTags && Array.isArray(filters.imageTags)) ? { "match": { "image.tags": filters.imageTags[0] } } : (filters.imageTags ? { "match": { "tags": filters.imageTags } } : undefined),
+        filters.publisher ? { "has_parent": { "parent_type": 'user', "query": { "term": { "username": filters.publisher } } } } : undefined,
+        (filters.location && filters.radiusFrom) ? { "geo_distance": { "distance": `${filters.radiusFrom}km`, "location": { "lat": filters.location.latitude, "lon": filters.location.longitude } } } : undefined
+    ]
+    allArrayFilters = addTagsQuery(filters)
+    allFilters = allFilters.filter(o => o != undefined)
+    allArrayFilters = allArrayFilters.filter(o => o != undefined)
+
+    console.log(allFilters)
+    return {
+        "query": {
+            "bool": {
+                "must": allFilters.length > 0 ? allFilters : { exists: { field: 'postId' } },
+                "should": allArrayFilters.length > 0 ? allArrayFilters : undefined
+            }
+        }
+    }
+}
+function addTagsQuery(filters) {
+    let query = []
+    if (filters.userTags && Array.isArray(filters.userTags)) {
+        query = query.concat(filters.userTags.map(tag => { return tag.length > 0 ? { "match": { "tags": tag } } : undefined }))
+    }
+    else if (filters.userTags && filters.userTags.length > 0) {
+        query.push({ "match": { "tags": filters.userTags } })
+    }
+
+    if (filters.imageTags && Array.isArray(filters.imageTags)) {
+        query = query.concat(filters.imageTags.map(tag => { return tag.length > 0 ? { "match": { "image.tags": tag } } : undefined }))
+    }
+    else if (filters.imageTags && filters.imageTags.length > 0) {
+        query.push({ "match": { "image.tags": filters.imageTags } })
+    }
+
+    return query
+}
+
+function getBaseQuery(body, id = undefined, doc = undefined) {
+    return {
+        index: 'posts',
+        id: id,
+        type: doc,
+        body: body
     }
 }
 

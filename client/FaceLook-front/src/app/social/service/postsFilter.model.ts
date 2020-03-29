@@ -3,7 +3,7 @@ import { IPost } from 'src/app/common/model/post';
 
 interface IPostData{
   fromFilter?:string,
-  ToFilter?:string,
+  toFilter?:string,
   publisher?:string,
   radiusFrom?:number,
   location?:{

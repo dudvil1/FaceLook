@@ -41,6 +41,7 @@ module.exports = (db, logger) => {
         res.status(201).json(posts);
       });
     } catch (error) {
+      console.log(error)
       return res.status(500).json({
         message: "Internal Server Error"
       });

@@ -218,8 +218,12 @@ paths:
       summary: Getting The Compatible Posts
       description: API for Getting All The Posts That Compatible with filter
       parameters:
-        - in: params
-          name: params
+        - in: path
+          name: filters
+          description: filters
+          required: true
+          schema:
+            type: string
       produces:
         - application/json
       responses:
@@ -365,10 +369,11 @@ paths:
         "500":
           description: Internal Server Error
 
-components:
-  securitySchemes:
-    Bearer:
-      type: http
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
 
 definitions:
   Post:
@@ -457,7 +462,7 @@ RequestDefinitions:
       newPassword:
         type: string
         description: Your New Password
-
+  
   PostRequest:
     properties:
       image:

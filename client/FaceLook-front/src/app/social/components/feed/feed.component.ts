@@ -27,6 +27,9 @@ export class FeedComponent implements OnInit {
         };
       }
 
+      this.postsFilterService.postsData = {};
+      this.postsFilterService.postsData.userTags = ["first", 'text']
+
 
       this._postApiService.getFilterPosts(this.postsFilterService.postsData).subscribe();
     }
