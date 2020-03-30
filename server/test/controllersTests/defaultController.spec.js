@@ -37,10 +37,9 @@ describe("default Controller Tests", function () {
   // const sendSpy = sinon.spy(res, "send");
 
   it("test the help() should return status and massege about api methods", function () {
-    const expMessage = 'Welcome To FaceLook! API Methods In http://localhost:3000/api-docs';
-
+    const expMessage = 'Welcome To FaceLook! API Methods In http://localhost:3000/api-docs '
     callbackStatus = (code) => expect(code).to.equal(200)
     callbackSend = (data) => expect(data.message).to.equal(expMessage)
-    defCtrl.help(req, sendExpect(callbackStatus,callbackSend))
+    defCtrl.help(req, sendExpect(callbackStatus, callbackSend))
   });
 });
