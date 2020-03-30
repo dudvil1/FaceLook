@@ -1,1 +1,2 @@
-require("./servicesTests") 
+require("./servicesTests");
+require('./controllersTests');

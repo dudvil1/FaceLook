@@ -29,8 +29,9 @@ describe('mailSevice Tests', function () {
 
     mailService = mail(nodemailerService)
   })
+
   it('test onInit createTransport with auth obj', function (done) {
-    nodemailerService = nodemailerWithTransport((params) => {
+    nodemailerService = nodemailerWithTransport((params) => {      
       const { auth } = params
 
       expect(auth).to.not.be.undefined

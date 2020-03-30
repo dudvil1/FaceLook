@@ -1,16 +1,22 @@
 const { assert, should, expect, sinon } = require('../baseTest');
 
 const bcryptService = require('../../services/bcryptService');
-const bcrypt = require('bcryptjs');
+const bcryptjs = require('bcryptjs');
 
 describe('bcryptService Tests', function() {
-    
-    it('check the HashSync function',function(){
-      let Password = '1234';
-      bcryptService.createHashPassword(Password);
-      console.log(bcryptPassword);
-      
-      expect(bcryptPassword).to.not.be.eql(Password);
+    const bcrypt = bcryptService(bcryptjs);
+    let Password = '1234';
+    let crptPassword = bcrypt.createHashPassword(Password);
+
+    it('test the createHashPassword() create new hash password to the input password',function(){
+      expect(crptPassword).to.not.be.equal(Password);
     })
-   
+
+    it('test the checkPassword() check if return true when its compere and false when its not', function() {
+       bcrypt.checkPassword(Password,crptPassword).should.be.true;
+       bcrypt.checkPassword('987',crptPassword).should.be.false;
+    })
+    it('test onInit bycrptSevice shoud have hashKey',function(){
+     //how to check it??? 
+    })
 });
