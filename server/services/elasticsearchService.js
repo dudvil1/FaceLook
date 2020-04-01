@@ -1,6 +1,6 @@
 const elasticsearch = require('elasticsearch');
 const client = new elasticsearch.Client({
-    host: 'localhost:9200',
+    host: `${process.env.SQL_SERVER}:9200`,
     apiVersion: '7.5'
 });
 
@@ -19,11 +19,12 @@ exports.add = async (query, callback) => {
     try {
         const isExist = await client.exists(query)
         if (!isExist) {
-            const response = await client.create(query)
-            if (response.result == 'created') {
-                console.log(response.result == 'created')
-                callback(response.result == 'created')
-            }
+            client.create(query, (response) => {
+                if (response.result == 'created') {
+                    console.log(response.result == 'created')
+                    callback(response.result == 'created')
+                }
+            })
         }
         else {
             callback(isExist)
@@ -108,8 +109,9 @@ function getObjKeys(obj) {
 
 exports.update = async (query, callback) => {
     try {
-        const response = await client.update(query)
-        callback(response)
+        client.update(query, (response => {
+            callback(response)
+        }))
     } catch (error) {
         console.log("error  ", error.message)
         callback(false)

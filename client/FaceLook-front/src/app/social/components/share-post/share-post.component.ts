@@ -54,7 +54,7 @@ export class SharePostComponent implements OnInit {
     formData.append("date", new Date().toString());
 
     this.postApi.addPost(formData).subscribe(res => {
-      this.socket.addPost()
+      this.socket.addPost(res.post)
       this.postCreated = true;
       this.shareModel.resetdata();
       this.toastr.success(res.message);

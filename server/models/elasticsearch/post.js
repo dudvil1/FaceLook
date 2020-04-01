@@ -1,5 +1,5 @@
 module.exports = class Post {
-    constructor(userId, postId, title, date, lat, lon, text, imageUrl, tags, imageTags) {
+    constructor(username,userId, postId, title, date, lat, lon, text, imageUrl, tags, imageTags) {
         this.publishDate = date;
         this.location = {
             "lat": lat,
@@ -9,6 +9,7 @@ module.exports = class Post {
             "name": "post",
             "parent": userId
         };
+        this.username = username
         this.postId = postId;
         this.title = title;
         this.image = {

@@ -46,7 +46,7 @@ export class PostsComponent implements OnInit {
         (res) => {
           const index = this.posts.indexOf(this.posts.find(p => p.postId == res.post.postId))
           this.posts[index] = res.post;
-          this.socket.updateLike(post)
+          this.socket.updateLike(res.post)
         }
       )
     }

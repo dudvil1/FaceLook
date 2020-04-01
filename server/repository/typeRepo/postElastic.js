@@ -5,7 +5,7 @@ module.exports = (sql, mongoose) => {
         post.post_id = new mongoose.Types.ObjectId();
         post.date = formatDate(post.date);
 
-        const newPost = new PostModule(post.user._id, post.post_id, post.title, post.date, post.locationLocationLat,
+        const newPost = new PostModule(post.user.name,post.user._id, post.post_id, post.title, post.date, post.locationLocationLat,
             post.locationLocationLng, post.text, post.img, post.tags)
 
         const query = {

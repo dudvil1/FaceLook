@@ -1,14 +1,12 @@
-module.exports = (dbManager) => {
+module.exports = () => {
     return (socket) => {
         listeningAddPost(socket);
         listeningUpdateLike(socket);
     }
 
     function listeningAddPost(socket) {
-        socket.on('addPost', () => {
-            dbManager.getAllPosts((posts) => {
-                socket.broadcast.emit('addPostChange', posts)
-            })
+        socket.on('addPost', (post) => {
+            socket.broadcast.emit('addPostChange', post)
         });
     }
 

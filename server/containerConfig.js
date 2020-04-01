@@ -33,7 +33,7 @@ module.exports = async () => {
     container.registerModule('passwordGeneretor', [], require('./services/passwordGeneretor'));
     container.registerModule('sql', [],await require('./services/sqlService')(container.getModule('loggerService')));
     container.registerModule('elasticsearchService',[],require('./services/elasticsearchService'));
-    container.registerModule('socketService', ['dbManager'], require('./services/socketService'));
+    container.registerModule('socketService', [], require('./services/socketService'));
 
     //middlewares
     container.registerModule('authenticated', ['jwtService'], require('./middlewares/authenticated'));
