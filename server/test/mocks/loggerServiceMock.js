@@ -4,4 +4,4 @@ function error(message, obj) {}
 
 function debug(message, obj) {}
 
-return { info, error, debug };
+module.exports = { info, error, debug };
