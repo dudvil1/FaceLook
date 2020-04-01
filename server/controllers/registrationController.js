@@ -47,7 +47,6 @@ module.exports = (db, mailer, bcrypt, jwt, logger) => {
     }
 
     function login(req, res) {
-        console.log("registration Controller: login call()");
         try {
             logger.debug(`registration Controller: login call() - start processing for ${req.body.email}`,
                 { location: filename });
