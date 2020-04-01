@@ -49,10 +49,10 @@ module.exports = async () => {
     container.registerModule('dbManager', ['userRepo', 'baseRepo', 'tagRepo', 'postRepo', 'userFriendRepo'], require('./repository/dbmaneger'));
 
     //controllers
-    container.registerModule('defaultController', ["moment",'loggerService'], require('./controllers/defaultController'));
-    container.registerModule('friendController', ["dbManager",'loggerService'], require('./controllers/friendController'));
-    container.registerModule('postsController', ["dbManager",'loggerService'], require('./controllers/postsController'));
-    container.registerModule('registrationController', ["dbManager", 'mailService', 'bcrypt', 'jwtService','loggerService'], require('./controllers/registrationController'));
+    container.registerModule('defaultController', ["moment","loggerService"], require('./controllers/defaultController'));
+    container.registerModule('friendController', ["dbManager","loggerService"], require('./controllers/friendController'));
+    container.registerModule('postsController', ["dbManager","loggerService"], require('./controllers/postsController'));
+    container.registerModule('registrationController', ["dbManager", 'mailService', 'bcrypt', 'jwtService',"loggerService"], require('./controllers/registrationController'));
 
     //routes
     container.registerModule('defaultRoutes', ['express', 'defaultController'], require('./routes/default'));
