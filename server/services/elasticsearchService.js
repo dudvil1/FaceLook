@@ -13,27 +13,25 @@ client.ping({
         console.log('All is well');
     }
 });
-
-
-exports.add = async (query, callback) => {
-    try {
-        const isExist = await client.exists(query)
-        if (!isExist) {
-            client.create(query, (response) => {
-                if (response.result == 'created') {
-                    console.log(response.result == 'created')
-                    callback(response.result == 'created')
-                }
-            })
-        }
-        else {
-            callback(isExist)
-        }
-    } catch (error) {
-        console.log(error.message)
-    }
+function validScriptValue(value) {
+    return typeof (value) == "string" ? `'${value}'` : value
 }
 
+function setScript(script, inline) {
+    script.inline += inline;
+}
+function setScriptWithParams(script, inline, value) {
+    script.inline += inline;
+    script.params = {
+        ...script.params,
+        ...value
+    };
+}
+function getObjKeys(obj) {
+    if (typeof (obj) != "string" && Object.keys(obj).length > 0)
+        return { keys: Object.keys(obj) }
+    return {}
+}
 exports.createScript = () => {
     return {
         script: {
@@ -87,55 +85,50 @@ exports.createScript = () => {
     }
 }
 
-function validScriptValue(value) {
-    return typeof (value) == "string" ? `'${value}'` : value
+exports.add = (query, callback) => {
+    client.create(query, (err, response) => {
+        if (err) {
+            callback(undefined)
+            return
+        }
+        if (response.result == 'created') {
+            callback(response.result == 'created')
+        }
+    })
 }
 
-function setScript(script, inline) {
-    script.inline += inline;
-}
-function setScriptWithParams(script, inline, value) {
-    script.inline += inline;
-    script.params = {
-        ...script.params,
-        ...value
-    };
-}
-function getObjKeys(obj) {
-    if (typeof (obj) != "string" && Object.keys(obj).length > 0)
-        return { keys: Object.keys(obj) }
-    return {}
+exports.update = (query, callback) => {
+    client.update(query, (err, response) => {
+        if (err) {
+            callback(undefined)
+            return
+        }
+        callback(response)
+    })
 }
 
-exports.update = async (query, callback) => {
-    try {
-        client.update(query, (response => {
-            callback(response)
-        }))
-    } catch (error) {
-        console.log("error  ", error.message)
-        callback(false)
+exports.getOne = (query, callback) => {
+    client.get(query, (err, response) => {
+        if (response)
+            callback(response._source)
+        else
+            callback(undefined)
+    });
+}
+
+exports.getMany = (query, callback) => {
+    const queryForMany = {
+        ...query,
+        size: query.size || 10000
     }
-}
-
-exports.getOne = async (query, callback) => {
-    try {
-        const response = await client.get(query);
-        callback(response._source)
-    } catch (error) {
-        console.log(error.message)
-        callback(undefined)
-    }
-}
-
-exports.getMany = async (query, callback) => {
-    try {
-        const response = await client.search(query);
-        const result = response.hits.hits.map(hit => hit._source)
-        callback(result)
-    } catch (error) {
-        console.log(error)
-        callback([])
-    }
+    client.search(queryForMany, (err, response) => {
+        if(err){
+            console.log(err)
+        }
+        if (response)
+            callback(response.hits.hits.map(hit => hit._source))
+        else
+            callback([])
+    });
 }
 

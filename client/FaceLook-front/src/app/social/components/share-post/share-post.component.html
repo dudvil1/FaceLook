@@ -25,7 +25,7 @@
           <input [(ngModel)]="this.shareModel.sharePostsModel.tags" #text="ngModel" name="postTags" class="form-control"
             placeholder="tags for your posts" />
         </div>
-        <button type="submit" class="btn-large btn-submit" [disabled]="Image.value == '' || !imageForm.valid"
+        <button type="submit" class="btn-large btn-submit" [disabled]="!imageForm.valid"
           (click)="createPost()">
           share
         </button>

@@ -6,7 +6,7 @@ import { IPost } from '../model/post';
 import { environment } from 'src/environments/environment';
 
 
-export interface ISocketService{
+export interface ISocketService {
   addPost(post: IPost),
   updateLike(post: IPost)
 }
@@ -15,7 +15,7 @@ export interface ISocketService{
   providedIn: 'root'
 })
 
-export class SocketService extends Socket implements ISocketService{
+export class SocketService extends Socket implements ISocketService {
   constructor(
     private markerCollection: markerCollectionsService,
     private postsFilter: postsFilterService,
@@ -26,7 +26,7 @@ export class SocketService extends Socket implements ISocketService{
   }
 
   addPost(post) {
-    this.emit('addPost',post)
+    this.emit('addPost', post)
   }
 
   updateLike(post: IPost) {
@@ -34,22 +34,29 @@ export class SocketService extends Socket implements ISocketService{
   }
 
   private listening() {
-    this.on('addPostChange', (post:IPost) => {
+    this.on('addPostChange', (post: IPost) => {
       const markers = this.markerCollection.markers$.getValue()
       if (!Object.keys(this.postsFilter.postsData)) {
         this.markerCollection.markers$.next([...markers, post])
       }
-      else if(this.postsFilter.isPostMatch(post)){
+      else if (this.postsFilter.isPostMatch(post)) {
         this.markerCollection.markers$.next([...markers, post])
       }
+
+      const allPosts = this.markerCollection.allPost$.getValue()
+      this.markerCollection.allPost$.next([...allPosts, post])
     })
-    this.on('updateLikeChange', (post:IPost) => {
+    this.on('updateLikeChange', (post: IPost) => {
       const markers = this.markerCollection.markers$.getValue()
       const oldPost = markers.find(p => p.postId = post.postId)
       if (oldPost) {
         const newMarkers = markers.filter(p => p != oldPost)
         this.markerCollection.markers$.next([...newMarkers, post])
       }
+
+      const allPosts = this.markerCollection.allPost$.getValue()
+      console.log(...allPosts.filter(p => p.postId != post.postId))
+      this.markerCollection.allPost$.next([...allPosts.filter(p => p.postId != post.postId), post])
     })
   }
 }

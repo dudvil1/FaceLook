@@ -38,6 +38,8 @@ export class PostApiService implements IPostApi {
       tap((posts) => {
         if (notifyMarkers)
           this.markersService.markers$.next(posts);
+        else
+          this.markersService.allPost$.next(posts);
       })
     );
   }

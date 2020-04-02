@@ -4,7 +4,7 @@ module.exports = (db, logger) => {
   function addPost(req, res) {
     console.log("postController: addPost call()");
     req.body.user = req.user;
-    req.body.img = req.image;
+    req.body.img = req.image || 'anonym.png';
 
     try {
       db.addPost(req.body, postResult => {

@@ -5,7 +5,7 @@ module.exports = (sql, mongoose) => {
         post.post_id = new mongoose.Types.ObjectId();
         post.date = formatDate(post.date);
 
-        const newPost = new PostModule(post.user.name,post.user._id, post.post_id, post.title, post.date, post.locationLocationLat,
+        const newPost = new PostModule(post.user.name, post.user._id, post.post_id, post.title, post.date, post.locationLocationLat,
             post.locationLocationLng, post.text, post.img, post.tags)
 
         const query = {
@@ -28,6 +28,10 @@ module.exports = (sql, mongoose) => {
     }
     function getAllPosts(callback) {
         const body = {
+            sort: [
+                { "publishDate": { "order": "asc" } },
+                "_score"
+            ],
             query: {
                 exists: {
                     field: 'postId'
@@ -147,17 +151,11 @@ function returnPostOnSuccess(success, query, sql, callback) {
 
 ///private methods
 function formatDate(date) {
-    var d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
+    var d = new Date(date)
+    var tzoffset = (d).getTimezoneOffset() * 60000; //offset in milliseconds
+    var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0, -1);
 
-    if (month.length < 2)
-        month = '0' + month;
-    if (day.length < 2)
-        day = '0' + day;
-
-    return [year, month, day].join('-');
+    return localISOTime
 }
 
 
