@@ -7,7 +7,7 @@ import { JwtService } from '../../common/service/jwt.service';
 import { markerCollectionsService } from './marker-collection.service';
 import { PostApiService } from './postApi.service';
 import { ISuccessResponse } from 'src/app/common/model/successResponse';
-import { PostsApiMockService } from '../test/services/postApiMockService';
+import { PostsApiMockService, postsMock } from '../test/services/postApiMockService';
 import { IPost } from 'src/app/common/model/post';
 import { Observable, combineLatest } from 'rxjs';
 
@@ -86,19 +86,19 @@ describe("PostApiService", () => {
   });
 
   it('api request of #updateLikes with markers :expected result', (done: DoneFn) => {
-    const { socialUrl, updateLikes } = apiConfigService.socialApi
+    const { socialUrl, addLike } = apiConfigService.socialApi
     const mockSuccessResponse: ISuccessResponse = { message: "SUCCESS" }
     const observ = service.updateLikes(<any>{});
     const expectedResult = (res) => {
       expect(res).toEqual(mockSuccessResponse, 'expect to get SUCCESS message')
       done()
     }
-    expectHttpPatch(mockSuccessResponse, socialUrl + updateLikes, observ, expectedResult)
+    expectHttpPatch(mockSuccessResponse, socialUrl + addLike, observ, expectedResult)
   });
 
 
   function expectGetPosts(url: string, obs: Observable<any>, withMarker: boolean, done: DoneFn) {
-    const mockSuccessResponse: IPost[] = new PostsApiMockService().posts
+    const mockSuccessResponse: IPost[] = postsMock
     const spyOnMarkers = spyOn(markerCollections.markers$, 'next')
     const expectedResult = (res) => {
       expect(res).toEqual(mockSuccessResponse, 'expect to get all posts')

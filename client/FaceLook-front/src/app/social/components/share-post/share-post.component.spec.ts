@@ -90,7 +90,6 @@ describe('SharePostComponent', () => {
 
       expect(spyPostApi).toHaveBeenCalledWith(formData)
       observableRes.subscribe(() => {
-        debugger;
         expect(component.postCreated).toBeTruthy("after response from api post create should be true");
         expect(spyShareModel).toHaveBeenCalled();
         expect(spytoastrService).toHaveBeenCalled();
