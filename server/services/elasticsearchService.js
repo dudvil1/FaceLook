@@ -1,6 +1,6 @@
 const elasticsearch = require('elasticsearch');
 const client = new elasticsearch.Client({
-    host: 'localhost:9200',
+    host: `${process.env.SQL_SERVER}:9200`,
     apiVersion: '7.5'
 });
 
@@ -13,52 +13,122 @@ client.ping({
         console.log('All is well');
     }
 });
+function validScriptValue(value) {
+    return typeof (value) == "string" ? `'${value}'` : value
+}
 
+function setScript(script, inline) {
+    script.inline += inline;
+}
+function setScriptWithParams(script, inline, value) {
+    script.inline += inline;
+    script.params = {
+        ...script.params,
+        ...value
+    };
+}
+function getObjKeys(obj) {
+    if (typeof (obj) != "string" && Object.keys(obj).length > 0)
+        return { keys: Object.keys(obj) }
+    return {}
+}
+exports.createScript = () => {
+    return {
+        script: {
+            lang: "painless",
+            inline: "",
+            params: {
 
-
-exports.add = async (query, callback) => {
-    try {
-        const isExist = await client.exists(query)
-        if (!isExist) {
-            const response = await client.create(query)
-            if (response.result == 'created') {
-                console.log(response.result == 'created')
-                callback(response.result == 'created')
             }
+        },
+        scriptAppendArray: function (field, value) {
+            const { keys } = getObjKeys(value)
+            if (keys) {
+                setScriptWithParams(this.script, `ctx._source.${field}.add(params.${keys[0]});`, value);
+            }
+            else {
+                setScript(this.script, `ctx._source.${field}.add(${validScriptValue(value)});`)
+            }
+            return this
+        },
+        scriptRemove: function (field, value) {
+            const { keys } = getObjKeys(value)
+            if (keys) {
+                setScriptWithParams(this.script, `ctx._source.${field}.remove(ctx._source.${field}.indexOf(params.${keys[0]}));`, value);
+            }
+            else {
+                setScript(this.script, `ctx._source.${field}.remove(ctx._source.${field}.indexOf(${validScriptValue(value)}));`)
+            }
+            return this
+        },
+        scriptIncrement: function (field, value) {
+            const { keys } = getObjKeys(value)
+            if (keys) {
+                setScriptWithParams(this.script, `ctx._source.${field} += params.${keys[0]};`, value);
+            }
+            else {
+                setScript(this.script, `ctx._source.${field} += ${validScriptValue(value)};`)
+            }
+            return this
+        },
+        scriptDecrement: function (field, value) {
+            const { keys } = getObjKeys(value)
+            if (keys) {
+                setScriptWithParams(this.script, `ctx._source.${field} -= params.${keys[0]};`, value);
+            }
+            else {
+                setScript(this.script, `ctx._source.${field} -= ${validScriptValue(value)};`)
+            }
+            return this
         }
-        else {
-            callback(isExist)
-        }
-    } catch (error) {
-        console.log(error.message)
+
     }
 }
 
-exports.getOne = async (query, callback) => {
-    try {
-        const response = await client.search(query);
-
-        const result = response.hits.hits.map(hit => hit._source)[0]
-        if (result)
-            callback(result)
-        else
+exports.add = (query, callback) => {
+    client.create(query, (err, response) => {
+        if (err) {
             callback(undefined)
-
-    } catch (error) {
-        console.log(error.message)
-    }
+            return
+        }
+        if (response.result == 'created') {
+            callback(response.result == 'created')
+        }
+    })
 }
 
-exports.getMany = async (query, callback) => {
-    try {
-        const response = await client.search(query);
-        const result = response.hits.hits.map(hit => hit._source)
-        if (result)
-            callback(result)
+exports.update = (query, callback) => {
+    client.update(query, (err, response) => {
+        if (err) {
+            callback(undefined)
+            return
+        }
+        callback(response)
+    })
+}
+
+exports.getOne = (query, callback) => {
+    client.get(query, (err, response) => {
+        if (response)
+            callback(response._source)
         else
             callback(undefined)
-    } catch (error) {
-        console.log(error.message)
+    });
+}
+
+exports.getMany = (query, callback) => {
+    const queryForMany = {
+        ...query,
+        size: query.size || 10000
     }
+    client.search(queryForMany, (err, response) => {
+        if(err){
+            console.log(err)
+        }
+        if (response)
+            callback(response.hits.hits.map(hit => hit._source))
+        else
+            callback([])
+    });
 }
 

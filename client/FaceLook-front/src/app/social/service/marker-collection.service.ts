@@ -6,6 +6,7 @@ import { Subject, BehaviorSubject } from 'rxjs';
 })
 export class markerCollectionsService {
   markers$ = new BehaviorSubject<any[]>([]);
+  allPost$ = new BehaviorSubject<any[]>([]);
 
   constructor() { }
 

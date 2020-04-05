@@ -1,4 +1,4 @@
-module.exports = (sql, connectionString, mongoose, baseRepo) => {
+module.exports = (sql,  mongoose, baseRepo) => {
   function addTag(tag, callback) {
     console.log("dbManeger: addTag call()");
 
@@ -8,7 +8,7 @@ module.exports = (sql, connectionString, mongoose, baseRepo) => {
         const query = `INSERT INTO Tags
                        VALUES( '${tag.tag_id}', '${tag.tags}')`;
 
-        sql.add(connectionString, query, (success) => {
+        sql.add( query, (success) => {
           if (success) {
             callback(tag)
           }

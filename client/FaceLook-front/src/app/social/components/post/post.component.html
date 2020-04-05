@@ -3,18 +3,18 @@
         {{post.title}}
     </div>
     <div class="user_details">
-        Date of post: {{post.date | date}}
+        Date of post: {{post.publishDate | date}}
         <br />
         {{post.text}}
     </div>
 </div>
 
 <div class="fRight">
-    <img src="{{imgPath}}{{post.image}}" class="user_img fRight" title="{{post.post_id}}" />
+    <img src="{{imgPath}}{{post.image.url}}" class="user_img fRight" title="{{post.postId}}" />
 
     <div (click)="addLike(post)"
         class="likes_div likes_div_SELECTOR" 
-        id={{post.post_id}}>
-        <span>{{post.likes}}</span> Liks <img src="./assets/img/like.png" class="like_icon" title="Like me or die" />
+        id={{post.postId}}>
+        <span>{{post.likes.amount}}</span> Likes <img src="./assets/img/like.png" class="like_icon" title="Like me or die" />
     </div>
 </div>

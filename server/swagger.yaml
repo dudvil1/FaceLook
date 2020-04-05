@@ -1,16 +1,16 @@
-swagger: '2.0'
+swagger: "2.0"
 info:
   description: API For FaceLook
-  version: '0.2.0'
+  version: "0.2.0"
   title: Node Rest API documentation
-  termsOfService: 'http://swagger.io/terms/'
+  termsOfService: "http://swagger.io/terms/"
   license:
     name: Apache 2.0
-    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 host: localhost:3000
 basePath: /
 schemes:
-- http
+  - http
 
 paths:
   /help:
@@ -22,11 +22,11 @@ paths:
       produces:
         - application/json
       responses:
-        '200':
+        "200":
           description: Welcome To FaceLook
-          schema: 
-            $ref: '#/ResponseDefinitions/DefaultApiResponse'
-  
+          schema:
+            $ref: "#/ResponseDefinitions/DefaultApiResponse"
+
   /status:
     get:
       tags:
@@ -36,10 +36,10 @@ paths:
       produces:
         - application/json
       responses:
-        '200':
-          description: 
-          schema: 
-            $ref: '#/ResponseDefinitions/DefaultApiResponse'         
+        "200":
+          description:
+          schema:
+            $ref: "#/ResponseDefinitions/DefaultApiResponse"
 
   /registration/register:
     post:
@@ -53,17 +53,17 @@ paths:
           description: register Payload
           required: true
           schema:
-            $ref: '#/RequestDefinitions/RegisterModel'
+            $ref: "#/RequestDefinitions/RegisterModel"
       produces:
         - application/json
       responses:
-        '201':
-          description:  User Created Successfully , Please check Your Mail To Verify Your Account
+        "201":
+          description: User Created Successfully , Please check Your Mail To Verify Your Account
           schema:
-            $ref: '#/ResponseDefinitions/DefaultApiResponse'
-        '409':
+            $ref: "#/ResponseDefinitions/DefaultApiResponse"
+        "409":
           description: user already exist,try again
-        '500':
+        "500":
           description: Internal Server Error
 
   /registration/login:
@@ -78,19 +78,19 @@ paths:
           description: LogIn Payload
           required: true
           schema:
-            $ref: '#/RequestDefinitions/LogInModel'
+            $ref: "#/RequestDefinitions/LogInModel"
       produces:
         - application/json
       responses:
-        '200':
+        "200":
           description: Authorize successful
           schema:
-            $ref: '#/ResponseDefinitions/LogInApiResponse'
-        '409':
+            $ref: "#/ResponseDefinitions/LogInApiResponse"
+        "409":
           description: You Didn`t Verify Your Account Yet,Please Check Your Mail Box And Verify It
-        '401':
+        "401":
           description: Wrong Password
-        '500':
+        "500":
           description: Internal Server Error
 
   /registration/verifyAccount:
@@ -105,19 +105,19 @@ paths:
           description: verify Account Payload
           required: true
           schema:
-            $ref: '#/RequestDefinitions/verifyAccountModel'
+            $ref: "#/RequestDefinitions/verifyAccountModel"
       produces:
         - application/json
       responses:
-        '200':
+        "200":
           description: active account Successfully , you can log in now
           schema:
-            $ref: '#/ResponseDefinitions/verifyAccountResponse'
-        '404':
+            $ref: "#/ResponseDefinitions/verifyAccountResponse"
+        "404":
           description: User did not found
-        '500':
+        "500":
           description: Internal Server Error
-  
+
   /registration/getResetCodePassword:
     patch:
       tags:
@@ -130,17 +130,17 @@ paths:
           description: User Email Payload
           required: true
           schema:
-            $ref: '#/RequestDefinitions/getResetCodePassword'
+            $ref: "#/RequestDefinitions/getResetCodePassword"
       produces:
         - application/json
       responses:
-        '200':
+        "200":
           description: an email send to your mail
           schema:
-            $ref: '#/ResponseDefinitions/DefaultApiResponse'
-        '500':
-          description: Internal Server Error         
-   
+            $ref: "#/ResponseDefinitions/DefaultApiResponse"
+        "500":
+          description: Internal Server Error
+
   /registration/forgetPassword:
     patch:
       tags:
@@ -153,16 +153,16 @@ paths:
           description: Reset Code && New password Payload
           required: true
           schema:
-            $ref: '#/RequestDefinitions/forgetPassword'
+            $ref: "#/RequestDefinitions/forgetPassword"
       produces:
         - application/json
       responses:
-        '200':
+        "200":
           description: password change successfuly
           schema:
-            $ref: '#/ResponseDefinitions/DefaultApiResponse'
-        '500':
-          description: Internal Server Error         
+            $ref: "#/ResponseDefinitions/DefaultApiResponse"
+        "500":
+          description: Internal Server Error
 
   /social/addPost:
     post:
@@ -178,17 +178,17 @@ paths:
           description: Create Post Payload
           required: true
           schema:
-            $ref: '#/RequestDefinitions/PostRequest'
+            $ref: "#/RequestDefinitions/PostRequest"
       produces:
         - application/json
       responses:
-        '200':
+        "200":
           description: post Created Successfully
           schema:
-            $ref: '#/ResponseDefinitions/DefaultApiResponse'
-        '400':
+            $ref: "#/ResponseDefinitions/PostChangeResponse"
+        "400":
           description: Invalid Fields
-        '500':
+        "500":
           description: Internal Server Error
 
   /social/getPosts:
@@ -202,13 +202,13 @@ paths:
       produces:
         - application/json
       responses:
-        '200':
+        "200":
           description: Get The Post successfuly
           schema:
-            $ref: '#/ResponseDefinitions/getPostsResponse'
-        '500':
-          description: Internal Server Error          
-  
+            $ref: "#/ResponseDefinitions/getPostsResponse"
+        "500":
+          description: Internal Server Error
+
   /social/filterPosts/{filters}:
     get:
       security:
@@ -218,25 +218,29 @@ paths:
       summary: Getting The Compatible Posts
       description: API for Getting All The Posts That Compatible with filter
       parameters:
-        - in: params
-          name: params
+        - in: path
+          name: filters
+          description: filters
+          required: true
+          schema:
+            type: string
       produces:
         - application/json
       responses:
-        '200':
+        "200":
           description: Get The Posts successfuly
           schema:
-            $ref: '#/ResponseDefinitions/getPostsResponse'
-        '500':
+            $ref: "#/ResponseDefinitions/getPostsResponse"
+        "500":
           description: Internal Server Error
-  
-  /social/updateLikes:
+
+  /social/addLike:
     patch:
       security:
         - Bearer: []
       tags:
         - Post Module
-      summary: Likeing a Post
+      summary: Liking a Post
       description: API for Adding Like For Post
       parameters:
         - in: body
@@ -244,42 +248,77 @@ paths:
           description: post Payload
           required: true
           schema:
-            $ref: '#/RequestDefinitions/PostRequest'
+            type: object
+            properties:
+              post:
+                $ref: "#/definitions/Post"
+              userId:
+                type: string 
       produces:
         - application/json
       responses:
-        '200':
+        "200":
           description: Post-Like updated successfuly
           schema:
-            $ref: '#/ResponseDefinitions/DefaultApiResponse'
-        '500':
+            $ref: "#/ResponseDefinitions/PostChangeResponse"
+        "500":
           description: Internal Server Error
- 
+
+  /social/removeLike:
+    patch:
+      security:
+        - Bearer: []
+      tags:
+        - Post Module
+      summary: UnLike a Post
+      description: API for Removing Like For Post
+      parameters:
+        - in: body
+          name: body
+          description: post Payload
+          required: true
+          schema:
+            type: object
+            properties:
+              post:
+                $ref: "#/definitions/Post"
+              userId:
+                type: string 
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Post-Like updated successfuly
+          schema:
+            $ref: "#/ResponseDefinitions/PostChangeResponse"
+        "500":
+          description: Internal Server Error
+
   /friend/addFriend:
-   post:
-     security:
-      - Bearer: []
-     tags: 
-       - Friend Module
-     summary: Adding New Friend
-     description: API For Adding New Friend To The Friend List    
-     parameters:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - Friend Module
+      summary: Adding New Friend
+      description: API For Adding New Friend To The Friend List
+      parameters:
         - in: body
           name: body
           description: User && Friend Id's
           required: true
           schema:
-             $ref: '#/RequestDefinitions/FriendRequest'
-     produces:
-       - application/json
-     responses:
-        '200': 
+            $ref: "#/RequestDefinitions/FriendRequest"
+      produces:
+        - application/json
+      responses:
+        "200":
           schema:
-            $ref: '#/ResponseDefinitions/AddFriendResponse'   
-        '401':
+            $ref: "#/ResponseDefinitions/AddFriendResponse"
+        "401":
           description: Failure to Add Friend
-        '500':
-          description: Internal Server Error              
+        "500":
+          description: Internal Server Error
 
   /friend/searchUsers/{data}:
     get:
@@ -289,49 +328,46 @@ paths:
         - Friend Module
       summary: Search an User
       description: Api For Searching sn User
-      parameters: 
+      parameters:
         - in: params
           name: params
-          description: Some Letters To Search People 
+          description: Some Letters To Search People
           required: true
           schema:
-            $ref: '#/RequestDefinitions/'
+            $ref: "#/RequestDefinitions/"
           produces:
             - application/json
       responses:
-            '201':
-               schema:
-                 $ref: '#/ResponseDefinitions/getPostsResponse'
-            '500':
-              description: Internal Server Error     
-                
+        "201":
+          schema:
+            $ref: "#/ResponseDefinitions/getPostsResponse"
+        "500":
+          description: Internal Server Error
+
   /friend/updateFollowFriend:
     post:
       security:
-       Bearer: []
-      tags: 
-       - Friend Module
+        Bearer: []
+      tags:
+        - Friend Module
       summary: Follow/Stop Follow  User
       description: Api For Follow Unfollow User
-      parameters: 
+      parameters:
         - in: body
           name: body
           description: User && Friend Id's
-          schema: 
-             $ref: '#/RequestDefinitions/FriendRequest'
+          schema:
+            $ref: "#/RequestDefinitions/FriendRequest"
           produces:
             - application/json
       responses:
-        '200':
+        "200":
           schema:
-             $ref: '#/ResponseDefinitions/getPostsResponse'
-        '401':
+            $ref: "#/ResponseDefinitions/getPostsResponse"
+        "401":
           description: Failure to Follow Friend
-        '500':
-          description: Internal Server Error       
-
-
-
+        "500":
+          description: Internal Server Error
 
 securityDefinitions:
   Bearer:
@@ -339,8 +375,53 @@ securityDefinitions:
     name: Authorization
     in: header
 
+definitions:
+  Post:
+    type: object
+    properties:
+      postId:
+        type: string
+      publishDate:
+        type: string
+        format: date-time
+      name:
+        type: string
+      location:
+        type: object
+        properties:
+          lat:
+            type: string
+          lon:
+            type: string
+      title:
+        type: string
+      image:
+        type: object
+        properties:
+          url:
+            type: string
+          tags:
+            type: array
+            items:
+              type: string
+      likes:
+        type: object
+        properties:
+          amount:
+            type: integer
+          users:
+            type: array
+            items:
+              type: string
+      text:
+        type: string
+      tags:
+        type: array
+        items: 
+          type: string
+
 RequestDefinitions:
-   RegisterModel:
+  RegisterModel:
     properties:
       name:
         type: string
@@ -352,7 +433,7 @@ RequestDefinitions:
         type: string
         description: password of the user
 
-   LogInModel:
+  LogInModel:
     properties:
       email:
         type: string
@@ -361,19 +442,19 @@ RequestDefinitions:
         type: string
         description: password of the user
 
-   verifyAccountModel:
+  verifyAccountModel:
     properties:
       id:
         type: string
         description: id of the user(get it from the snapshot)
 
-   getResetCodePassword:
+  getResetCodePassword:
     properties:
       email:
         type: string
         description: Email Of The User
 
-   forgetPassword:
+  forgetPassword:
     properties:
       ResetCode:
         type: string
@@ -381,8 +462,8 @@ RequestDefinitions:
       newPassword:
         type: string
         description: Your New Password
-
-   PostRequest:
+  
+  PostRequest:
     properties:
       image:
         type: file
@@ -403,14 +484,14 @@ RequestDefinitions:
         type: string
         description: The Date Of The Post Time
 
-   FriendRequest:
-    properties: 
+  FriendRequest:
+    properties:
       userId:
-       type: string
-       description: Id of The User
+        type: string
+        description: Id of The User
       FriendId:
         type: string
-        description: Id of The Friend That The User Try To Connect      
+        description: Id of The Friend That The User Try To Connect
 
 ResponseDefinitions:
   DefaultApiResponse:
@@ -431,46 +512,24 @@ ResponseDefinitions:
       message:
         type: string
       body:
-        type: object 
-        properties: 
+        type: object
+        properties:
           token:
             type: string
 
-  getPostsResponse:
+  PostChangeResponse:
     type: object
     properties:
-      status:
-        type: integer
-      body:
-        type: array
-        items:
-         type: object
-         properties: 
-          post_id:
-           type: string
-           description: Id Of The Post
-          publisher_id:
-           type: string
-           description: Id Of The Publisher
-          image:
-           type: string
-           description: Image url   
-          text:
-           type: string
-           description: Text Of The Post
-          date:
-           type: string
-           description: Date Of The Post
-          latitude:
-           type: string
-           description: Location Latitude Of The Post
-          longtitude:
-           type: string
-           description: Location longtitude Of The Post
-          likes:
-           type: string
-           description: Likes Number Of The Post
-   
+      post:
+        $ref: "#/definitions/Post"
+      message:
+        type: string
+
+  getPostsResponse:
+    type: array
+    items:
+      $ref: "#/definitions/Post"
+
   verifyAccountResponse:
     type: object
     properties:
@@ -479,7 +538,7 @@ ResponseDefinitions:
       message:
         type: string
       body:
-        type: object    
+        type: object
 
   AddFriendResponse:
     type: object
@@ -490,8 +549,3 @@ ResponseDefinitions:
         type: object
         properties:
           user: object
-
-
-                  
-            
-

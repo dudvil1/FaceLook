@@ -1,4 +1,6 @@
-module.exports = (sql, mongoose, bcrypt, passwordGeneretor) => {
+const UserModule = require("../../models/elasticsearch/postUser")
+
+module.exports = (sql, elasticSql, mongoose, bcrypt, passwordGeneretor) => {
 
     function addUser(user, callback) {
         console.log("dbManeger: addUser call()");
@@ -8,12 +10,32 @@ module.exports = (sql, mongoose, bcrypt, passwordGeneretor) => {
 
         const query = `INSERT INTO Users VALUES( '${user._id}','${user.name}' , '${user.password}' , 'user' , '${user.email}' , '0',${null})`;
         sql.add(query, (isSuccess) => {
-            if (isSuccess)
-                callback(user)
+            if (isSuccess) {
+                AddPostUserElastic(user, callback)
+            }
             else {
                 callback(isSuccess)
             }
         });
+    }
+
+    function AddPostUserElastic(user, callback) {
+        try {
+            const newUser = new UserModule(user._id, user.name, user.email)
+            const query = {
+                index: 'posts',
+                id: user._id.toString(),
+                body: newUser
+            }
+
+            elasticSql.add(query, (success) => {
+                callback(success ? user : undefined)
+            });
+
+        } catch (error) {
+            console.log(error)
+        }
+
     }
     function verifyAccount(userId, callback) {
         console.log("dbManeger: verifyAccount call()");
@@ -21,7 +43,7 @@ module.exports = (sql, mongoose, bcrypt, passwordGeneretor) => {
         const query = `UPDATE Users
                     SET active = '1'
                     WHERE _id = '${userId}'`;
-        sql.update( query, callback);
+        sql.update(query, callback);
     }
     function changePassword(user, newPassword, callback) {
         console.log("dbManeger: changePassword call()");
@@ -32,7 +54,7 @@ module.exports = (sql, mongoose, bcrypt, passwordGeneretor) => {
                          SET password = '${hash}' , resetPasswordCode = ''
                          WHERE _id = '${user._id}'`;
 
-        sql.update( query, callback);
+        sql.update(query, callback);
     }
     function getUsers(callback, filter, userId) {
 
@@ -46,7 +68,7 @@ module.exports = (sql, mongoose, bcrypt, passwordGeneretor) => {
                      where Users._id !='${userId}' 
                      ${filter ? `And (Users.name like '%${filter}%' OR Users.email like '%${filter}%')` : ""}`;
 
-        sql.getMany( query, callback);
+        sql.getMany(query, callback);
     }
 
     function getUser(userId, callback) {
@@ -58,7 +80,7 @@ module.exports = (sql, mongoose, bcrypt, passwordGeneretor) => {
                        
                        where Users._id ='${userId}'`;
 
-        sql.getOne( query, callback);
+        sql.getOne(query, callback);
     }
 
     function getResetCodePassword(user, callback) {
@@ -69,7 +91,7 @@ module.exports = (sql, mongoose, bcrypt, passwordGeneretor) => {
         const query = `UPDATE Users
                          SET password = '' , resetPasswordCode = '${user.resetCodeBcrypt}'
                          WHERE email = '${user.email}'`;
-        sql.update( query, (success) => {
+        sql.update(query, (success) => {
             if (success) {
                 callback(user)
             }

@@ -4,6 +4,8 @@ import { Observable, Subscription } from 'rxjs';
 import { PostApiService } from "../../service/postApi.service";
 import { IPost } from '../../../common/model/post';
 import { SocketService } from 'src/app/common/service/socket.service';
+import { JwtService } from 'src/app/common/service/jwt.service';
+import { markerCollectionsService } from '../../service/marker-collection.service';
 
 @Component({
   selector: 'app-posts',
@@ -18,14 +20,14 @@ export class PostsComponent implements OnInit {
 
   constructor(
     private postApiService: PostApiService,
+    private markerCollection: markerCollectionsService,
+    private jwtServiceHelper: JwtService,
     private socket: SocketService
   ) { }
 
   ngOnInit(): void {
-    this.subscriptionGet = this.postApiService.getAllPosts()
-      .subscribe((res) => {
-        this.posts = res;
-      })
+    this.subscriptionGet = this.markerCollection.allPost$.subscribe((posts) => this.posts = posts);
+    this.postApiService.getAllPosts().subscribe()
   }
 
 
@@ -35,8 +37,17 @@ export class PostsComponent implements OnInit {
 
   setLikesOfPost(post: IPost) {
     if (post) {
-      this.subscriptionPost = this.postApiService.updateLikes(post).subscribe(
-        () => this.socket.updateLike(post)
+      const data = { post: post, userId: this.jwtServiceHelper.getUserId() }
+      const observableLike = post.likes.users.find(u => u == this.jwtServiceHelper.getUserId()) ?
+        this.postApiService.removeLikes(data) :
+        this.postApiService.updateLikes(data)
+
+      this.subscriptionPost = observableLike.subscribe(
+        (res) => {
+          const index = this.posts.indexOf(this.posts.find(p => p.postId == res.post.postId))
+          this.posts[index] = res.post;
+          this.socket.updateLike(res.post)
+        }
       )
     }
   }

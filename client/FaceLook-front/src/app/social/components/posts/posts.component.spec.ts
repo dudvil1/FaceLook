@@ -11,12 +11,15 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { SocketService } from 'src/app/common/service/socket.service';
 import { SocketMockService } from 'src/app/common/test/service/socketMockService';
+import { JwtService } from 'src/app/common/service/jwt.service';
+import { JwtMockService } from 'src/app/common/test/service/jwtMockService';
 
 describe('PostsComponent', () => {
   let component: PostsComponent;
   let fixture: ComponentFixture<PostsComponent>;
   let postApi: PostsApiMockService
   let socketService: SocketService
+  let jwtService: JwtService
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -27,6 +30,7 @@ describe('PostsComponent', () => {
       providers: [
         { provide: PostApiService, useClass: PostsApiMockService },
         { provide: SocketService, useClass: SocketMockService },
+        { provide: JwtService, useClass: JwtMockService },
         { provide: ApiConfigService, useValue: { imageUrl: '' } }
       ]
     }).compileComponents();
@@ -36,6 +40,7 @@ describe('PostsComponent', () => {
     fixture = TestBed.createComponent(PostsComponent);
     postApi = TestBed.get(PostApiService);
     socketService = TestBed.get(SocketService);
+    jwtService = TestBed.get(JwtService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -91,9 +96,9 @@ describe('PostsComponent', () => {
 
     let postChild: DebugElement = fixture.debugElement.query(
       By.directive(PostComponent));
-      postChild.triggerEventHandler("likesEmitter",postApi.posts[1]);
+    postChild.triggerEventHandler("likesEmitter", postApi.posts[1]);
 
-      updateLikesCallsCount(postApi.posts[1],1)
+    updateLikesCallsCount(postApi.posts[1], 1)
 
   })
 
@@ -101,7 +106,7 @@ describe('PostsComponent', () => {
     const postApiSpy = jasmine.createSpyObj('postApiService', ['updateLikes'])
     postApiSpy.updateLikes.and.returnValue(of({}))
 
-    component = new PostsComponent(postApiSpy,socketService)
+    component = new PostsComponent(postApiSpy,jwtService, socketService)
     component.setLikesOfPost(post);
     expect(postApiSpy.updateLikes.calls.count()).toEqual(expectedAmount)
   }

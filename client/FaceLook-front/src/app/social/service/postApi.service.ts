@@ -38,6 +38,8 @@ export class PostApiService implements IPostApi {
       tap((posts) => {
         if (notifyMarkers)
           this.markersService.markers$.next(posts);
+        else
+          this.markersService.allPost$.next(posts);
       })
     );
   }
@@ -52,11 +54,18 @@ export class PostApiService implements IPostApi {
       })
     );
   }
-  updateLikes(post: IPost): Observable<ISuccessResponse> {
-    const { socialUrl, updateLikes } = this.apiConfig.socialApi
-    const url = socialUrl + updateLikes
+  updateLikes(data: { post: IPost, userId: string }): Observable<ISuccessResponse> {
+    const { socialUrl, addLike } = this.apiConfig.socialApi
+    const url = socialUrl + addLike
 
-    return this.httpClient.patch<ISuccessResponse>(url, { post });
+    return this.httpClient.patch<ISuccessResponse>(url, data);
+  }
+
+  removeLikes(data: { post: IPost, userId: string }): Observable<ISuccessResponse> {
+    const { socialUrl, removeLike } = this.apiConfig.socialApi
+    const url = socialUrl + removeLike
+
+    return this.httpClient.patch<ISuccessResponse>(url, data);
   }
 
 }

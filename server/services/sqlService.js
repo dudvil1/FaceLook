@@ -1,62 +1,142 @@
-const sql = require('msnodesqlv8');
+// const sql = require('msnodesqlv8');
 
-exports.getOne = (connectionString, query, callback) => {
-    queryOne(connectionString, query, callback)
+const sql = require('mssql')
+
+const config = {
+    user: process.env.SQL_USER,
+    password: process.env.SQL_PASSWORD,
+    server: process.env.SQL_SERVER,
+    database: 'FaceLook',
+    port: 1433
 }
 
-exports.getMany = (connectionString, query, callback) => {
-    queryMany(connectionString, query, callback)
-}
+// function getOne(query, callback) {
+//     queryOne(query, callback)
+// }
 
-exports.add = (connectionString, query, callback) => {
-    queryChangeSuccess(connectionString, query, callback)
-}
+// function getMany(query, callback) {
+//     queryMany(query, callback)
+// }
 
-exports.update = (connectionString, query, callback) => {
-    queryChangeSuccess(connectionString, query, callback)
-}
+// function add(query, callback) {
+//     queryChangeSuccess(query, callback)
+// }
 
-exports.delete = (connectionString, query, callback) => {
-    queryChangeSuccess(connectionString, query, callback)
-}
+// function update(query, callback) {
+//     queryChangeSuccess(query, callback)
+// }
 
-function queryOne(connectionString, query, callback) {
+// function remove(query, callback) {
+//     queryChangeSuccess(query, callback)
+// }
+
+// function queryOne(query, callback) {
+//     try {
+//         let result1 = pool.request()
+//             .query(query)
+//         callback(result1.recordset[0])
+//     } catch (error) {
+//         console.log(error)
+//     }
+// }
+
+// function queryMany(query, callback) {
+//     try {
+//         let result1 = pool.request()
+//             .query(query)
+//         callback(result1.recordset)
+//     } catch (error) {
+//         console.log(error)
+//     }
+// }
+
+// function queryChangeSuccess(query, callback) {
+//     try {
+//         let result1 = pool.request()
+//             .query(query)
+//         callback(result1.rowsAffected.length > 0)
+//     } catch (error) {
+//         console.log(error)
+//     }
+// }
+// module.exports = {
+//     remove,
+//     update,
+//     add,
+//     getOne,
+//     getMany
+// }
+
+module.exports = async (logger) => {
+
     try {
-        sql.query(connectionString, query, (err, rows) => {
-            if (err) {
-                console.log(err)
-            }
-            callback((rows && rows[0] ? rows[0] : undefined));
-        });
-    } catch (error) {
-        console.log(error)
-    }
-}
+        let pool = await sql.connect(config)
+        async function getOne(query, callback) {
+            await queryOne(query, callback)
+        }
 
-function queryMany(connectionString, query, callback) {
-    try {
-        sql.query(connectionString, query, (err, rows) => {
-            if (err) {
-                console.log(err)
-            }
-            callback(rows);
-        });
-    } catch (error) {
-        console.log(error)
-    }
-}
+        async function getMany(query, callback) {
+            await queryMany(query, callback)
+        }
 
-function queryChangeSuccess(connectionString, query, callback) {
-    try {
-        sql.query(connectionString, query, (err, rows) => {
-            if (err) {
-                console.log(err)
+        async function add(query, callback) {
+            await queryChangeSuccess(query, callback)
+        }
+
+        async function update(query, callback) {
+            await queryChangeSuccess(query, callback)
+        }
+
+        async function remove(query, callback) {
+            await queryChangeSuccess(query, callback)
+        }
+
+        async function queryOne(query, callback) {
+            try {
+                let result1 = await pool.request()
+                    .query(query)
+                callback(result1.recordset[0])
+
+                logger.info(query, { location: __filename, data: { function: 'queryOne' } });
+            } catch (error) {
+                console.log(error)
             }
-            callback(err ? false : true);
-        });
-    } catch (error) {
-        console.log(error)
+        }
+
+        async function queryMany(query, callback) {
+            try {
+                let result1 = await pool.request()
+                    .query(query)
+                callback(result1.recordset)
+
+                logger.info(query, { location: __filename, data: { function: 'queryMany' } });
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        async function queryChangeSuccess(query, callback) {
+            try {
+                let result1 = await pool.request()
+                    .query(query)
+
+                callback(result1.rowsAffected.length > 0)
+
+                logger.info(query, { location: __filename, data: { function: 'queryChangeSuccess' } });
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        return {
+            remove,
+            update,
+            add,
+            getOne,
+            getMany
+        }
+    } catch (err) {
+        logger.error(err, { location: __filename, data: { } });
     }
-}
+};
 
 

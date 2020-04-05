@@ -1,37 +1,30 @@
 
-module.exports = (db) => {
+module.exports = (db, logger) => {
 
   function addPost(req, res) {
     console.log("postController: addPost call()");
     req.body.user = req.user;
-    req.body.img = req.image;
+    req.body.img = req.image || 'anonym.png';
 
     try {
       db.addPost(req.body, postResult => {
-        db.addTag(postResult, tagResult => {
-          console.log("tagResult", tagResult)
-          db.addPost_Tag(tagResult, result => {
-
-        console.log(postResult)
-            return res.status(201).json({
-              message: "post Created Successfully"
-            });
-          });
+        return res.status(201).json({
+          message: "post Created Successfully",
+          post: postResult
         });
       });
     } catch (error) {
       return res.status(500).json({
         message: "Internal Server Error"
-
       });
     }
   }
+
   function getAllPosts(req, res) {
     console.log("postController: getAllPosts call()");
 
     try {
       db.getAllPosts(posts => {
-        console.log("posts",posts)
         res.status(201).json(posts);
       });
     } catch (error) {
@@ -40,7 +33,6 @@ module.exports = (db) => {
       });
     }
   }
-
   function getFilterPosts(req, res) {
     try {
       console.log("postController: getFilterPosts call()");
@@ -49,19 +41,37 @@ module.exports = (db) => {
         res.status(201).json(posts);
       });
     } catch (error) {
+      console.log(error)
       return res.status(500).json({
         message: "Internal Server Error"
       });
     }
   }
-
-  async function updateLikes(req, res) {
+  async function addLike(req, res) {
     try {
       console.log("postController: updateLikes call()");
 
-      await db.updateLikes(req.body.post, (data) => {
+      await db.addLike(req.body, (post) => {
         res.status(200).json({
-          message: "Post-Like updated successfuly"
+          message: "Post-Like updated successfuly",
+          post: post
+        })
+      })
+    } catch (error) {
+      return res.status(500).json({
+        message: "Internal Server Error"
+      })
+    }
+  }
+
+  async function removeLike(req, res) {
+    try {
+      console.log("postController: removeLike call()");
+
+      await db.removeLike(req.body, (post) => {
+        res.status(200).json({
+          message: "Post-Like updated successfuly",
+          post: post
         })
       })
     } catch (error) {
@@ -73,7 +83,8 @@ module.exports = (db) => {
   return {
     addPost,
     getAllPosts,
-    updateLikes,
-    getFilterPosts
+    addLike,
+    getFilterPosts,
+    removeLike
   }
 }

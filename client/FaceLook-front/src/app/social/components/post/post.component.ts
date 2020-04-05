@@ -16,20 +16,19 @@ export class PostComponent implements OnInit {
 
   likeClicked: boolean = false;
 
-  constructor(private apiConfig :ApiConfigService) {
+  constructor(private apiConfig: ApiConfigService) {
     this.imgPath = this.apiConfig.imageUrl
-   }
+  }
 
   ngOnInit(): void {
   }
 
-  
-  addLike(post: IPost){
-    if(this.likeClicked == false){
-      this.post.likes++;
+
+  addLike(post: IPost) {
+    if (this.likeClicked == false) {
       this.likesEmitter.emit(post);
       this.likeClicked = true;
-    } 
+    }
   }
 
 }
