@@ -36,7 +36,7 @@ describe('friend Controller Tests', () => {
     
     it('test the searchUsers() with valid parameters', () => {
         callbackStatus = (code) => expect(code).to.equal(201)
-         callbackJson = (dsd) =>  console.log("dsdfsd");
+         callbackJson = (data) =>  console.log();
         frndCtrl.searchUsers(req,sendExpect(callbackStatus,callbackJson));
     });  
     it('test the searchUsers() with unvalid parameters', () => {

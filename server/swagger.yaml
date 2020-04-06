@@ -434,7 +434,7 @@ ResponseDefinitions:
         type: object 
         properties: 
           token:
-            type: string
+            type: string  
 
   getPostsResponse:
     type: object
