@@ -95,7 +95,6 @@ describe('PostsComponent', () => {
 
   it('Integration Test - child component emit post to add like', () => {
     let postChild: DebugElement = fixture.debugElement.query(By.directive(PostComponent));
-    console.log(postChild)
     postChild.triggerEventHandler("likesEmitter", postApi.posts[1]);
 
     updateLikesCallsCount(postApi.posts[1], 1)

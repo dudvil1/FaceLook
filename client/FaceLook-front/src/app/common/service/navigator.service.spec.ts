@@ -1,6 +1,6 @@
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { NavigatorService } from './navigator.service';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, Router, Routes, Route } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { allComponents } from '../test/components'
 import { routes } from '../../../app/app-routing.module';
@@ -9,13 +9,13 @@ import { Location } from '@angular/common';
 const mockRoutes = routes.map(route => {
     return {
         ...route,
-        component: setComponent(route),
+        component: setComponent(route, allComponents),
         data: undefined,
         canActivate: undefined
     }
 })
 
-fdescribe('NavigatorService', () => {
+describe('NavigatorService', () => {
     let service: NavigatorService;
     let location: Location
     let router: Router
@@ -23,6 +23,7 @@ fdescribe('NavigatorService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [
+                ...allComponents
             ],
             imports: [
                 RouterTestingModule.withRoutes(mockRoutes),
@@ -98,25 +99,25 @@ fdescribe('NavigatorService', () => {
     }));
 
     it("nevigate to not exist route redirects you to /login ", fakeAsync(() => {
-       router.navigate(['afdfaerwecwdvfwdcascasdascasdvsfascadsf'])
+        router.navigate(['afdfaerwecwdvfwdcascasdascasdvsfascadsf'])
         tick()
         expect(location.path()).toEqual('/login')
     }));
 
 });
 
-function setComponent(route): any {
+function setComponent(route: Route, componentsArray: any[]): any {
     //if route as component set a mock component instead else set undefind
     return route.component ?
         getComponentByName(route.component.name) || getDefaultComponent()
         : undefined;
 
     function getComponentByName(name: string): any {
-        return allComponents.find(comp => comp.name == name);
+        return componentsArray.find(comp => comp.name == name);
     }
 
     function getDefaultComponent(): any {
-        return allComponents[0]
+        return componentsArray[0]
     }
 }
 

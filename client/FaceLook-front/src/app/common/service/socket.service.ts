@@ -61,7 +61,6 @@ export class SocketService extends Socket implements ISocketService {
   }
   private updatePostForAllPosts(post: IPost) {
     const allPosts = this.markerCollection.allPost$.getValue();
-    console.log(...allPosts.filter(p => p.postId != post.postId));
     this.markerCollection.allPost$.next([...allPosts.filter(p => p.postId != post.postId), post]);
   }
   private addPostForAllPosts(post: IPost) {

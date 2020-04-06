@@ -34,7 +34,6 @@ export class MapComponent implements AfterViewInit {
   myMap(postMarkers: IPost[]) {
     let mapProp = GoogleMapHandler.createMapProp(this.userCurrentLocation)
 
-    console.log(mapProp)
     //init the map and props
     let googleMap = new google.maps.Map(
       document.getElementById("googleMap"),
