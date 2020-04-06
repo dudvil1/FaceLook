@@ -6,22 +6,25 @@ import {
   HttpRequest
 } from '@angular/common/http';
 
-import { Observable} from 'rxjs'
+import { Observable } from 'rxjs'
+import { StorageService } from '../common/service/storage.service';
 
 
 
 //@injectable
 @Injectable()
 export class HeaderInterceptor implements HttpInterceptor {
+
+
+  constructor(private storage: StorageService) {
+  }
   //this function intercepts the request
-  intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
     //get token from local storage
-    let token = localStorage.getItem("token");
+    let token = this.storage.getToken()
     //cloning the request and adding Authorization header to it
-    if(token){
+    if (token) {
       req = req.clone({
         headers: req.headers.set("Authorization", "JWT " + token)
       });
@@ -29,4 +32,5 @@ export class HeaderInterceptor implements HttpInterceptor {
     //passing the request
     return next.handle(req);
   }
+
 }

@@ -21,4 +21,8 @@ describe("postsFilterService", () => {
   it("markers$ to be instance of subject", () => {
     expect(service.markers$).toBeInstanceOf(Subject)
   });
+
+  it("allPost$ to be instance of subject", () => {
+    expect(service.allPost$).toBeInstanceOf(Subject)
+  });
 });

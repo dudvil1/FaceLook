@@ -96,6 +96,17 @@ describe("PostApiService", () => {
     expectHttpPatch(mockSuccessResponse, socialUrl + addLike, observ, expectedResult)
   });
 
+  it('api request of #removeLikes with markers :expected result', (done: DoneFn) => {
+    const { socialUrl, removeLike } = apiConfigService.socialApi
+    const mockSuccessResponse: ISuccessResponse = { message: "SUCCESS" }
+    const observ = service.removeLikes(<any>{});
+    const expectedResult = (res) => {
+      expect(res).toEqual(mockSuccessResponse, 'expect to get SUCCESS message')
+      done()
+    }
+    expectHttpPatch(mockSuccessResponse, socialUrl + removeLike, observ, expectedResult)
+  });
+
 
   function expectGetPosts(url: string, obs: Observable<any>, withMarker: boolean, done: DoneFn) {
     const mockSuccessResponse: IPost[] = postsMock

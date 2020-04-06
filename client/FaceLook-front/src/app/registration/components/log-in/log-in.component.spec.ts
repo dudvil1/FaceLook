@@ -112,7 +112,7 @@ describe('LogInComponent', () => {
 
   it('verifyAccountIfNecessary() - when params exist should call verifyAccount() in registrationApiService', () => {
     setRouteParams(route, "1214ddr4fcs");
-    spyOn(registrationApi, 'verifyAccount')
+    spyOn(registrationApi, 'verifyAccount').and.returnValue(of({message:"success"}))
     component.verifyAccountIfNecessary()
     expect(registrationApi.verifyAccount).toHaveBeenCalled()
   });

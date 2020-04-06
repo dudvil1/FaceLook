@@ -44,9 +44,11 @@ export class PostsComponent implements OnInit {
 
       this.subscriptionPost = observableLike.subscribe(
         (res) => {
-          const index = this.posts.indexOf(this.posts.find(p => p.postId == res.post.postId))
-          this.posts[index] = res.post;
-          this.socket.updateLike(res.post)
+          if (res.post) {
+            const index = this.posts.indexOf(this.posts.find(p => p.postId == res.post.postId))
+            this.posts[index] = res.post;
+            this.socket.updateLike(res.post)
+          }
         }
       )
     }
