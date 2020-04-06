@@ -11,7 +11,7 @@ import { FriendsComponent } from "./social/components/friends/friends.component"
 import { PostsComponent } from "./social/components/posts/posts.component";
 import { GuardService } from "./common/service/guard.service";
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: "", redirectTo: "login", pathMatch: "full" },
   {
     path: "login",

@@ -3,12 +3,10 @@ import { TestBed } from '@angular/core/testing';
 import { SocketService } from './socket.service';
 import { markerCollectionsService } from 'src/app/social/service/marker-collection.service';
 import { postsFilterService } from 'src/app/social/service/postsFilter.model';
-import { SocketIoModule } from 'ngx-socket-io';
 import { IPost } from '../model/post';
 import { postsMock } from 'src/app/social/test/services/postApiMockService';
 
-
-fdescribe('SocketService', () => {
+describe('SocketService', () => {
   let service: SocketService;
   let markerCollections: markerCollectionsService;
   let postsFilter: postsFilterService;
