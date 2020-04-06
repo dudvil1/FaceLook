@@ -1,5 +1,3 @@
-// const sql = require('msnodesqlv8');
-
 const sql = require('mssql')
 
 const config = {
@@ -9,63 +7,6 @@ const config = {
     database: 'FaceLook',
     port: 1433
 }
-
-// function getOne(query, callback) {
-//     queryOne(query, callback)
-// }
-
-// function getMany(query, callback) {
-//     queryMany(query, callback)
-// }
-
-// function add(query, callback) {
-//     queryChangeSuccess(query, callback)
-// }
-
-// function update(query, callback) {
-//     queryChangeSuccess(query, callback)
-// }
-
-// function remove(query, callback) {
-//     queryChangeSuccess(query, callback)
-// }
-
-// function queryOne(query, callback) {
-//     try {
-//         let result1 = pool.request()
-//             .query(query)
-//         callback(result1.recordset[0])
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
-
-// function queryMany(query, callback) {
-//     try {
-//         let result1 = pool.request()
-//             .query(query)
-//         callback(result1.recordset)
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
-
-// function queryChangeSuccess(query, callback) {
-//     try {
-//         let result1 = pool.request()
-//             .query(query)
-//         callback(result1.rowsAffected.length > 0)
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
-// module.exports = {
-//     remove,
-//     update,
-//     add,
-//     getOne,
-//     getMany
-// }
 
 module.exports = async (logger) => {
 

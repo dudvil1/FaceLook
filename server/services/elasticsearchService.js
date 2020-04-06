@@ -1,6 +1,6 @@
 const elasticsearch = require('elasticsearch');
 const client = new elasticsearch.Client({
-    host: `${process.env.SQL_SERVER}:9200`,
+    host: `${process.env.SQL_SERVER_Elastic}:9200`,
     apiVersion: '7.5'
 });
 
@@ -9,6 +9,7 @@ client.ping({
 }, function (error) {
     if (error) {
         console.trace('elasticsearch cluster is down!');
+        console.log(error);
     } else {
         console.log('All is well');
     }
@@ -122,7 +123,7 @@ exports.getMany = (query, callback) => {
         size: query.size || 10000
     }
     client.search(queryForMany, (err, response) => {
-        if(err){
+        if (err) {
             console.log(err)
         }
         if (response)

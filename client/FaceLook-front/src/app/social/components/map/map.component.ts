@@ -34,12 +34,12 @@ export class MapComponent implements AfterViewInit {
   myMap(postMarkers: IPost[]) {
     let mapProp = GoogleMapHandler.createMapProp(this.userCurrentLocation)
 
+    console.log(mapProp)
     //init the map and props
     let googleMap = new google.maps.Map(
       document.getElementById("googleMap"),
       mapProp
     );
-
     let currentPositionMarker = GoogleMapHandler.createMapMarker(this.userCurrentLocation, "YOU!");
     //add the marker of user curr location
     currentPositionMarker.setMap(googleMap);

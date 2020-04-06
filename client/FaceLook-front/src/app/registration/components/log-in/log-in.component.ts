@@ -39,7 +39,6 @@ export class LogInComponent implements OnInit, OnDestroy {
       data => {
         this.storageService.setToken(data.token);
         this.toastr.success(data.message, "Success");
-
         this.navigateService.goToHomePage()
       },
       error => {
@@ -49,9 +48,8 @@ export class LogInComponent implements OnInit, OnDestroy {
   }
 
   verifyAccountIfNecessary() {
-
     this.subscriptionParams = this.route.params.subscribe(params => {
-      if (Object.keys(params).length) {
+      if (params && Object.keys(params).length) {
         this.api.verifyAccount(params).subscribe(
           res => {
             this.toastr.success(res.message);
@@ -64,8 +62,9 @@ export class LogInComponent implements OnInit, OnDestroy {
     });
   }
 
-  onforgotPassword() {
-    if (!this.userService.userData.email) alert("Enter Your Email First");
+  onForgotPassword() {
+    if (!this.userService.userData.email)
+      alert("Enter Your Email First");
     else {
       //api call
       this.api.getResetCodePassword(this.userService.userData.email).subscribe(

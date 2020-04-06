@@ -26,7 +26,6 @@ export class FeedComponent implements OnInit {
           longitude: location.lng
         };
       }
-      
       this._postApiService.getFilterPosts(this.postsFilterService.postsData).subscribe();
     }
   }

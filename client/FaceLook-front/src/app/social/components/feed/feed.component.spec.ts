@@ -9,6 +9,8 @@ import { postsFilterService } from '../../service/postsFilter.model';
 import { FormsModule } from '@angular/forms';
 import { of, from } from 'rxjs';
 import { createSpy } from 'src/app/common/test/spy/spyService';
+import { CommentStmt } from '@angular/compiler';
+import { resolve } from 'dns';
 
 describe('FeedComponent', () => {
   let component: FeedComponent;
@@ -66,16 +68,20 @@ describe('FeedComponent', () => {
     expect(postApiSpy.getFilterPosts.calls.count()).toEqual(1, "should send request when there is filter option or options");
   });
 
-  it('in search method call if in the filter object there is radius filter implmentation location will be addad from location service', () => {
+  it('in search method call if in the filter object there is radius filter implmentation location will be addad from location service', (done) => {
     component.postsFilterService.postsData = {
       radiusFrom: 20
     }
+    const location = {
+      lat: 35,
+      lng: 32
+    }
+    spyOn(locationService, "getLocation").and.returnValue(new Promise(resolve => resolve(location)))
     component.search().then(
       () => {
         expect(component.postsFilterService.postsData.location).toBeDefined()
-        locationService.getLocation().then(
-          loc => expect(component.postsFilterService.postsData.location).toEqual({ latitude: loc.lat, longitude: loc.lng })
-        )
+        expect(component.postsFilterService.postsData.location).toEqual({ latitude: location.lat, longitude: location.lng })
+        done()
       })
   });
 

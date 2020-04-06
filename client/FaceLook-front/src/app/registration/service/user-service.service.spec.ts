@@ -17,4 +17,7 @@ describe("postsFilterService", () => {
     expect(service).toBeTruthy();
   });
 
+  it("should create", () => {
+    expect(service).toBeTruthy();
+  });
 });
