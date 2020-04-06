@@ -25,7 +25,7 @@ export class SocketService extends Socket implements ISocketService {
     this.listening()
   }
 
-  addPost(post) {
+  addPost(post: IPost) {
     this.emit('addPost', post)
   }
 
@@ -33,30 +33,48 @@ export class SocketService extends Socket implements ISocketService {
     this.emit('updateLike', post)
   }
 
-  private listening() {
-    this.on('addPostChange', (post: IPost) => {
-      const markers = this.markerCollection.markers$.getValue()
-      if (!Object.keys(this.postsFilter.postsData)) {
-        this.markerCollection.markers$.next([...markers, post])
-      }
-      else if (this.postsFilter.isPostMatch(post)) {
-        this.markerCollection.markers$.next([...markers, post])
-      }
+  listening() {
+    this.listeningToPostAdded();
+    this.listeningToPostUpdated();
+  }
 
-      const allPosts = this.markerCollection.allPost$.getValue()
-      this.markerCollection.allPost$.next([...allPosts, post])
-    })
+  listeningToPostUpdated() {
     this.on('updateLikeChange', (post: IPost) => {
-      const markers = this.markerCollection.markers$.getValue()
-      const oldPost = markers.find(p => p.postId = post.postId)
-      if (oldPost) {
-        const newMarkers = markers.filter(p => p != oldPost)
-        this.markerCollection.markers$.next([...newMarkers, post])
-      }
+      this.updatePostForMarkers(post);
+      this.updatePostForAllPosts(post);
+    });
+  }
+  listeningToPostAdded() {
+    this.on('addPostChange', (post: IPost) => {
+      this.addPostForMarkers(post);
+      this.addPostForAllPosts(post);
+    });
+  }
 
-      const allPosts = this.markerCollection.allPost$.getValue()
-      console.log(...allPosts.filter(p => p.postId != post.postId))
-      this.markerCollection.allPost$.next([...allPosts.filter(p => p.postId != post.postId), post])
-    })
+  private updatePostForMarkers(post: IPost) {
+    const markers = this.markerCollection.markers$.getValue();
+    const oldPost = markers.find(p => p.postId = post.postId);
+    if (oldPost) {
+      const newMarkers = markers.filter(p => p != oldPost);
+      this.markerCollection.markers$.next([...newMarkers, post]);
+    }
+  }
+  private updatePostForAllPosts(post: IPost) {
+    const allPosts = this.markerCollection.allPost$.getValue();
+    console.log(...allPosts.filter(p => p.postId != post.postId));
+    this.markerCollection.allPost$.next([...allPosts.filter(p => p.postId != post.postId), post]);
+  }
+  private addPostForAllPosts(post: IPost) {
+    const allPosts = this.markerCollection.allPost$.getValue();
+    this.markerCollection.allPost$.next([...allPosts, post]);
+  }
+  private addPostForMarkers(post: IPost) {
+    const markers = this.markerCollection.markers$.getValue();
+    if (!Object.keys(this.postsFilter.postsData)) {
+      this.markerCollection.markers$.next([...markers, post]);
+    }
+    else if (this.postsFilter.isPostMatch(post)) {
+      this.markerCollection.markers$.next([...markers, post]);
+    }
   }
 }

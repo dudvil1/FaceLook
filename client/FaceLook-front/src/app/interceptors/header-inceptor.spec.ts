@@ -10,7 +10,7 @@ import { PostApiService } from '../social/service/postApi.service';
 import { ApiConfigService } from '../common/service/api-config.service';
 import { StorageService } from '../common/service/storage.service';
 
-fdescribe(`AuthHttpInterceptor`, () => {
+describe(`AuthHttpInterceptor`, () => {
   let service: PostApiService;
   let apiConfig: ApiConfigService
   let storageService: StorageService
