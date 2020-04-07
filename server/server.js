@@ -10,10 +10,10 @@ const filename = __filename.slice(__dirname.length + 1);
 
 server.listen(port, function () {
    logger.info(`server listening in port: ${port}`, { location: filename}); 
-
 });
 
 io.on("connection", socket => {
- socketService(socket)
+  socketService(socket)
 })
 
+module.exports = server;

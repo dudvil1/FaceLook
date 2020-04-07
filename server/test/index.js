@@ -1,3 +1,3 @@
 require("./servicesTests");
 require('./controllersTests');
-require('./routes');
+require('./routesTest');

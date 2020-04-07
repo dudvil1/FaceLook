@@ -1,5 +1,5 @@
 module.exports = (jwt, moment) => {
-  let secret = process.env.JWT_SECRET || "secret";
+   let secret = process.env.JWT_SECRET || 'secret'; 
 
   createToken = user => {
     user.expired = moment()
@@ -13,11 +13,11 @@ module.exports = (jwt, moment) => {
   };
 
   isTokenExpire = token => {
-    if (token) {
-      const payload = decodeToken(token);
-      return payload.expired <= moment().unix();
-    }
-    return true;
+      if (token) {
+        const payload = decodeToken(token);
+        return payload.expired <= moment().unix();
+      }
+      return true;
   };
 
   return {
