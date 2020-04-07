@@ -13,20 +13,20 @@ module.exports = (db, mailer, bcrypt, jwt, logger) => {
                     return userAlreadyExistResponse();
                 }
                 else {
-                    db.addUser(req.body, result => {
-                        mailer.verifyAccountMail(result);
-                        return successRegisterResponse();
-                    });
+                    return successRegisterResponse();
                 }
             });
         } catch (error) {
             return errorHandler(req, res, error, 'Register');
         }
         function successRegisterResponse() {
-            message = "User Created Successfully , Please check Your Mail To Verify Your Account";
-            status = 201;
-            logDebug(`register`, req.body.email, `status ${status} message ${message}`);
-            return messageResponse(res, { message: message }, status);
+            db.addUser(req.body, result => {
+                mailer.verifyAccountMail(result);
+                message = "User Created Successfully , Please check Your Mail To Verify Your Account";
+                status = 201;
+                logDebug(`register`, req.body.email, `status ${status} message ${message}`);
+                return messageResponse(res, { message: message }, status);
+            });
         }
 
         function userAlreadyExistResponse() {
