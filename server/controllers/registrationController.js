@@ -1,109 +1,103 @@
 
+const filename = __filename.slice(__dirname.length + 1);
+
 module.exports = (db, mailer, bcrypt, jwt, logger) => {
-    const filename = __filename.slice(__dirname.length + 1);
-
-    function logDebug(funcName, data, response) {
-        logger.debug(`registration Controller: ${funcName} call()`
-            + response ? `- response: ${response}` : '', { location: filename, data: data });
-    }
-
-    function logError(funcName, data, response) {
-        logger.error(`registration Controller: ${funcName} call()`
-            + response ? `- response: ${response}` : '', { location: filename, data: data });
-    }
-
-    function messageResponse(res, message, status) {
-        return res.status(status).json({
-            message: message
-        });
-    }
 
     function register(req, res) {
+        let message = ''
+        let status = 200
         try {
-            let message = ''
-            let status = ''
             logDebug('register', req.body.email)
             db.find("Users", "email", req.body.email, user => {
                 if (user) {
-                    message = "user already exist,try again"
-                    status = 409
-                    logDebug(`register`, req.body.email, `status ${status} message ${message}`)
-                    return messageResponse(res, message, status)
+                    return userAlreadyExistResponse();
                 }
-                db.addUser(req.body, result => {
-                    mailer.verifyAccountMail(result);
-                    message = "User Created Successfully , Please check Your Mail To Verify Your Account"
-                    status = 201
-                    logDebug(`register`, req.body.email, `status ${status} message ${message}`)
-                    return messageResponse(res, message, status)
-                });
+                else {
+                    db.addUser(req.body, result => {
+                        mailer.verifyAccountMail(result);
+                        return successRegisterResponse();
+                    });
+                }
             });
         } catch (error) {
-            message = "Internal Server Error"
-            status = 500
-            logError(`register ${message}`, req.body.email, `status ${status}`)
-            return messageResponse(res, message, status)
+            return errorHandler(req, res, error, 'Register');
+        }
+        function successRegisterResponse() {
+            message = "User Created Successfully , Please check Your Mail To Verify Your Account";
+            status = 201;
+            logDebug(`register`, req.body.email, `status ${status} message ${message}`);
+            return messageResponse(res, { message: message }, status);
+        }
+
+        function userAlreadyExistResponse() {
+            message = "user already exist,try again";
+            status = 409;
+            logDebug(`register`, req.body.email, `status ${status} message ${message}`);
+            return messageResponse(res, { message: message }, status);
         }
     }
-
     function login(req, res) {
+        let message = ''
+        let status = 200
         try {
-            logger.debug(`registration Controller: login call() - start processing for ${req.body.email}`,
-                { location: filename });
-
+            logDebug('login', req.body.email)
             db.find("Users", "email", req.body.email, user => {
                 if (user) {
                     if (!user.active) {
-                        logger.debug(`registration Controller: login call() - finish processing for ${req.body.email} response: status: 409`,
-                            { location: filename });
-                        return res.status(409).json({
-                            message:
-                                "You Didn`t Verify Your Account Yet,Please Check Your Mail Box And Verify It"
-                        });
+                        return userIsNotActiveResponse();
                     }
                     if (bcrypt.checkPassword(req.body.password, user.password)) {
-                        let token = jwt.createToken(user);
-                        logger.debug(`registration Controller: login call() - finish processing for ${req.body.email} response: status: 200`,
-                            { location: filename });
-                        return res.status(200).json({
-                            message: "Authorize successful",
-                            token: token
-                        });
-                    } else
-                        logger.debug(`registration Controller: login call() - finish processing for ${req.body.email} response: status: 401`,
-                            { location: filename });
-                    return res.status(401).json({
-                        message: "Wrong Password"
-                    });
+                        return SuccessLoginResponse(user);
+                    }
+                    else {
+                        return worngPasswordResponse();
+                    }
                 }
             });
         } catch (error) {
-            logger.error(`registration Controller: login call() - catch error - response: status: 500`,
-                { location: filename, err: error });
-            return res.status(500).json({
-                message: "Internal Server Error"
-            });
+            return errorHandler(req, res, error, 'Login');
+        }
+
+        function worngPasswordResponse() {
+            message = "Wrong Password";
+            status = 401;
+            logDebug(`login`, req.body.email, `status ${status} message ${message}`);
+            return messageResponse(res, { message: message, token: token }, status);
+        }
+
+        function SuccessLoginResponse(user) {
+            let token = jwt.createToken(user);
+            message = "Authorize successful";
+            status = 200;
+            logDebug(`login`, req.body.email, `status ${status} message ${message}`);
+            return messageResponse(res, { message: message, token: token }, status);
+        }
+
+        function userIsNotActiveResponse() {
+            message = "You Didn`t Verify Your Account Yet,Please Check Your Mail Box And Verify It";
+            status = 409;
+            logDebug(`login`, req.body.email, `status ${status} message ${message}`);
+            return messageResponse(res, { message: message }, status);
         }
     }
     function verifyAccount(req, res) {
-        logger.debug(`registration Controller: verifyAccount call() - start processing for ${req.body.id}`,
-            { location: filename });
+        let message = ''
+        let status = 200
         try {
+            logDebug('verifyAccount', req.body.email)
             db.find("Users", "_id", req.body.id, user => {
                 if (user && user.active) {
-                    logger.debug(`registration Controller: verifyAccount call() - finish processing for ${user.id} response: status: 409`,
-                        { location: filename });
-                    res.status(409).json({
-                        message: "your account is already active"
-                    });
+                    message = "your account is already active";
+                    status = 409;
+                    logDebug(`login`, req.body.email, `status ${status} message ${message}`);
+                    return messageResponse(res, { message: message }, status);
                 }
                 else if (user) {
                     db.verifyAccount(req.body.id, result => {
-                        logger.debug(`registration Controller: verifyAccount call() - finish processing for ${result.id} response: status: 200`,
-                            { location: filename });
-                        res.status(200).json({
-                            message: "active account Successfully , you can log in now"
-                        });
+                        message = "active account Successfully , you can log in now";
+                        status = 200;
+                        logDebug(`login`, req.body.email, `status ${status} message ${message}`);
+                        return messageResponse(res, { message: message }, status);
                     });
                 }
                 else {
@@ -115,11 +109,7 @@ module.exports = (db, mailer, bcrypt, jwt, logger) => {
                 }
             });
         } catch (error) {
-            logger.error(`registration Controller: verifyAccount call() - catch error - response: status: 500`,
-                { location: filename, err: error });
-            return res.status(500).json({
-                message: "Internal Server Error"
-            });
+            return errorHandler(req, res, error, 'verifyAccount');
         }
     }
     function forgetPassword(req, res) {
@@ -147,11 +137,7 @@ module.exports = (db, mailer, bcrypt, jwt, logger) => {
                 }
             });
         } catch (error) {
-            logger.error(`registration Controller: forgetPassword call() - catch error - response: status: 500`,
-                { location: filename, err: error });
-            return res.status(500).json({
-                message: "Internal Server Error"
-            });
+            return errorHandler(req, res, error, 'forgetPassword');
         }
     }
     function getResetCodePassword(req, res) {
@@ -178,11 +164,7 @@ module.exports = (db, mailer, bcrypt, jwt, logger) => {
                 });
             });
         } catch (error) {
-            logger.error(`registration Controller: getResetCodePassword call() - catch error - response: status: 500`,
-                { location: filename, err: error });
-            return res.status(500).json({
-                message: "Failure to get Reset Code Password"
-            });
+            return errorHandler(req, res, error, 'getResetCodePassword');
         }
     }
 
@@ -193,4 +175,30 @@ module.exports = (db, mailer, bcrypt, jwt, logger) => {
         forgetPassword,
         getResetCodePassword
     }
-} 
+}
+
+function errorHandler(res, error, functionName) {
+    message = "Internal Server Error";
+    status = 500;
+    logError(`${functionName} ${message}`, error, `status ${status}`);
+    return messageResponse(res, message, status);
+}
+
+function logDebug(funcName, data, response) {
+    logger.debug(`registration Controller: ${funcName} call()`
+        + response ? `- response: ${response}` : '', { location: filename, data: data });
+}
+
+function logInfo(funcName, data, response) {
+    logger.debug(`registration Controller: ${funcName} call()`
+        + response ? `- response: ${response}` : '', { location: filename, data: data });
+}
+
+function logError(funcName, data, response) {
+    logger.error(`registration Controller: ${funcName} call()`
+        + response ? `- response: ${response}` : '', { location: filename, data: data });
+}
+
+function messageResponse(res, response, status) {
+    return res.status(status).json(response);
+}
