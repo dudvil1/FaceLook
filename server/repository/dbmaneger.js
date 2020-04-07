@@ -1,4 +1,4 @@
-module.exports = (userRepo, baseRepo, tagRepo, postRepo, userFriendRepo) => {
+module.exports = (userRepo, baseRepo, postRepo, userFriendRepo) => {
 
   function find(table, key, userKey, callback) {
     return baseRepo.find(table, key, userKey, callback);
@@ -20,9 +20,6 @@ module.exports = (userRepo, baseRepo, tagRepo, postRepo, userFriendRepo) => {
   }
   function getUser(callback, userId) {
     return userRepo.getUser(callback, userId)
-  }
-  function addTag(tag, callback) {
-    return tagRepo.addTag(tag, callback)
   }
   function addPost_Tag(post_tag, callback) {
     return postRepo.addPost_Tag(post_tag, callback)
@@ -61,7 +58,6 @@ module.exports = (userRepo, baseRepo, tagRepo, postRepo, userFriendRepo) => {
     changePassword,
     getResetCodePassword,
     addPost,
-    addTag,
     addPost_Tag,
     getAllPosts,
     addLike,

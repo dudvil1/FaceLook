@@ -1,4 +1,5 @@
-module.exports = (express, postsController, md_auth, multer) => {
+module.exports = (nodeServices, postsController, md_auth, multer) => {
+    const { express } = nodeServices
     const api = express.Router();
 
     api.post("/addPost", [md_auth.ensureAuth, multer.single("image")], postsController.addPost);

@@ -1,5 +1,6 @@
-module.exports = () => {
-  const { createLogger, format, transports } = require("winston");
+module.exports = (nodeServices) => {
+  const { createLogger, format, transports } = nodeServices;
+  
   require("winston-daily-rotate-file");
   const fs = require("fs");
   const path = require("path");
@@ -23,60 +24,36 @@ module.exports = () => {
       maxFiles: `${numberOfDaysToKeepLog}d`
     });
 
+  const baseFormat = format.combine(
+    format.json(),
+    format.timestamp({
+      format: "YYYY-MM-DD HH:mm:ss"
+    }),
+    format.printf(info => {
+      const { location, data, err } = info[Symbol.for("splat")][0];
+      const locationString = location ? `Location - ${location}` : "";
+      const errString = err ? `error - ${err}` : "";
+      const objString = data ? `data - ${JSON.stringify(data)}` : "";
+      return `${info.timestamp}| ${info.level}: ${JSON.stringify(info.messag)} 
+                \t${locationString}\t${objString}\n${errString}`;
+    }),
+  );
+
   const errorLogger = createLogger({
     handleExceptions: true,
-    format: format.combine(
-      format.json(),
-      format.timestamp({
-        format: "YYYY-MM-DD HH:mm:ss"
-      }),
-      format.printf(info => {
-        const { location, data } = info[Symbol.for("splat")][0];
-        const locationString = location ? `Location - ${location}` : "";
-        const objString = data ? `data - ${JSON.stringify(data)}` : "";
-        return `${info.timestamp}| ${info.level}: ${JSON.stringify(
-          info.message
-        )}\t${locationString}\t${objString}\n`;
-      })
-    ),
+    format: baseFormat,
     transports: [dailyRotateFileTransport("-err")]
   });
 
   const infoLogger = createLogger({
     handleExceptions: true,
-    format: format.combine(
-      format.json(),
-      format.timestamp({
-        format: "YYYY-MM-DD HH:mm:ss"
-      }),
-      format.printf(info => {
-        const { location, data } = info[Symbol.for("splat")][0];
-        const locationString = location ? `Location - ${location}` : "";
-        const objString = data ? `data - ${JSON.stringify(data)}` : "";
-        return `${info.timestamp}| ${info.level}: ${JSON.stringify(
-          info.message
-        )}\t${locationString}\t${objString}\n`;
-      })
-    ),
+    format: baseFormat,
     transports: [dailyRotateFileTransport("-info")]
   });
 
   const dubugLogger = createLogger({
     handleExceptions: true,
-    format: format.combine(
-      format.json(),
-      format.timestamp({
-        format: "YYYY-MM-DD HH:mm:ss"
-      }),
-      format.printf(info => {
-        const { location, data } = info[Symbol.for("splat")][0];
-        const locationString = location ? `Location - ${location}` : "";
-        const objString = data ? `data - ${JSON.stringify(data)}` : "";
-        return `${info.timestamp}| ${info.level}: ${JSON.stringify(
-          info.message
-        )}\t${locationString}\t${objString}\n`;
-      })
-    ),
+    format: baseFormat,
     transports: [dailyRotateFileTransport("-dubug")]
   });
 

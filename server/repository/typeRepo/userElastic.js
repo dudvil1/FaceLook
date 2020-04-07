@@ -1,6 +1,7 @@
 const UserModule = require("../../models/elasticsearch/postUser")
 
-module.exports = (sql, elasticSql, mongoose, bcrypt, passwordGeneretor) => {
+module.exports = (sql, elasticSql, nodeServices, bcrypt, passwordGeneretor) => {
+    const { mongoose } = nodeServices
 
     function addUser(user, callback) {
         console.log("dbManeger: addUser call()");

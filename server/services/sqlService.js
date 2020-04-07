@@ -1,14 +1,15 @@
-const sql = require('mssql')
 
-const config = {
-    user: process.env.SQL_USER,
-    password: process.env.SQL_PASSWORD,
-    server: process.env.SQL_SERVER,
-    database: 'FaceLook',
-    port: 1433
-}
 
-module.exports = async (logger) => {
+module.exports = async (logger, nodeServices) => {
+    const { sql } = nodeServices
+
+    const config = {
+        user: process.env.SQL_USER,
+        password: process.env.SQL_PASSWORD,
+        server: process.env.SQL_SERVER,
+        database: 'FaceLook',
+        port: 1433
+    }
 
     try {
         let pool = await sql.connect(config)
@@ -76,7 +77,7 @@ module.exports = async (logger) => {
             getMany
         }
     } catch (err) {
-        logger.error(err, { location: __filename, data: { } });
+        logger.error(err, { location: __filename, data: {} });
     }
 };
 

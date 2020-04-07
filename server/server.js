@@ -1,6 +1,6 @@
 require('./containerConfig')().then(
   container => {
-    const http = container.get('http');
+    const { http } = container.get('nodeServices');
     const app = container.get('app');
     const logger = container.get('loggerService');
     const socketService = container.get('socketService');

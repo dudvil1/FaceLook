@@ -1,6 +1,9 @@
 const PostModule = require('../../models/elasticsearch/post')
 
-module.exports = (sql, mongoose) => {
+module.exports = (sql, nodeServices) => {
+    const { mongoose } = nodeServices
+
+
     function addPost(post, callback) {
         post.post_id = new mongoose.Types.ObjectId();
         post.date = formatDate(post.date);

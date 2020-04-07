@@ -1,4 +1,5 @@
-module.exports = (express, friendController, md_auth) => {
+module.exports = (nodeServices, friendController, md_auth) => {
+    const {express} = nodeServices
     const api = express.Router();
     
     api.get("/searchUsers/:data", md_auth.ensureAuth, friendController.searchUsers);

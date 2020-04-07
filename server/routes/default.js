@@ -1,4 +1,5 @@
-module.exports = (express, DefaultController) => {
+module.exports = (nodeServices, DefaultController) => {
+    const {express} = nodeServices
     const api = express.Router();
 
     api.get('/', DefaultController.help);

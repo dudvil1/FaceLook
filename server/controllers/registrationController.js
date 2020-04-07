@@ -32,7 +32,6 @@ module.exports = (db, mailer, bcrypt, jwt, logger) => {
                 }
                 db.addUser(req.body, result => {
                     mailer.verifyAccountMail(result);
-
                     message = "User Created Successfully , Please check Your Mail To Verify Your Account"
                     status = 201
                     logDebug(`register`, req.body.email, `status ${status} message ${message}`)
@@ -48,7 +47,6 @@ module.exports = (db, mailer, bcrypt, jwt, logger) => {
     }
 
     function login(req, res) {
-        console.log("registration Controller: login call()");
         try {
             logger.debug(`registration Controller: login call() - start processing for ${req.body.email}`,
                 { location: filename });

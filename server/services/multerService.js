@@ -1,4 +1,5 @@
-module.exports = (multer) => {
+module.exports = (nodeServices) => {
+  const { multer } = nodeServices;
 
   const store = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -14,5 +15,5 @@ module.exports = (multer) => {
 
   const upload = multer({ storage: store });
 
-  return upload
+  return upload;
 }

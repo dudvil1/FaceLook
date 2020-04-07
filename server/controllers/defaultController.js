@@ -1,4 +1,5 @@
-module.exports = (moment, logger) => {
+module.exports = (nodeServices, logger) => {
+    const { moment } = nodeServices
     const version = '0.2.0';
     const filename = __filename.slice(__dirname.length + 1);
 
@@ -13,10 +14,10 @@ module.exports = (moment, logger) => {
         logger.debug(`Default Controller: status call() -`, { location: filename });
         res.status(200).send({
             message: {
-                'api': 'social',
-                'status': 'OK',
-                'version': version,
-                'time': moment().unix()
+                api: 'social',
+                status: 'OK',
+                version: version,
+                time: moment().unix()
             }
         });
     }

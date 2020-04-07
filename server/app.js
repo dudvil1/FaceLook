@@ -1,6 +1,9 @@
-module.exports = (express, bodyParser, morgan, cors, path, defaultRoute, friendRoute, registrationRoute, socialRoute, swaggerUi, YAML , loggerService) => {
+module.exports = (nodeServices, defaultRoute, friendRoute, registrationRoute, socialRoute, loggerService) => {
+
+  const { express, bodyParser, morgan, cors, path, swagger, yamljs } = nodeServices
+
   app = express();
-  const swaggerDocument = YAML.load('./swagger.yaml');
+  const swaggerDocument = yamljs.load('./swagger.yaml');
 
   app.use(cors());
   app.use(morgan("dev"));
@@ -30,7 +33,7 @@ module.exports = (express, bodyParser, morgan, cors, path, defaultRoute, friendR
   app.use("/registration", registrationRoute);
   app.use("/social", socialRoute);
   app.use("/friend", friendRoute);
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  app.use('/api-docs', swagger.serve, swagger.setup(swaggerDocument));
 
   // ERROR HANDLING
   app.use((req, res, next) => {
