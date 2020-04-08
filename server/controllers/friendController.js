@@ -1,66 +1,46 @@
-module.exports = (db, logger) => {
-  function searchUsers(req, res) {    
+module.exports = (db, friendHelper) => {
+  const { log, errorHandler } = friendHelper
+  const filename = __filename.slice(__dirname.length + 1);
+
+  const { searchUsersResponse, updateFollowResponse } = friendHelper
+
+  function searchUsers(req, res) {
     try {
       const { filter, userId } = JSON.parse(req.params.data);
-      
-      db.getUsers(
-        users => {
-          if(users) 
-            res.status(201).json(users);
-          else
-            res.status(401).json({
-              message: "Failure to Find Users"
-            });
-        },
-        filter,
-        userId
-      );
+      const { successSearchUsers, failSearchUsers } = searchUsersResponse
+
+      db.getUsers((users) => {
+        return users ? successSearchUsers(res, filename, { filter, userId }, users) :
+          failSearchUsers(res, filename, { filter, userId })
+      }, filter, userId);
     } catch (error) {
-      console.log(error);
-      
-      return res.status(500).json({
-        message: "Internal Server Error"
-      });
+      return errorHandler(res, filename, error, "searchUsers")
     }
   }
+
   function updateFollowFriend(req, res) {
     try {
       const { userId, friendId } = req.body;
+      const { successUpdateFollow, failUpdateFollow } = updateFollowResponse
       db.updateFollow(friendId, userId, data => {
-        if (data) {
-          db.getUser(friendId, user => {
-            return res.status(200).json(user);
-          });
-        } else {
-          return res.status(401).json({
-            message: "Failure to Follow Friend"
-          });
-        }
+        return data ? successUpdateFollow(res, filename, req.body, db, friendId) :
+          failUpdateFollow(res, filename, req.body)
       });
     } catch (error) {
-      return res.status(500).json({
-        message: "Internal Server Error"
-      });
+      return errorHandler(res, filename, error, "updateFollowFriend")
     }
   }
+
   function addFriend(req, res) {
     try {
       const { userId, friendId } = req.body;
+      const { successAddFriend, failAddFriend } = addFriendResponse
       db.addUser_Friend(userId, friendId, result => {
-        if (result) {
-          db.getUser(friendId, user => {
-            return res.status(200).json(user);
-          });
-        } else {
-          return res.status(401).json({
-            message: "Failure to Add Friend"
-          });
-        }
+        return result ? successAddFriend(res, filename, req.body, db, friendId) :
+          failAddFriend(res, filename, req.body)
       });
     } catch (error) {
-      return res.status(500).json({
-        message: "Internal Server Error"
-      });
+      return errorHandler(res, filename, error, "searchUsers")
     }
   }
   return {

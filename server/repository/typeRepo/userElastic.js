@@ -67,6 +67,7 @@ module.exports = (sql, elasticSql, nodeServices, bcrypt, passwordGeneretor) => {
                        left JOIN (select * From User_Friend where User_Friend.friendId = '${userId}') as friends ON friends.userId = Users._id
                      
                      where Users._id !='${userId}' 
+                     And active = '1'
                      ${filter ? `And (Users.name like '%${filter}%' OR Users.email like '%${filter}%')` : ""}`;
 
         sql.getMany(query, callback);

@@ -31,14 +31,14 @@ module.exports = async () => {
 
 
     //controllersHelpers
-    container.registerModule('defaultHelper', [], require('./controllerHelper/defaultControllerHelper'));
-    container.registerModule('friendHelper', [], require('./controllerHelper/friendControllerHelper'));
+    container.registerModule('defaultHelper', ["loggerService"], require('./controllerHelper/defaultControllerHelper'));
+    container.registerModule('friendHelper', ["loggerService"], require('./controllerHelper/friendControllerHelper'));
     container.registerModule('postsHelper', [], require('./controllerHelper/postsControllerHelper'));
     container.registerModule('registrationHelper', ["loggerService"], require('./controllerHelper/registrationControllerHelper'));
 
     //controllers
-    container.registerModule('defaultController', ["nodeServices", "loggerService"], require('./controllers/defaultController'));
-    container.registerModule('friendController', ["dbManager", "loggerService"], require('./controllers/friendController'));
+    container.registerModule('defaultController', ["nodeServices", "defaultHelper"], require('./controllers/defaultController'));
+    container.registerModule('friendController', ["dbManager", "friendHelper"], require('./controllers/friendController'));
     container.registerModule('postsController', ["dbManager", "loggerService"], require('./controllers/postsController'));
     container.registerModule('registrationController', ["dbManager", 'mailService', 'bcryptService', 'jwtService', "registrationHelper"], require('./controllers/registrationController'));
 

@@ -33,24 +33,28 @@ module.exports = (nodeServices) => {
       const { location, data } = info[Symbol.for("splat")][0];
       const locationString = location ? `Location - ${location}` : "";
       const dataString = data ? `data - ${JSON.stringify(data)}` : "";
-      return `${info.timestamp}| ${info.level}: ${info["message"]} 
+      const res = `${info.timestamp}| ${info.level}: ${info["message"]} 
                 \t${locationString}\t${dataString}`;
+      return res;
     }),
   );
 
   const errorLogger = createLogger({
+    level: 'error',
     handleExceptions: true,
     format: baseFormat,
     transports: [dailyRotateFileTransport("-err")]
   });
 
   const infoLogger = createLogger({
+    level: 'info',
     handleExceptions: true,
     format: baseFormat,
     transports: [dailyRotateFileTransport("-info")]
   });
 
   const dubugLogger = createLogger({
+    level: 'debug',
     handleExceptions: true,
     format: baseFormat,
     transports: [dailyRotateFileTransport("-dubug")]
@@ -59,7 +63,7 @@ module.exports = (nodeServices) => {
   function stream() {
     errorLogger.stream = {
       write: message => {
-        errorLogger.info(message);
+        errorLogger.error(message);
       }
     };
   }
@@ -69,11 +73,11 @@ module.exports = (nodeServices) => {
   }
 
   function error(message, obj) {
-    errorLogger.info(message, obj);
+    errorLogger.error(message, obj);
   }
 
   function debug(message, obj) {
-    dubugLogger.info(message, obj);
+    dubugLogger.debug(message, obj);
   }
 
   return { info, error, debug, stream };
