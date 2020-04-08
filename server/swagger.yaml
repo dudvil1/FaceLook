@@ -115,6 +115,8 @@ paths:
             $ref: "#/ResponseDefinitions/verifyAccountResponse"
         "404":
           description: User did not found
+        "409":
+          description: your account is already active
         "500":
           description: Internal Server Error
 
@@ -138,6 +140,10 @@ paths:
           description: an email send to your mail
           schema:
             $ref: "#/ResponseDefinitions/DefaultApiResponse"
+        "404":
+          description: User did not found
+        "401":
+          description: Failure to get Reset Code Password
         "500":
           description: Internal Server Error
 
@@ -161,6 +167,10 @@ paths:
           description: password change successfuly
           schema:
             $ref: "#/ResponseDefinitions/DefaultApiResponse"
+        "400":
+          description: password change successfuly
+        "401":
+          description: Auth failed
         "500":
           description: Internal Server Error
 

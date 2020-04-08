@@ -29,11 +29,18 @@ module.exports = async () => {
     //db manager
     container.registerModule('dbManager', ['userRepo', 'baseRepo', 'postRepo', 'userFriendRepo'], require('./repository/dbmaneger'));
 
+
+    //controllersHelpers
+    container.registerModule('defaultHelper', [], require('./controllerHelper/defaultControllerHelper'));
+    container.registerModule('friendHelper', [], require('./controllerHelper/friendControllerHelper'));
+    container.registerModule('postsHelper', [], require('./controllerHelper/postsControllerHelper'));
+    container.registerModule('registrationHelper', ["loggerService"], require('./controllerHelper/registrationControllerHelper'));
+
     //controllers
     container.registerModule('defaultController', ["nodeServices", "loggerService"], require('./controllers/defaultController'));
     container.registerModule('friendController', ["dbManager", "loggerService"], require('./controllers/friendController'));
     container.registerModule('postsController', ["dbManager", "loggerService"], require('./controllers/postsController'));
-    container.registerModule('registrationController', ["dbManager", 'mailService', 'bcryptService', 'jwtService', "loggerService"], require('./controllers/registrationController'));
+    container.registerModule('registrationController', ["dbManager", 'mailService', 'bcryptService', 'jwtService', "registrationHelper"], require('./controllers/registrationController'));
 
     //routes
     container.registerModule('defaultRoutes', ['nodeServices', 'defaultController'], require('./routes/default'));

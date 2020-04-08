@@ -1,6 +1,6 @@
 module.exports = (nodeServices) => {
   const { createLogger, format, transports } = nodeServices;
-  
+
   require("winston-daily-rotate-file");
   const fs = require("fs");
   const path = require("path");
@@ -30,12 +30,11 @@ module.exports = (nodeServices) => {
       format: "YYYY-MM-DD HH:mm:ss"
     }),
     format.printf(info => {
-      const { location, data, err } = info[Symbol.for("splat")][0];
+      const { location, data } = info[Symbol.for("splat")][0];
       const locationString = location ? `Location - ${location}` : "";
-      const errString = err ? `error - ${err}` : "";
-      const objString = data ? `data - ${JSON.stringify(data)}` : "";
-      return `${info.timestamp}| ${info.level}: ${JSON.stringify(info.messag)} 
-                \t${locationString}\t${objString}\n${errString}`;
+      const dataString = data ? `data - ${JSON.stringify(data)}` : "";
+      return `${info.timestamp}| ${info.level}: ${info["message"]} 
+                \t${locationString}\t${dataString}`;
     }),
   );
 
@@ -70,11 +69,11 @@ module.exports = (nodeServices) => {
   }
 
   function error(message, obj) {
-    errorLogger.error(message, obj);
+    errorLogger.info(message, obj);
   }
 
   function debug(message, obj) {
-    dubugLogger.debug(message, obj);
+    dubugLogger.info(message, obj);
   }
 
   return { info, error, debug, stream };
