@@ -15,7 +15,7 @@ module.exports = (logger) => {
     function errorHandler(res, filename, error, functionName) {
         let message = "Internal Server Error";
         let status = 500;
-        logError(`${functionName} ${message}`, error, `status ${status}`, filename);
+        logError(`${functionName} ${message}`, undefined, `status ${status} error - ${error}`, filename);
         return responseJson(res, message, status);
     }
     function responseJson(res, response, status) {
@@ -48,6 +48,20 @@ module.exports = (logger) => {
         return responseJson(res, { message }, status);
     }
 
+    function successAddFriend(res, filename, data, db, friendId) {
+        let status = 200;
+        logDebug(`addFriend`, data, `status ${status} message Get all Users`, filename);
+        db.getUser(friendId, user => {
+            return responseJson(res, user, status);
+        });
+    }
+    function failAddFriend(res, filename, data) {
+        let message = "Failure to Add Friend"
+        let status = 401;
+        logDebug(`addFriend`, data, `status ${status} message ${message}`, filename);
+        return responseJson(res, { message }, status);
+    }
+
     return {
         log: {
             logError,
@@ -61,6 +75,10 @@ module.exports = (logger) => {
         updateFollowResponse: {
             successUpdateFollow,
             failUpdateFollow
+        },
+        addFriendResponse:{
+            successAddFriend,
+            failAddFriend
         },
         errorHandler,
     }

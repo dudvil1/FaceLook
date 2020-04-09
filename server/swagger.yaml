@@ -268,7 +268,7 @@ paths:
         - application/json
       responses:
         "200":
-          description: Post-Like updated successfuly
+          description: Post-Like Added successfuly
           schema:
             $ref: "#/ResponseDefinitions/PostChangeResponse"
         "500":
@@ -298,7 +298,7 @@ paths:
         - application/json
       responses:
         "200":
-          description: Post-Like updated successfuly
+          description: Post-Like removed successfuly
           schema:
             $ref: "#/ResponseDefinitions/PostChangeResponse"
         "500":

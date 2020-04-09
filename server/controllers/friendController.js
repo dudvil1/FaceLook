@@ -1,8 +1,6 @@
 module.exports = (db, friendHelper) => {
-  const { log, errorHandler } = friendHelper
   const filename = __filename.slice(__dirname.length + 1);
-
-  const { searchUsersResponse, updateFollowResponse } = friendHelper
+  const { searchUsersResponse, updateFollowResponse, errorHandler } = friendHelper
 
   function searchUsers(req, res) {
     try {
@@ -13,6 +11,7 @@ module.exports = (db, friendHelper) => {
         return users ? successSearchUsers(res, filename, { filter, userId }, users) :
           failSearchUsers(res, filename, { filter, userId })
       }, filter, userId);
+
     } catch (error) {
       return errorHandler(res, filename, error, "searchUsers")
     }

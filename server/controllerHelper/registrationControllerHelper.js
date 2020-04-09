@@ -34,9 +34,9 @@ module.exports = (logger) => {
         return responseJson(res, { message }, status);
     }
     function errorHandler(res, filename, error, functionName) {
-        message = "Internal Server Error";
-        status = 500;
-        logError(`${functionName} ${message}`, error, `status ${status}`, filename);
+        let message = "Internal Server Error";
+        let status = 500;
+        logError(`${functionName} ${message}`, undefined, `status ${status} error - ${error}`, filename);
         return responseJson(res, message, status);
     }
     function logDebug(funcName, data, response, filename) {

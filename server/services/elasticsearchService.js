@@ -133,7 +133,8 @@ module.exports = (nodeServices) => {
         getMany,
         getOne,
         update,
-        add
+        add,
+        createScript
     }
 }
 
