@@ -1,4 +1,4 @@
-module.exports = (nodeServices) => {
+module.exports = (logger,nodeServices) => {
     const { elasticsearch } = nodeServices
 
     const client = new elasticsearch.Client({

@@ -14,8 +14,8 @@ module.exports = async () => {
     container.registerModule('sqlAsync', ['loggerService', 'nodeServices'], require('./services/sqlService'));
     const sql = await container.getModule('sqlAsync')
     container.registerModule('sql', [], sql);
-    container.registerModule('elasticsearchService', ['nodeServices'], require('./services/elasticsearchService'));
-    container.registerModule('socketService', [], require('./services/socketService'));
+    container.registerModule('elasticsearchService', ["loggerService", 'nodeServices'], require('./services/elasticsearchService'));
+    container.registerModule('socketService', ["loggerService"], require('./services/socketService'));
 
     //middlewares
     container.registerModule('authenticated', ['jwtService'], require('./middlewares/authenticated'));

@@ -30,11 +30,12 @@ module.exports = (nodeServices) => {
       format: "YYYY-MM-DD HH:mm:ss"
     }),
     format.printf(info => {
-      const { location, data } = info[Symbol.for("splat")][0];
+      const { location, data, err } = info[Symbol.for("splat")][0];
       const locationString = location ? `Location - ${location}` : "";
       const dataString = data ? `data - ${JSON.stringify(data)}` : "";
+      const errorString = err ? `error - ${err}` : "";
       const res = `${info.timestamp}| ${info.level}: ${info["message"]} 
-                \t${locationString}\t${dataString}`;
+                \t${locationString}\t${dataString}\t${errorString}`;
       return res;
     }),
   );
