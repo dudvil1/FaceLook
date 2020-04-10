@@ -22,7 +22,7 @@ module.exports = (nodeServices) => {
         subject: "verfiy account for FaceLook",
         html: `<p>please verify your account in http://localhost:4200/login/${mailOptions._id}</p>`
       }
-      sendMail(mailOptions, data.subject, data.html)
+      await sendMail(mailOptions, data.subject, data.html)
     }
   }
 
@@ -33,7 +33,7 @@ module.exports = (nodeServices) => {
         html: `<p>your Reset Code To Your password is ${mailOptions.resetCode}</p> 
              <p>please Change it in: http://localhost:4200/forgetpassword/${mailOptions._id}</p>`
       }
-      sendMail(mailOptions, data.subject, data.html)
+      await sendMail(mailOptions, data.subject, data.html)
     }
   }
 

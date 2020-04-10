@@ -1,4 +1,4 @@
-module.exports = (logger,nodeServices) => {
+module.exports = (logger, nodeServices) => {
     const { elasticsearch } = nodeServices
 
     const client = new elasticsearch.Client({
@@ -6,7 +6,9 @@ module.exports = (logger,nodeServices) => {
         apiVersion: '7.5'
     });
 
-    client.ping({ requestTimeout: 1000 }, (error) => { });
+    client.ping({ requestTimeout: 1000 }, (error) => {
+        error ? logError(logger, error) : logInfo(logger, "connected !!!")
+    });
     function validScriptValue(value) {
         return typeof (value) == "string" ? `'${value}'` : value
     }
@@ -74,35 +76,42 @@ module.exports = (logger,nodeServices) => {
                 }
                 return this
             }
-
         }
     }
     add = (query, callback) => {
         client.create(query, (err, response) => {
             if (err) {
+                logError(logger, err, "add", query)
                 callback(undefined)
-                return
             }
-            if (response.result == 'created') {
-                callback(response.result == 'created')
+            else {
+                logInfo(logger, `create Success`,'add',query)
+                callback(response)
             }
         })
     }
     update = (query, callback) => {
         client.update(query, (err, response) => {
             if (err) {
+                logError(logger, err, "update", query)
                 callback(undefined)
-                return
             }
-            callback(response)
+            else {
+                logInfo(logger, `update Success`,'update',query)
+                callback(response)
+            }
         })
     }
     getOne = (query, callback) => {
         client.get(query, (err, response) => {
-            if (response)
-                callback(response._source)
-            else
+            if (err) {
+                logError(logger, err, "getOne", query)
                 callback(undefined)
+            }
+            else {
+                logInfo(logger, `get one Success`,'getOne',query)
+                callback(response._source)
+            }
         });
     }
     getMany = (query, callback) => {
@@ -112,11 +121,13 @@ module.exports = (logger,nodeServices) => {
         }
         client.search(queryForMany, (err, response) => {
             if (err) {
-            }
-            if (response)
-                callback(response.hits.hits.map(hit => hit._source))
-            else
+                logError(logger, err, "getOne", query)
                 callback([])
+            }
+            else {
+                logInfo(logger, `get Many Success`,'getMany',query)
+                callback(response.hits.hits.map(hit => hit._source))
+            }
         });
     }
 
@@ -127,6 +138,15 @@ module.exports = (logger,nodeServices) => {
         add,
         createScript
     }
+}
+
+
+function logInfo(logger, message, funcName, query) {
+    logger.info("ElaticSerachService - " + message, { location: __filename, data: { function: funcName, query } });
+}
+
+function logError(logger, error, funcName, query) {
+    logger.error(`error in ElaticSerachService - ${error}`, { location: __filename, data: { function: funcName, query } });
 }
 
 

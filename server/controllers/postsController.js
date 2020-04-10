@@ -43,7 +43,7 @@ module.exports = (db, postsHelper) => {
       errorHandler(res, filename, error, "addLike")
     }
   }
-  async function removeLike(req, res) {
+  function removeLike(req, res) {
     try {
       db.removeLike(req.body, (post) => {
         return removeLikeResponse.successRemoveLikePost(res, filename, req.body, post)

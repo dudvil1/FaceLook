@@ -9,7 +9,7 @@ require('./containerConfig')().then(
     const io = require('socket.io')(server);
 
     server.listen(port, function () {
-      logger.info('kjhlkjlkj', { location: __filename, data: { port, function: 'server.listen' } });
+      logger.info(`Server Start at Port ${port}`, { location: __filename, data: { port, function: 'server.listen' } });
     });
 
     io.on("connection", socket => {

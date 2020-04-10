@@ -18,7 +18,6 @@ module.exports = (sql, elasticSql, nodeServices, bcrypt, passwordGeneretor) => {
             }
         });
     }
-
     function AddPostUserElastic(user, callback) {
         try {
             const newUser = new UserModule(user._id, user.name, user.email)
@@ -39,8 +38,9 @@ module.exports = (sql, elasticSql, nodeServices, bcrypt, passwordGeneretor) => {
     function verifyAccount(userId, callback) {
 
         const query = `UPDATE Users
-                    SET active = '1'
-                    WHERE _id = '${userId}'`;
+        SET active = '1'
+        WHERE _id = '${userId}'`;
+
         sql.update(query, callback);
     }
     function changePassword(user, newPassword, callback) {
@@ -48,40 +48,29 @@ module.exports = (sql, elasticSql, nodeServices, bcrypt, passwordGeneretor) => {
         let hash = bcrypt.createHashPassword(newPassword);
 
         const query = `UPDATE Users
-                         SET password = '${hash}' , resetPasswordCode = ''
-                         WHERE _id = '${user._id}'`;
+        SET password = '${hash}' , resetPasswordCode = ''
+        WHERE _id = '${user._id}'`;
 
         sql.update(query, callback);
     }
     function getUsers(callback, filter, userId) {
-        const query = `select *
-                       From Users
-    
-                       left JOIN (select * From User_Friend where User_Friend.friendId = '${userId}') as friends ON friends.userId = Users._id
-                     
-                     where Users._id !='${userId}' 
-                     And active = '1'
-                     ${filter ? `And (Users.name like '%${filter}%' OR Users.email like '%${filter}%')` : ""}`;
+        const query = `select * From Users 
+        left JOIN (select * From User_Friend where User_Friend.friendId = '${userId}') as friends 
+        ON friends.userId = Users._id where Users._id !='${userId}' And active = '1' 
+        ${filter ? `And (Users.name like '%${filter}%' OR Users.email like '%${filter}%')` : ""}`;
 
         sql.getMany(query, callback);
     }
-
     function getUser(userId, callback) {
-        const query = `select * From Users
-                       LEFT JOIN User_Friend ON User_Friend.userId =Users._id
-                       
-                       where Users._id ='${userId}'`;
+        const query = `select * From Users LEFT JOIN User_Friend ON User_Friend.userId =Users._id where Users._id ='${userId}'`;
 
         sql.getOne(query, callback);
     }
-
     function getResetCodePassword(user, callback) {
         user.resetCode = passwordGeneretor.generatePassword();
         user.resetCodeBcrypt = bcrypt.createHashPassword(user.resetCode);
 
-        const query = `UPDATE Users
-                         SET password = '' , resetPasswordCode = '${user.resetCodeBcrypt}'
-                         WHERE email = '${user.email}'`;
+        const query = `UPDATE Users SET password = '' , resetPasswordCode = '${user.resetCodeBcrypt}' WHERE email = '${user.email}'`;
         sql.update(query, (success) => {
             if (success) {
                 callback(user)
@@ -91,8 +80,6 @@ module.exports = (sql, elasticSql, nodeServices, bcrypt, passwordGeneretor) => {
             }
         });
     }
-
-
     return {
         verifyAccount,
         addUser,
