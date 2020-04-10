@@ -4,7 +4,6 @@ module.exports = (sql, elasticSql, nodeServices, bcrypt, passwordGeneretor) => {
     const { mongoose } = nodeServices
 
     function addUser(user, callback) {
-        console.log("dbManeger: addUser call()");
 
         user.password = bcrypt.createHashPassword(user.password);
         user._id = new mongoose.Types.ObjectId();
@@ -34,12 +33,10 @@ module.exports = (sql, elasticSql, nodeServices, bcrypt, passwordGeneretor) => {
             });
 
         } catch (error) {
-            console.log(error)
         }
 
     }
     function verifyAccount(userId, callback) {
-        console.log("dbManeger: verifyAccount call()");
 
         const query = `UPDATE Users
                     SET active = '1'
@@ -47,7 +44,6 @@ module.exports = (sql, elasticSql, nodeServices, bcrypt, passwordGeneretor) => {
         sql.update(query, callback);
     }
     function changePassword(user, newPassword, callback) {
-        console.log("dbManeger: changePassword call()");
 
         let hash = bcrypt.createHashPassword(newPassword);
 
@@ -58,9 +54,6 @@ module.exports = (sql, elasticSql, nodeServices, bcrypt, passwordGeneretor) => {
         sql.update(query, callback);
     }
     function getUsers(callback, filter, userId) {
-
-        console.log("dbmaneger: getUsers call()");
-
         const query = `select *
                        From Users
     
@@ -74,9 +67,6 @@ module.exports = (sql, elasticSql, nodeServices, bcrypt, passwordGeneretor) => {
     }
 
     function getUser(userId, callback) {
-
-        console.log("dbmaneger: getUser call()");
-
         const query = `select * From Users
                        LEFT JOIN User_Friend ON User_Friend.userId =Users._id
                        
@@ -86,7 +76,6 @@ module.exports = (sql, elasticSql, nodeServices, bcrypt, passwordGeneretor) => {
     }
 
     function getResetCodePassword(user, callback) {
-        console.log("dbManeger: getResetCodePassword call()");
         user.resetCode = passwordGeneretor.generatePassword();
         user.resetCodeBcrypt = bcrypt.createHashPassword(user.resetCode);
 

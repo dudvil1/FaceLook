@@ -41,7 +41,6 @@ module.exports = async (logger, nodeServices) => {
 
                 logger.info(query, { location: __filename, data: { function: 'queryOne' } });
             } catch (error) {
-                console.log(error)
             }
         }
 
@@ -53,7 +52,6 @@ module.exports = async (logger, nodeServices) => {
 
                 logger.info(query, { location: __filename, data: { function: 'queryMany' } });
             } catch (error) {
-                console.log(error)
             }
         }
 
@@ -66,7 +64,6 @@ module.exports = async (logger, nodeServices) => {
 
                 logger.info(query, { location: __filename, data: { function: 'queryChangeSuccess' } });
             } catch (error) {
-                console.log(error)
             }
         }
         return {

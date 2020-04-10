@@ -5,105 +5,104 @@ const loggerMock = require('../mocks/loggerServiceMock');
 const dbMock = require('../mocks/dbMock');
 
 describe('friend Controller Tests', () => {
-   let req;
-   const frndCtrl = friendController(dbMock, loggerMock);
-   function sendExpect(callbackStatus, callbackJson) {
-    return {
-        status: function (code) {
-            callbackStatus(code)
-            return {
-                json: function (data) {
-                    callbackJson(data)
+    let req;
+    const frndCtrl = friendController(dbMock, loggerMock);
+    function sendExpect(callbackStatus, callbackJson) {
+        return {
+            status: function (code) {
+                callbackStatus(code)
+                return {
+                    json: function (data) {
+                        callbackJson(data)
+                    }
                 }
             }
         }
-    }
-};
-  beforeEach(function() {
-    req = {
-        body: {
-            userId: 1,
-            friendId: 3,
-        },
-        params: {
-            data:`{
+    };
+    beforeEach(function () {
+        req = {
+            body: {
+                userId: 1,
+                friendId: 3,
+            },
+            params: {
+                data: `{
                 "userId":"1",
                 "filter":"5"
             }`
-        }
-    };
-  });
-    
+            }
+        };
+    });
+
     it('test the searchUsers() with valid parameters', () => {
         callbackStatus = (code) => expect(code).to.equal(201)
-         callbackJson = (dsd) =>  console.log("dsdfsd");
-        frndCtrl.searchUsers(req,sendExpect(callbackStatus,callbackJson));
-    });  
+        frndCtrl.searchUsers(req, sendExpect(callbackStatus, callbackJson));
+    });
     it('test the searchUsers() with unvalid parameters', () => {
-        req.params.data = `{"userId":"8","filter":"12"}`; 
+        req.params.data = `{"userId":"8","filter":"12"}`;
         callbackStatus = (code) => expect(code).to.equal(401)
-        callbackJson = (data) =>   expect(data.message).to.equal('Failure to Find Users') 
-        frndCtrl.searchUsers(req,sendExpect(callbackStatus,callbackJson));
-    }); 
-     it('test the searchUsers() with unvalid request', () => {
+        callbackJson = (data) => expect(data.message).to.equal('Failure to Find Users')
+        frndCtrl.searchUsers(req, sendExpect(callbackStatus, callbackJson));
+    });
+    it('test the searchUsers() with unvalid request', () => {
         req = {};
         let res = {
-            json: function(err){
+            json: function (err) {
             },
-            status: function(responseStatus) {
+            status: function (responseStatus) {
                 assert.equal(responseStatus, 500);
-                return this; 
+                return this;
             }
         }
-        frndCtrl.searchUsers(req,res);
-    }); 
+        frndCtrl.searchUsers(req, res);
+    });
 
-   it('test the updateFollowFriend() with valid parameters', () => {
-       callbackStatus = (code) => expect(code).to.equal(200)
-       callbackJson = (data) =>   expect(data.id).to.equal(req.body.friendId) 
-       frndCtrl.updateFollowFriend(req,sendExpect(callbackStatus,callbackJson));
-    }); 
-   it('test the updateFollowFriend() with unvalid parameters', () => {
+    it('test the updateFollowFriend() with valid parameters', () => {
+        callbackStatus = (code) => expect(code).to.equal(200)
+        callbackJson = (data) => expect(data.id).to.equal(req.body.friendId)
+        frndCtrl.updateFollowFriend(req, sendExpect(callbackStatus, callbackJson));
+    });
+    it('test the updateFollowFriend() with unvalid parameters', () => {
         req.body.userId = 7;
         callbackStatus = (code) => expect(code).to.equal(401)
-        callbackJson = (data) =>   expect(data.message).to.equal('Failure to Follow Friend') 
-        frndCtrl.updateFollowFriend(req,sendExpect(callbackStatus,callbackJson));
-    });  
-   it('test the updateFollowFriend() with unvalid request', () => {
+        callbackJson = (data) => expect(data.message).to.equal('Failure to Follow Friend')
+        frndCtrl.updateFollowFriend(req, sendExpect(callbackStatus, callbackJson));
+    });
+    it('test the updateFollowFriend() with unvalid request', () => {
         req = {};
         let res = {
-            json: function(err){
+            json: function (err) {
             },
-            status: function(responseStatus) {
+            status: function (responseStatus) {
                 assert.equal(responseStatus, 500);
-                return this; 
+                return this;
             }
         }
-        frndCtrl.updateFollowFriend(req,res);
-    });  
+        frndCtrl.updateFollowFriend(req, res);
+    });
 
 
     it('test the addFriend() with valid parameters', () => {
         callbackStatus = (code) => expect(code).to.equal(200)
-        callbackJson = (data) =>   expect(data.id).to.equal(req.body.friendId) 
-        frndCtrl.addFriend(req,sendExpect(callbackStatus,callbackJson));
+        callbackJson = (data) => expect(data.id).to.equal(req.body.friendId)
+        frndCtrl.addFriend(req, sendExpect(callbackStatus, callbackJson));
     });
     it('test the addFriend() with unvalid parameters', () => {
         req.body.userId = 7;
         callbackStatus = (code) => expect(code).to.equal(401)
-        callbackJson = (data) =>   expect(data.message).to.equal('Failure to Add Friend') 
-        frndCtrl.addFriend(req,sendExpect(callbackStatus,callbackJson));
-    }); 
+        callbackJson = (data) => expect(data.message).to.equal('Failure to Add Friend')
+        frndCtrl.addFriend(req, sendExpect(callbackStatus, callbackJson));
+    });
     it('test the addFriend() with unvalid request', () => {
         req = {};
         let res = {
-            json: function(err){
+            json: function (err) {
             },
-            status: function(responseStatus) {
+            status: function (responseStatus) {
                 assert.equal(responseStatus, 500);
-                return this; 
+                return this;
             }
         }
-        frndCtrl.addFriend(req,res);
-    });  
+        frndCtrl.addFriend(req, res);
+    });
 });

@@ -4,7 +4,6 @@ module.exports = (db, postsHelper) => {
   const { addPostResponse, getPostsResponse, filterPostsResponse, addLikeResponse, removeLikeResponse, errorHandler } = postsHelper
 
   function addPost(req, res) {
-    console.log("postController: addPost call()");
     req.body.user = req.user;
     req.body.img = req.image || 'anonym.png';
 

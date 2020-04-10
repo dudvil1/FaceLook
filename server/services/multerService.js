@@ -3,7 +3,6 @@ module.exports = (nodeServices) => {
 
   const store = multer.diskStorage({
     destination: function (req, file, cb) {
-      console.log("multer call()");
       cb(null, "public/uploads/images");
     },
     filename: function (req, file, cb) {

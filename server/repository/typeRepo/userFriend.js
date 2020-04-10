@@ -7,8 +7,6 @@ module.exports = (sql) => {
         sql.update( query, callback);
     }
     function addUser_Friend(friendId, userId, callback) {
-        console.log("dbManeger: User_Friend call()");
-
         const query = `INSERT INTO User_Friend VALUES
         ('${userId}', '${friendId}','0'),
         ('${friendId}', '${userId}','0')`;

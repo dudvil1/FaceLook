@@ -58,8 +58,6 @@ module.exports = (sql, nodeServices) => {
                 returnPostOnSuccess(success, query, sql, callback);
             });
         } catch (error) {
-            console.log(error);
-
         }
 
     }
@@ -89,7 +87,6 @@ module.exports = (sql, nodeServices) => {
 }
 
 function getQueryByFilters(filters) {
-    console.log(filters)
     let allFilters = [
         filters.fromFilter ? { "range": { "publishDate": { "gte": filters.fromFilter } } } : undefined,
         filters.toFilter ? { "range": { "publishDate": { "lte": filters.toFilter } } } : undefined,
@@ -102,7 +99,6 @@ function getQueryByFilters(filters) {
     allFilters = allFilters.filter(o => o != undefined)
     allArrayFilters = allArrayFilters.filter(o => o != undefined)
 
-    console.log(allFilters)
     return {
         "query": {
             "bool": {

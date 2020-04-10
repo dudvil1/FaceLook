@@ -6,15 +6,7 @@ module.exports = (nodeServices) => {
         apiVersion: '7.5'
     });
 
-    client.ping({
-        requestTimeout: 1000
-    }, function (error) {
-        if (error) {
-            console.trace('elasticsearch cluster is down!');
-        } else {
-            console.log('All is well');
-        }
-    });
+    client.ping({ requestTimeout: 1000 }, (error) => { });
     function validScriptValue(value) {
         return typeof (value) == "string" ? `'${value}'` : value
     }
@@ -120,7 +112,6 @@ module.exports = (nodeServices) => {
         }
         client.search(queryForMany, (err, response) => {
             if (err) {
-                console.log(err)
             }
             if (response)
                 callback(response.hits.hits.map(hit => hit._source))
