@@ -122,6 +122,7 @@ module.exports = (sql, elasticSql, nodeServices, bcrypt, passwordGeneretor, logg
     };
 }
 function logInfo(logger, query, funcName) {
+    query = typeof (query) == 'object' ? JSON.stringify(query) : query
     logger.info(`Success in UserRepo query ${query}`, { data: { function: funcName } });
 }
 

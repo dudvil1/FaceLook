@@ -1,15 +1,15 @@
 module.exports = (logger) => {
     function logDebug(funcName, data, response, filename) {
-        logger.debug(`default Controller: ${funcName} call()`
-            + response ? `- response: ${response}` : '', { location: filename, data: data });
+        logger.debug(`default Controller: ${funcName} call() ${response ? `- response: ${response}` : ''}`,
+            { location: filename, data: data });
     }
     function logInfo(funcName, data, response, filename) {
-        logger.info(`default Controller: ${funcName} call()`
-            + response ? `- response: ${response}` : '', { location: filename, data: data });
+        logger.info(`default Controller: ${funcName} call() ${response ? `- response: ${response}` : ''}`,
+            { location: filename, data: data });
     }
     function logError(funcName, data, response, filename) {
-        logger.error(`default Controller: ${funcName} call()`
-            + response ? `- response: ${response}` : '', { location: filename, data: data });
+        logger.error(`default Controller: ${funcName} call() ${response ? `- response: ${response}` : ''}`,
+            { location: filename, data: data });
     }
 
     function successHelp(res, filename) {

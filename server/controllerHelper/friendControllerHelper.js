@@ -1,15 +1,15 @@
 module.exports = (logger) => {
     function logDebug(funcName, data, response, filename) {
-        logger.debug(`friend Controller: ${funcName} call()`
-            + response ? `- response: ${response}` : '', { location: filename, data: data });
+        logger.debug(`friend Controller: ${funcName} call() ${response ? `- response: ${response}` : ''}`,
+            { location: filename, data: data });
     }
     function logInfo(funcName, data, response, filename) {
-        logger.info(`friend Controller: ${funcName} call()`
-            + response ? `- response: ${response}` : '', { location: filename, data: data });
+        logger.info(`friend Controller: ${funcName} call() ${response ? `- response: ${response}` : ''}`,
+            { location: filename, data: data });
     }
     function logError(funcName, data, response, filename) {
-        logger.error(`friend Controller: ${funcName} call()`
-            + response ? `- response: ${response}` : '', { location: filename, data: data });
+        logger.error(`friend Controller: ${funcName} call() ${response ? `- response: ${response}` : ''}`,
+            { location: filename, data: data });
     }
 
     function errorHandler(res, filename, error, functionName) {
@@ -36,7 +36,7 @@ module.exports = (logger) => {
 
     function successUpdateFollow(res, filename, data, db, friendId) {
         let status = 200;
-        logDebug(`updateFollowFriend`, data, `status ${status} message Get all Users`, filename);
+        logDebug(`updateFollowFriend`, data, `status ${status} message Update Follow Success`, filename);
         db.getUser(friendId, user => {
             return responseJson(res, user, status);
         });
@@ -50,7 +50,7 @@ module.exports = (logger) => {
 
     function successAddFriend(res, filename, data, db, friendId) {
         let status = 200;
-        logDebug(`addFriend`, data, `status ${status} message Get all Users`, filename);
+        logDebug(`addFriend`, data, `status ${status} message Add Friend Success`, filename);
         db.getUser(friendId, user => {
             return responseJson(res, user, status);
         });
@@ -76,7 +76,7 @@ module.exports = (logger) => {
             successUpdateFollow,
             failUpdateFollow
         },
-        addFriendResponse:{
+        addFriendResponse: {
             successAddFriend,
             failAddFriend
         },

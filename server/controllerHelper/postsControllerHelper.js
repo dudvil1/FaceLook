@@ -1,15 +1,15 @@
 module.exports = (logger) => {
     function logDebug(funcName, data, response, filename) {
-        logger.debug(`Posts Controller: ${funcName} call()`
-            + response ? `- response: ${response}` : '', { location: filename, data: data });
+        logger.debug(`posts Controller: ${funcName} call() ${response ? `- response: ${response}` : ''}`,
+            { location: filename, data: data });
     }
     function logInfo(funcName, data, response, filename) {
-        logger.info(`Posts Controller: ${funcName} call()`
-            + response ? `- response: ${response}` : '', { location: filename, data: data });
+        logger.info(`posts Controller: ${funcName} call() ${response ? `- response: ${response}` : ''}`,
+            { location: filename, data: data });
     }
     function logError(funcName, data, response, filename) {
-        logger.error(`Posts Controller: ${funcName} call()`
-            + response ? `- response: ${response}` : '', { location: filename, data: data });
+        logger.error(`posts Controller: ${funcName} call() ${response ? `- response: ${response}` : ''}`,
+            { location: filename, data: data });
     }
 
     function errorHandler(res, filename, error, functionName) {

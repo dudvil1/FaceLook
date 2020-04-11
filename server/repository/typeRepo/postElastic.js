@@ -106,6 +106,7 @@ module.exports = (sql, nodeServices, logger) => {
     }
 }
 function logInfo(logger, query, funcName) {
+    query = typeof (query) == 'object' ? JSON.stringify(query) : query
     logger.info(`Success in PostRepo query ${query}`, { data: { function: funcName } });
 }
 

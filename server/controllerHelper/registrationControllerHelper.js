@@ -40,16 +40,16 @@ module.exports = (logger) => {
         return responseJson(res, message, status);
     }
     function logDebug(funcName, data, response, filename) {
-        logger.debug(`registration Controller: ${funcName} call()`
-            + response ? `- response: ${response}` : '', { location: filename, data: data });
+        logger.debug(`registration Controller: ${funcName} call() ${response ? `- response: ${response}` : ''}`,
+            { location: filename, data: data });
     }
     function logInfo(funcName, data, response, filename) {
-        logger.info(`registration Controller: ${funcName} call()`
-            + response ? `- response: ${response}` : '', { location: filename, data: data });
+        logger.info(`registration Controller: ${funcName} call() ${response ? `- response: ${response}` : ''}`,
+            { location: filename, data: data });
     }
     function logError(funcName, data, response, filename) {
-        logger.error(`registration Controller: ${funcName} call()`
-            + response ? `- response: ${response}` : '', { location: filename, data: data });
+        logger.error(`registration Controller: ${funcName} call() ${response ? `- response: ${response}` : ''}`,
+            { location: filename, data: data });
     }
     function responseJson(res, response, status) {
         return res.status(status).json(response);
