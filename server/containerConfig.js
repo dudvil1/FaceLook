@@ -21,10 +21,10 @@ module.exports = async () => {
     container.registerModule('authenticated', ['jwtService'], require('./middlewares/authenticated'));
 
     //base Repositories
-    container.registerModule('baseRepo', ['sql'], require('./repository/typeRepo/base'));
-    container.registerModule('postRepo', ['elasticsearchService', 'nodeServices'], require('./repository/typeRepo/postElastic'));
-    container.registerModule('userRepo', ['sql', "elasticsearchService", 'nodeServices', 'bcryptService', 'passwordGeneretor'], require('./repository/typeRepo/userElastic'));
-    container.registerModule('userFriendRepo', ['sql'], require('./repository/typeRepo/userFriend'));
+    container.registerModule('baseRepo', ['sql', 'loggerService'], require('./repository/typeRepo/base'));
+    container.registerModule('postRepo', ['elasticsearchService', 'nodeServices', 'loggerService'], require('./repository/typeRepo/postElastic'));
+    container.registerModule('userRepo', ['sql', "elasticsearchService", 'nodeServices', 'bcryptService', 'passwordGeneretor', 'loggerService'], require('./repository/typeRepo/userElastic'));
+    container.registerModule('userFriendRepo', ['sql', 'loggerService'], require('./repository/typeRepo/userFriend'));
 
     //db manager
     container.registerModule('dbManager', ['userRepo', 'baseRepo', 'postRepo', 'userFriendRepo'], require('./repository/dbmaneger'));

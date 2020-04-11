@@ -1,51 +1,67 @@
 const PostModule = require('../../models/elasticsearch/post')
 
-module.exports = (sql, nodeServices) => {
+module.exports = (sql, nodeServices, logger) => {
     const { mongoose } = nodeServices
 
 
     function addPost(post, callback) {
-        post.post_id = new mongoose.Types.ObjectId();
-        post.date = formatDate(post.date);
+        try {
+            post.post_id = new mongoose.Types.ObjectId();
+            post.date = formatDate(post.date);
 
-        const newPost = new PostModule(post.user.name, post.user._id, post.post_id, post.title, post.date, post.locationLocationLat,
-            post.locationLocationLng, post.text, post.img, post.tags)
+            const newPost = new PostModule(post.user.name, post.user._id, post.post_id, post.title, post.date, post.locationLocationLat,
+                post.locationLocationLng, post.text, post.img, post.tags)
 
-        const query = {
-            index: 'posts',
-            routing: newPost.post_user.parent,
-            id: post.post_id.toString(),
-            body: newPost
+            const query = {
+                index: 'posts',
+                routing: newPost.post_user.parent,
+                id: post.post_id.toString(),
+                body: newPost
+            }
+            logInfo(logger, query, "addPost")
+            sql.add(query, (success) => {
+                callback(success ? newPost : undefined)
+            });
+        } catch (error) {
+            logError(logger, error, "getFilterPosts")
+            callback(undefined)
         }
-
-        sql.add(query, (success) => {
-            callback(success ? newPost : undefined)
-        });
     }
     function getFilterPosts(filters, callback) {
-        const body = getQueryByFilters(filters)
-        const query = getBaseQuery(body)
-        sql.getMany(query, (posts) => {
-            callback(posts ? posts : [])
-        });
+        try {
+            const body = getQueryByFilters(filters)
+            const query = getBaseQuery(body)
+            logInfo(logger, query, "getFilterPosts")
+            sql.getMany(query, (posts) => {
+                callback(posts ? posts : [])
+            });
+        } catch (error) {
+            logError(logger, error, "getFilterPosts")
+            callback([])
+        }
     }
     function getAllPosts(callback) {
-        const body = {
-            sort: [
-                { "publishDate": { "order": "asc" } },
-                "_score"
-            ],
-            query: {
-                exists: {
-                    field: 'postId'
+        try {
+            const body = {
+                sort: [
+                    { "publishDate": { "order": "asc" } },
+                    "_score"
+                ],
+                query: {
+                    exists: {
+                        field: 'postId'
+                    }
                 }
             }
+            const query = getBaseQuery(body)
+            logInfo(logger, query, "getAllPosts")
+            sql.getMany(query, (posts) => {
+                callback(posts ? posts : [])
+            });
+        } catch (error) {
+            logError(logger, error, "getAllPosts")
+            callback([])
         }
-        const query = getBaseQuery(body)
-
-        sql.getMany(query, (posts) => {
-            callback(posts ? posts : [])
-        });
     }
     function addLike(data, callback) {
         try {
@@ -54,10 +70,13 @@ module.exports = (sql, nodeServices) => {
                     .scriptIncrement('likes.amount', { amount: 1 }).script
             }
             const query = getBaseQuery(body, data.post.postId, '_doc')
+            logInfo(logger, query, "addLike")
             sql.update(query, (success) => {
                 returnPostOnSuccess(success, query, sql, callback);
             });
         } catch (error) {
+            logError(logger, error, "addLike")
+            callback(undefined)
         }
 
     }
@@ -68,11 +87,12 @@ module.exports = (sql, nodeServices) => {
                     .scriptDecrement('likes.amount', { amount: 1 }).script
             }
             const query = getBaseQuery(body, data.post.postId, '_doc')
-
+            logInfo(logger, query, "removeLike")
             sql.update(query, (success) => {
                 returnPostOnSuccess(success, query, sql, callback);
             });
         } catch (error) {
+            logError(logger, error, "removeLike")
             callback(undefined)
         }
 
@@ -84,6 +104,13 @@ module.exports = (sql, nodeServices) => {
         addLike,
         removeLike
     }
+}
+function logInfo(logger, query, funcName) {
+    logger.info(`Success in PostRepo query ${query}`, { data: { function: funcName } });
+}
+
+function logError(logger, error, funcName) {
+    logger.error(`Error in PostRepo`, { err: error, data: { function: funcName } });
 }
 
 function getQueryByFilters(filters) {
@@ -126,7 +153,6 @@ function addTagsQuery(filters) {
 
     return query
 }
-
 function getBaseQuery(body, id = undefined, doc = undefined) {
     return {
         index: 'posts',
@@ -135,7 +161,6 @@ function getBaseQuery(body, id = undefined, doc = undefined) {
         body: body
     }
 }
-
 function returnPostOnSuccess(success, query, sql, callback) {
     if (success) {
         query.body = undefined;
@@ -147,8 +172,6 @@ function returnPostOnSuccess(success, query, sql, callback) {
         callback(undefined);
     }
 }
-
-///private methods
 function formatDate(date) {
     var d = new Date(date)
     var tzoffset = (d).getTimezoneOffset() * 60000; //offset in milliseconds
