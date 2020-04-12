@@ -9,6 +9,7 @@ import { FormsModule } from "@angular/forms";
 import { RegistrationApiMockService } from '../../test/services/registrationApiMock';
 import { NavigatorMockService } from 'src/app/common/test/service/navigatorMockService';
 import { ToastrMockservice } from 'src/app/common/test/service/toastrMockService';
+import { of, throwError } from 'rxjs';
 
 describe("RegisterComponent", () => {
   let component: RegisterComponent;
@@ -53,7 +54,7 @@ describe("RegisterComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("should create", () => {
+  it("ngOnInit() should call resetData()", () => {
     const spyUserService = jasmine.createSpyObj("UserService", ["resetData"]);
 
     component = new RegisterComponent(
@@ -66,15 +67,39 @@ describe("RegisterComponent", () => {
     component.ngOnInit();
 
     expect(spyUserService.resetData.calls.count()).toBe(1, "resetData() from UserService Should be call once");
+    expect(userService.userData).toEqual({});
+  });
+
+  it("register() should call api.register()", () => {
+    const reqBody = userService.userData
+    const spy = spyOn(RegistrationApiService, 'register').withArgs(reqBody).and.returnValue(of())
+    component.register();
+
+    expect(spy).toHaveBeenCalled()
+  });
+
+  it("register() - on api.register() success should call", () => {
+    const spyToastrService = spyOn(toastrService, 'success')
+    component.register();
+
+    expect(spyToastrService).toHaveBeenCalled()
+  });
+
+  it("register() - on api.register() error should call", () => {
+    const spyApiService = jasmine.createSpyObj("registrationApiService", ["register"]);
+    const errorObservable = throwError({ error: { message: "err" } })
+    spyApiService.register.and.returnValue(errorObservable)
 
     component = new RegisterComponent(
       navigatorService,
-      RegistrationApiService,
+      spyApiService,
       userService,
       toastrService
     );
 
-    component.ngOnInit();
-    expect(userService.userData).toEqual({});
+    const spyToastrService = spyOn(toastrService, 'error')
+    component.register();
+
+    expect(spyToastrService).toHaveBeenCalled()
   });
 });
