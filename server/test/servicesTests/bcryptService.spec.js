@@ -1,22 +1,24 @@
-const { assert, should, expect, sinon } = require('../baseTest');
+require('../../containerConfig')()
+  .then((container) => {
+    const { assert, should, expect, sinon } = require('../baseTest');
+    const nodeServices = container.getModule("nodeServices")
+    const bcryptService = require('../../services/bcryptService');
 
-const bcryptService = require('../../services/bcryptService');
-const bcryptjs = require('bcryptjs');
+    describe('bcryptService Tests', function () {
+      const bcrypt = bcryptService(nodeServices);
+      let Password = '1234';
+      let crptPassword = bcrypt.createHashPassword(Password);
 
-describe('bcryptService Tests', function() {
-    const bcrypt = bcryptService(bcryptjs);
-    let Password = '1234';
-    let crptPassword = bcrypt.createHashPassword(Password);
+      it('test the createHashPassword() create new hash password to the input password', function () {
+        expect(crptPassword).to.not.be.equal(Password);
+      })
 
-    it('test the createHashPassword() create new hash password to the input password',function(){
-      expect(crptPassword).to.not.be.equal(Password);
-    })
-
-    it('test the checkPassword() check if return true when its compere and false when its not', function() {
-       bcrypt.checkPassword(Password,crptPassword).should.be.true;
-       bcrypt.checkPassword('987',crptPassword).should.be.false;
-    })
-    it('test onInit bycrptSevice shoud have hashKey',function(){
-     //how to check it??? 
-    })
-});
+      it('test the checkPassword() check if return true when its compere and false when its not', function () {
+        bcrypt.checkPassword(Password, crptPassword).should.be.true;
+        bcrypt.checkPassword('987', crptPassword).should.be.false;
+      })
+      it('test onInit bycrptSevice shoud have hashKey', function () {
+        //how to check it??? 
+      })
+    });
+  });

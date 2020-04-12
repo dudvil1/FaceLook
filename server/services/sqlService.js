@@ -8,7 +8,9 @@ module.exports = async (logger, nodeServices) => {
         password: process.env.SQL_PASSWORD,
         server: process.env.SQL_SERVER,
         database: 'FaceLook',
-        port: 1433
+        options: {
+            enableArithAbort: true
+        }
     }
 
     try {
@@ -82,6 +84,7 @@ module.exports = async (logger, nodeServices) => {
             getMany
         }
     } catch (err) {
+        console.log(err)
         logger.error(err, { location: __filename, data: {} });
     }
 };

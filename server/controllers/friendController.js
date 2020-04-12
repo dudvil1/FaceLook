@@ -1,6 +1,6 @@
 module.exports = (db, friendHelper) => {
   const filename = __filename.slice(__dirname.length + 1);
-  const { searchUsersResponse, updateFollowResponse, errorHandler } = friendHelper
+  const { searchUsersResponse, updateFollowResponse, addFriendResponse, errorHandler } = friendHelper
 
   function searchUsers(req, res) {
     try {

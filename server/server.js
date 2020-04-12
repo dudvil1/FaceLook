@@ -1,5 +1,5 @@
-require('./containerConfig')().then(
-  container => {
+require('./containerConfig')()
+  .then(container => {
     const { http } = container.get('nodeServices');
     const app = container.get('app');
     const logger = container.get('loggerService');
@@ -16,4 +16,4 @@ require('./containerConfig')().then(
       socketService(socket)
     })
   }
-)
+  )

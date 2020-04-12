@@ -3,10 +3,11 @@ const { assert, should, expect, sinon } = require("../baseTest");
 const friendController = require('../../controllers/friendController')
 const loggerMock = require('../mocks/loggerServiceMock');
 const dbMock = require('../mocks/dbMock');
+const friendHelper = require("../../controllerHelper/friendControllerHelper")(loggerMock);
 
 describe('friend Controller Tests', () => {
     let req;
-    const frndCtrl = friendController(dbMock, loggerMock);
+    const frndCtrl = friendController(dbMock, friendHelper);
     function sendExpect(callbackStatus, callbackJson) {
         return {
             status: function (code) {
@@ -36,6 +37,7 @@ describe('friend Controller Tests', () => {
 
     it('test the searchUsers() with valid parameters', () => {
         callbackStatus = (code) => expect(code).to.equal(201)
+        callbackJson = (json) => dbMock.getUsers((users) => expect(json).to.equal(users), undefined, 1)
         frndCtrl.searchUsers(req, sendExpect(callbackStatus, callbackJson));
     });
     it('test the searchUsers() with unvalid parameters', () => {
