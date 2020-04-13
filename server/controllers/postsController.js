@@ -9,7 +9,7 @@ module.exports = (db, postsHelper) => {
 
     try {
       db.addPost(req.body, postResult => {
-        return addPostResponse.addPostResponse(res, filename, req.body, post)
+        return addPostResponse.addPostResponse(res, filename, req.body, postResult)
       });
     } catch (error) {
       errorHandler(res, filename, error, "addPost")
