@@ -2,7 +2,7 @@ const { chai, assert, should, expect, sinon } = require("../baseTest");
 
 const server = require('../../server')
 
- describe.only("Test the Default routes", function() {
+ describe("Test the Default routes", function() {
   this.timeout(20000); 
   it("test the / route", (done) => {
      chai

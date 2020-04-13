@@ -3,6 +3,7 @@ const { assert, should, expect, sinon } = require("../baseTest");
 const defaultController = require("../../controllers/defaultController");
 const moment = require("moment");
 const logger = require("../mocks/loggerServiceMock");
+
 describe("default Controller Tests", function () {
   defCtrl = defaultController(moment, logger);
   
