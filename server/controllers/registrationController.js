@@ -47,7 +47,9 @@ module.exports = (db, mailer, bcrypt, jwt, registrationHelper) => {
                     accountAlreadyActive(res, req.body.email)
                 }
                 else if (user) {
-                    successVerifyAccount(res, req.body.email)
+                    db.verifyAccount(req.body.id, result => {
+                        successVerifyAccount(res, req.body.email)
+                    });
                 }
                 else {
                     accountNotFound(res, req.body.email)
@@ -79,7 +81,7 @@ module.exports = (db, mailer, bcrypt, jwt, registrationHelper) => {
             const { failCreateResetCode, successCreateResetCode } = getResetCodeResponse
             db.find("Users", "email", req.body.userMail, user => {
                 if (user) {
-                    db.getResetCodePassword(priveteUser, userResetCode => {
+                    db.getResetCodePassword(user, userResetCode => {
                         if (userResetCode) {
                             successCreateResetCode(res, filename, user, mailer, userResetCode)
                         } else {
