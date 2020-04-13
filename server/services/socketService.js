@@ -28,7 +28,7 @@ module.exports = (logger) => {
 }
 
 function logInfo(logger, funcName) {
-    logger.info(`${funcName} has been broadcast Successfuly!!`);
+    logger.info(`${funcName} has been broadcast Successfuly!!`, {});
 }
 
 function logError(logger, error, funcName) {
