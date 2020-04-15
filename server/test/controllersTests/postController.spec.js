@@ -5,6 +5,7 @@ const postController = require('../../controllers/postsController')
 const loggerMock = require('../mocks/loggerServiceMock');
 const dbMock = require('../mocks/dbMock');
 const postHelper = require("../../controllerHelper/postsControllerHelper")(loggerMock);
+const mockPosts = require('../mocks/models/posts')
 
 describe('posts Controller Tests', () => {
     let req
@@ -40,7 +41,8 @@ describe('posts Controller Tests', () => {
     it('test the addPost() catch error', (done) => {
         let dbMock = { addPost: function () { throw new Error() } }
         const pstCtrl = postController(dbMock, postHelper)
-        const { callbackJson, callbackStatus } = expectStatusAndJson(500, "Internal Server Error", done);
+        const { callbackJson, callbackStatus } = expectStatusAndJson(500,
+            "Internal Server Error", done);
         pstCtrl.addPost(req, sendExpect(callbackStatus, callbackJson));
     });
     it('test the getAllPosts() return success', (done) => {
@@ -53,8 +55,58 @@ describe('posts Controller Tests', () => {
     it('test the getAllPosts() catch error', (done) => {
         let dbMock = { getAllPosts: function () { throw new Error() } }
         const pstCtrl = postController(dbMock, postHelper)
-        const { callbackJson, callbackStatus } = expectStatusAndJson(500, "Internal Server Error", done);
+        const { callbackJson, callbackStatus } = expectStatusAndJson(500,
+            "Internal Server Error", done);
         pstCtrl.getAllPosts(req, sendExpect(callbackStatus, callbackJson));
+    });
+
+    it('test the getFilterPosts() return success', (done) => {
+        const filters = { username: 'guy' }
+        dbMock.getFilterPosts(filters, (posts) => {
+            const { callbackJson, callbackStatus } = expectStatusAndJson(201,
+                posts, done);
+            SetReqParams(req, { filters: JSON.stringify(filters) })
+            pstCtrl.getFilterPosts(req, sendExpect(callbackStatus, callbackJson));
+        })
+    });
+    it('test the getFilterPosts() catch error req has no params', (done) => {
+        const { callbackJson, callbackStatus } = expectStatusAndJson(500,
+            "Internal Server Error", done);
+        pstCtrl.getFilterPosts(req, sendExpect(callbackStatus, callbackJson));
+    });
+
+    it('test the addLike() return success', (done) => {
+        const post = mockPosts[0]
+        const { callbackJson, callbackStatus } = expectStatusAndJson(200,
+            { post: post, message: "Post-Like added successfuly" }, done);
+
+        SetReqBody(req, post.postId)
+        pstCtrl.addLike(req, sendExpect(callbackStatus, callbackJson));
+    });
+    it('test the addLike() catch error addLike() from db return error', (done) => {
+        let dbMock = { addLike: function () { throw new Error() } }
+        const pstCtrl = postController(dbMock, postHelper)
+
+        const { callbackJson, callbackStatus } = expectStatusAndJson(500,
+            "Internal Server Error", done);
+        pstCtrl.addLike(req, sendExpect(callbackStatus, callbackJson));
+    });
+
+    it('test the removeLike() return success', (done) => {
+        const post = mockPosts[0]
+        const { callbackJson, callbackStatus } = expectStatusAndJson(200,
+            { post: post, message: "Post-Like removed successfuly" }, done);
+
+        SetReqBody(req, post.postId)
+        pstCtrl.removeLike(req, sendExpect(callbackStatus, callbackJson));
+    });
+    it('test the removeLike() catch error removeLike() from db return error', (done) => {
+        let dbMock = { removeLike: function () { throw new Error() } }
+        const pstCtrl = postController(dbMock, postHelper)
+
+        const { callbackJson, callbackStatus } = expectStatusAndJson(500,
+            "Internal Server Error", done);
+        pstCtrl.removeLike(req, sendExpect(callbackStatus, callbackJson));
     });
 
 });

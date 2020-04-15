@@ -29,20 +29,20 @@ function getFilterPosts(filters, callback) {
 function getAllPosts(callback) {
     callback(posts)
 }
-function addLike(pst, callback) {
-    let postAddLike = posts.find(p => p.id === pst.postId)
+function addLike(postId, callback) {
+    let postAddLike = posts.find(p => p.postId == postId)
     if (postAddLike) {
-        postAddLike.likes.amount -= 1
-        callback('ok');
+        postAddLike.likes.amount += 1
+        callback(postAddLike);
     }
     else
         callback(undefined);
 }
-function removeLike(post, callback) {
-    let postRmvLike = posts.find(p => p.id === pst.postId)
+function removeLike(postId, callback) {
+    let postRmvLike = posts.find(p => p.postId === postId)
     if (postRmvLike) {
-        postRmvLike.likes.amount += 1
-        callback('ok');
+        postRmvLike.likes.amount -= 1
+        callback(postRmvLike);
     }
     else
         callback(undefined);
