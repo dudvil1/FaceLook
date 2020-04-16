@@ -27,21 +27,18 @@ describe('friend Controller Tests', () => {
                 friendId: 3,
             },
             params: {
-                data: `{
-                "userId":"1",
-                "filter":"5"
-            }`
+                data: `{ "userId":"1", "filter":{} }`
             }
         };
     });
 
     it('test the searchUsers() with valid parameters', () => {
         callbackStatus = (code) => expect(code).to.equal(201)
-        callbackJson = (json) => dbMock.getUsers((users) => expect(json).to.equal(users), undefined, 1)
+        callbackJson = (json) => dbMock.getUsers((users) => expect(json).to.eql(users), {}, 1)
         frndCtrl.searchUsers(req, sendExpect(callbackStatus, callbackJson));
     });
     it('test the searchUsers() with unvalid parameters', () => {
-        req.params.data = `{"userId":"8","filter":"12"}`;
+        req.params.data = `{"userId":"8","filter":null}`;
         callbackStatus = (code) => expect(code).to.equal(401)
         callbackJson = (data) => expect(data.message).to.equal('Failure to Find Users')
         frndCtrl.searchUsers(req, sendExpect(callbackStatus, callbackJson));
