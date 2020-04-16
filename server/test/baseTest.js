@@ -9,4 +9,4 @@ chai.use(chaiHttp);
 
 const sinon = require('sinon');
 
-module.exports = { chai, assert, should, expect, sinon,  } 
+module.exports = { chai, assert, should, expect, sinon } 
