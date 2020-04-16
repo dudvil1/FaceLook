@@ -21,6 +21,7 @@ module.exports = (db, mailer, bcrypt, jwt, registrationHelper) => {
             return errorResponse.errorHandler(res, filename, error, 'Register');
         }
     }
+    
     function login(req, res) {
         try {
             const { userIsNotActiveResponse, successLoginResponse, validateInCompleteResponse } = loginResponse

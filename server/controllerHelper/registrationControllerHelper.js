@@ -22,7 +22,7 @@ module.exports = (logger) => {
     }
     function successLoginResponse(res, filename, data, user, jwt) {
         let token = jwt.createToken(user);
-        let message = "Authorize successful";
+        let message = "Authorize successful"; 
         let status = 200;
         logDebug(`login`, data, `status ${status} message ${message}`, filename);
         return responseJson(res, { message: message, token: token }, status);
