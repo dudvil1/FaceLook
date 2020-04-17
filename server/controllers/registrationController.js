@@ -25,7 +25,7 @@ module.exports = (db, mailer, bcrypt, jwt, registrationHelper) => {
     function login(req, res) {
         try {
             const { userIsNotActiveResponse, successLoginResponse, validateInCompleteResponse } = loginResponse
-             
+
             db.find("Users", "email", req.body.email, user => {
                 if (user) {
                     if (!user.active)

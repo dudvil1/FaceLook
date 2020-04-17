@@ -123,6 +123,54 @@ describe('registration Controller Tests', () => {
         expectErrorHandler(done, registrationCtrl.verifyAccount, req, sendExpect);
     });
 
+    //verifyAccount
+    it('test the forgetPassword() return eroor 400 when user exist ,but resetCode is not valid', (done) => {
+        SetReqBody(req, { id: users[0]._id, user: { ResetCode: 122 } });
+
+        const { callbackJson, callbackStatus } = expectStatusAndJson(400,
+            { message: "Wrong ResetCode Or User" }, done);
+        registrationCtrl.forgetPassword(req, sendExpect(callbackStatus, callbackJson));
+    });
+    it('test the forgetPassword() return eroor 400 when user is not exist', (done) => {
+        SetReqBody(req, { id: 'not exist', user: { ResetCode: 122 } });
+        const { callbackJson, callbackStatus } = expectStatusAndJson(400,
+            { message: "Wrong ResetCode Or User" }, done);
+        registrationCtrl.forgetPassword(req, sendExpect(callbackStatus, callbackJson));
+    });
+    it('test the forgetPassword() return success 201 when user exist ,resetCode validate and db.changePassword() success', (done) => {
+        SetReqBody(req, { id: users[0]._id, user: { ResetCode: 122 } });
+        const dbMock = mockService(db, {
+            find: (table, key, value, callback) => callback({}),
+            changePassword: (user, password, callback) => callback(true)
+        })
+        const bcryptMock = mockService(bcrypt, { checkPassword: () => true })
+        const registrationCtrl = setNewRegisterController(dbMock, undefined, bcryptMock)
+
+        const { callbackJson, callbackStatus } = expectStatusAndJson(201,
+            { message: "password change successfuly" }, done);
+        registrationCtrl.forgetPassword(req, sendExpect(callbackStatus, callbackJson));
+    });
+
+    it('test the forgetPassword() return error 401 when user exist ,resetCode validate, but db.changePassword() fail', (done) => {
+        SetReqBody(req, { id: users[0]._id, user: { ResetCode: 122 } });
+        const dbMock = mockService(db, {
+            find: (table, key, value, callback) => callback({}),
+            changePassword: (user, password, callback) => callback(false)
+        })
+        const bcryptMock = mockService(bcrypt, { checkPassword: () => true })
+        const registrationCtrl = setNewRegisterController(dbMock, undefined, bcryptMock)
+
+        const { callbackJson, callbackStatus } = expectStatusAndJson(401,
+            { message: "Auth failed" }, done);
+        registrationCtrl.forgetPassword(req, sendExpect(callbackStatus, callbackJson));
+    });
+    it('test the forgetPassword() return error 500 when catch error', (done) => {
+        const dbMock = mockService(db, { find: (table, key, value, callback) => { throw {} } })
+        const registrationCtrl = setNewRegisterController(dbMock)
+
+        expectErrorHandler(done, registrationCtrl.forgetPassword, req, sendExpect);
+    });
+
 });
 
 function expectErrorHandler(done, action, req, sendExpect) {
