@@ -123,7 +123,7 @@ describe('registration Controller Tests', () => {
         expectErrorHandler(done, registrationCtrl.verifyAccount, req, sendExpect);
     });
 
-    //verifyAccount
+    //forgetPassword
     it('test the forgetPassword() return eroor 400 when user exist ,but resetCode is not valid', (done) => {
         SetReqBody(req, { id: users[0]._id, user: { ResetCode: 122 } });
 
@@ -150,7 +150,6 @@ describe('registration Controller Tests', () => {
             { message: "password change successfuly" }, done);
         registrationCtrl.forgetPassword(req, sendExpect(callbackStatus, callbackJson));
     });
-
     it('test the forgetPassword() return error 401 when user exist ,resetCode validate, but db.changePassword() fail', (done) => {
         SetReqBody(req, { id: users[0]._id, user: { ResetCode: 122 } });
         const dbMock = mockService(db, {
@@ -169,6 +168,37 @@ describe('registration Controller Tests', () => {
         const registrationCtrl = setNewRegisterController(dbMock)
 
         expectErrorHandler(done, registrationCtrl.forgetPassword, req, sendExpect);
+    });
+
+    //forgetPassword
+    it('test the getResetCodePassword() return eroor 404 when user is not exist', (done) => {
+        SetReqBody(req, { userMail: 'user not exist' });
+        const { callbackJson, callbackStatus } = expectStatusAndJson(404,
+            { message: "User did not found" }, done);
+        registrationCtrl.getResetCodePassword(req, sendExpect(callbackStatus, callbackJson));
+    });
+    it('test the getResetCodePassword() return success 201 when user exist,and get new reset code succeed', (done) => {
+        SetReqBody(req, { userMail: users[0].email });
+        const { callbackJson, callbackStatus } = expectStatusAndJson(201,
+            { message: "ok" }, done);
+        registrationCtrl.getResetCodePassword(req, sendExpect(callbackStatus, callbackJson));
+    });
+    it('test the getResetCodePassword() return error 401 when user is not exist,but get new reset code failed', (done) => {
+        SetReqBody(req, { userMail: users[0].email });
+
+        const dbMock = mockService(db, { getResetCodePassword: (user, callback) => callback(false) })
+        const registrationCtrl = setNewRegisterController(dbMock)
+
+
+        const { callbackJson, callbackStatus } = expectStatusAndJson(401,
+            { message: "Failure to get Reset Code Password" }, done);
+        registrationCtrl.getResetCodePassword(req, sendExpect(callbackStatus, callbackJson));
+    });
+    it('test the getResetCodePassword() return error 500 when catch error', (done) => {
+        const dbMock = mockService(db, { find: (table, key, value, callback) => { throw {} } })
+        const registrationCtrl = setNewRegisterController(dbMock)
+
+        expectErrorHandler(done, registrationCtrl.getResetCodePassword, req, sendExpect);
     });
 
 });

@@ -79,7 +79,7 @@ module.exports = (db, mailer, bcrypt, jwt, registrationHelper) => {
     }
     function getResetCodePassword(req, res) {
         try {
-            const { failCreateResetCode, successCreateResetCode } = getResetCodeResponse
+            const { failCreateResetCode, successCreateResetCode, accountNotFound } = getResetCodeResponse
             db.find("Users", "email", req.body.userMail, user => {
                 if (user) {
                     db.getResetCodePassword(user, userResetCode => {
