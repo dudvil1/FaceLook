@@ -30,7 +30,21 @@ describe('posts Controller Tests', () => {
         }
         registrationCtrl = RegisterController(dbMock, mailer, bcrypt, jwt, registrationHelper)
     });
+    it('test the register() return success when email not exist', (done) => {
+        const postMock = new PostModule('ggg', 10, 10, '', new Date(), 32, 32)
+        SetReqBody(req, postMock);
+        const { callbackJson, callbackStatus } = expectStatusAndJson(201,
+            { message: "User Created Successfully , Please check Your Mail To Verify Your Account" }, done);
+        pstCtrl.addPost(req, sendExpect(callbackStatus, callbackJson));
+    });
 
+    it('test the register() return error when email already exist exist', (done) => {
+        let dbMock = { addPost: function () { throw new Error() } }
+        const pstCtrl = postController(dbMock, postHelper)
+        const { callbackJson, callbackStatus } = expectStatusAndJson(500,
+            "Internal Server Error", done);
+        pstCtrl.addPost(req, sendExpect(callbackStatus, callbackJson));
+    });
 
 });
 

@@ -49,7 +49,7 @@ function getUsers(callback, filter, userId) {
         callback(undefined)
 }
 function getUser(userId, callback) {
-    callback(users.find(u => u.id === userId))
+    callback(users.find(u => u._id == userId))
 }
 function getResetCodePassword(user, callback) {
     if (users.find(u => u.id === user.id)) {
