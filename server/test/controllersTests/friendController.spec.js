@@ -58,7 +58,7 @@ describe('friend Controller Tests', () => {
 
     it('test the updateFollowFriend() with valid parameters', () => {
         callbackStatus = (code) => expect(code).to.equal(200)
-        callbackJson = (data) => expect(data.id).to.equal(req.body.friendId)
+        callbackJson = (data) => expect(data._id).to.equal(req.body.friendId)
         frndCtrl.updateFollowFriend(req, sendExpect(callbackStatus, callbackJson));
     });
     it('test the updateFollowFriend() with unvalid parameters', () => {
@@ -83,7 +83,7 @@ describe('friend Controller Tests', () => {
 
     it('test the addFriend() with valid parameters', () => {
         callbackStatus = (code) => expect(code).to.equal(200)
-        callbackJson = (data) => expect(data.id).to.equal(req.body.friendId)
+        callbackJson = (data) => expect(data._id).to.equal(req.body.friendId)
         frndCtrl.addFriend(req, sendExpect(callbackStatus, callbackJson));
     });
     it('test the addFriend() with unvalid parameters', () => {

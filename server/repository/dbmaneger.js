@@ -18,8 +18,8 @@ module.exports = (userRepo, baseRepo, postRepo, userFriendRepo) => {
   function getUsers(callback, filter, userId) {
     return userRepo.getUsers(callback, filter, userId)
   }
-  function getUser(callback, userId) {
-    return userRepo.getUser(callback, userId)
+  function getUser(userId, callback) {
+    return userRepo.getUser(userId, callback)
   }
   function addPost_Tag(post_tag, callback) {
     return postRepo.addPost_Tag(post_tag, callback)

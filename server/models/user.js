@@ -1,18 +1,11 @@
-const mongoose = require('mongoose');
-const userSchema = mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
-    email: {
-        type:String,
-        required:true,
-        unique:true,
-        match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/ 
-    },
-    password: {
-        type:String,
-        required:true
-    },
-    name:String,
-    user_type:String,
-    active:Boolean
-});
-module.exports = mongoose.model('User', userSchema);
+module.exports = class UserSql {
+    constructor(userId, name, password, role, email, active, resetPasswordCode) {
+        this._id = userId;
+        this.name = name;
+        this.password = password;
+        this.role = role;
+        this.email = email;
+        this.active = active;
+        this.resetPasswordCode = resetPasswordCode;
+    }
+}
