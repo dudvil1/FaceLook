@@ -5,7 +5,7 @@ module.exports = {
 function find(tableName, key, value, callback) {
     if (tableName.toLowerCase().includes('user')) {
         const user = users.find(u => u[key] == value)
-        user ? callback(user) : callback(undefined)
+        return user ? callback(user) : callback(undefined)
     }
     else
         callback(undefined)

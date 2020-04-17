@@ -21,7 +21,7 @@ module.exports = (db, mailer, bcrypt, jwt, registrationHelper) => {
             return errorResponse.errorHandler(res, filename, error, 'Register');
         }
     }
-    
+
     function login(req, res) {
         try {
             const { userIsNotActiveResponse, successLoginResponse, validateInCompleteResponse } = loginResponse
@@ -57,7 +57,7 @@ module.exports = (db, mailer, bcrypt, jwt, registrationHelper) => {
                 }
             });
         } catch (error) {
-            return errorHandler(req, res, error, 'verifyAccount');
+            return errorResponse.errorHandler(res, filename, error, 'verifyAccount');
         }
     }
     function forgetPassword(req, res) {
@@ -74,7 +74,7 @@ module.exports = (db, mailer, bcrypt, jwt, registrationHelper) => {
                 }
             });
         } catch (error) {
-            return errorHandler(req, res, error, 'forgetPassword');
+            return errorResponse.errorHandler(res, filename, error, 'forgetPassword');
         }
     }
     function getResetCodePassword(req, res) {
@@ -95,7 +95,7 @@ module.exports = (db, mailer, bcrypt, jwt, registrationHelper) => {
                 }
             });
         } catch (error) {
-            return errorHandler(req, res, error, 'getResetCodePassword');
+            return errorResponse.errorHandler(res, filename, error, 'getResetCodePassword');
         }
     }
     return {

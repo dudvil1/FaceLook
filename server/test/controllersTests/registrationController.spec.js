@@ -1,14 +1,16 @@
 const { assert, should, expect, sinon } = require("../baseTest");
 
+const users = require('../mocks/models/users')
+const UserModule = require('../../models/user')
 const RegisterController = require('../../controllers/registrationController')
 const loggerMock = require('../mocks/loggerServiceMock');
-const dbMock = require('../mocks/dbMock');
+const db = require('../mocks/dbMock');
 const jwt = require('../mocks/jwtServiceMock');
 const mailer = require('../mocks/mailerServiceMock');
 const bcrypt = require('../../services/bcryptService')({ bcryptjs: require('bcryptjs') });
 const registrationHelper = require("../../controllerHelper/registrationControllerHelper")(loggerMock);
 
-describe('posts Controller Tests', () => {
+describe('registration Controller Tests', () => {
     let req
     let registrationCtrl
     function sendExpect(callbackStatus, callbackJson) {
@@ -28,25 +30,122 @@ describe('posts Controller Tests', () => {
             body: {},
             params: {}
         }
-        registrationCtrl = RegisterController(dbMock, mailer, bcrypt, jwt, registrationHelper)
+        registrationCtrl = RegisterController(db, mailer, bcrypt, jwt, registrationHelper)
     });
+    //register
     it('test the register() return success when email not exist', (done) => {
-        const postMock = new PostModule('ggg', 10, 10, '', new Date(), 32, 32)
-        SetReqBody(req, postMock);
+        const userMock = new UserModule(106, 'new', '123', 'user', 'g@g.com', '1')
+        SetReqBody(req, userMock);
         const { callbackJson, callbackStatus } = expectStatusAndJson(201,
             { message: "User Created Successfully , Please check Your Mail To Verify Your Account" }, done);
-        pstCtrl.addPost(req, sendExpect(callbackStatus, callbackJson));
+        registrationCtrl.register(req, sendExpect(callbackStatus, callbackJson));
+    });
+    it('test the register() return error 409 when email exist', (done) => {
+        const userMock = { ...users[0] }
+        SetReqBody(req, userMock);
+        const { callbackJson, callbackStatus } = expectStatusAndJson(409,
+            { message: "user already exist,try again" }, done);
+        registrationCtrl.register(req, sendExpect(callbackStatus, callbackJson));
+    });
+    it('test the register() return error ', (done) => {
+        let dbMock = { addUser: function () { throw new Error() } }
+        const registrationCtrl = setNewRegisterController(dbMock)
+        expectErrorHandler(done, registrationCtrl.register, req, sendExpect);
     });
 
-    it('test the register() return error when email already exist exist', (done) => {
-        let dbMock = { addPost: function () { throw new Error() } }
-        const pstCtrl = postController(dbMock, postHelper)
-        const { callbackJson, callbackStatus } = expectStatusAndJson(500,
-            "Internal Server Error", done);
-        pstCtrl.addPost(req, sendExpect(callbackStatus, callbackJson));
+    //login
+    it('test the login() return success when email exist ,user is active and pasword is correct', (done) => {
+        const tokenMock = 'ssssss'
+        const userMock = { ...users[0] }
+        SetReqBody(req, userMock);
+
+        const bcryptMock = mockService(bcrypt, { checkPassword: () => true })
+        const jwtMock = mockService(jwt, { createToken: () => tokenMock })
+        const registrationCtrl = setNewRegisterController(undefined, undefined, bcryptMock, jwtMock)
+
+        const { callbackJson, callbackStatus } = expectStatusAndJson(200,
+            {
+                message: "Authorize successful",
+                token: tokenMock
+            }, done);
+        registrationCtrl.login(req, sendExpect(callbackStatus, callbackJson));
+    });
+    it('test the login() return error 409 when email exist ,but user is not active', (done) => {
+        const dbMock = mockService(db, { find: (table, key, value, callback) => { callback({ active: false }) } })
+
+        const registrationCtrl = setNewRegisterController(dbMock)
+
+        const { callbackJson, callbackStatus } = expectStatusAndJson(409,
+            { message: "You Didn`t Verify Your Account Yet,Please Check Your Mail Box And Verify It" }, done);
+        registrationCtrl.login(req, sendExpect(callbackStatus, callbackJson));
+    });
+    it('test the login() return error 401 when email not exist', (done) => {
+        //user not exist
+        const dbMock = mockService(db, { find: (table, key, value, callback) => { callback(undefined) } })
+        const registrationCtrl = setNewRegisterController(dbMock)
+
+        const { callbackJson, callbackStatus } = expectStatusAndJson(401,
+            { message: "Wrong Password Or Email" }, done);
+        registrationCtrl.login(req, sendExpect(callbackStatus, callbackJson));
+    });
+    it('test the login() return error 500 when catch error', (done) => {
+        const dbMock = mockService(db, { find: (table, key, value, callback) => { throw {} } })
+        const registrationCtrl = setNewRegisterController(dbMock)
+
+        expectErrorHandler(done, registrationCtrl.login, req, sendExpect);
+    });
+
+    //verifyAccount
+    it('test the verifyAccount() return eroor 409 when user is already active', (done) => {
+        SetReqBody(req, { id: users[0]._id });
+        const { callbackJson, callbackStatus } = expectStatusAndJson(409,
+            { message: "your account is already active" }, done);
+        registrationCtrl.verifyAccount(req, sendExpect(callbackStatus, callbackJson));
+    });
+    it('test the verifyAccount() return success 200 when user is not active', (done) => {
+        SetReqBody(req, { id: users[0]._id });
+        const dbMock = mockService(db, { find: (table, key, value, callback) => { callback({ ...users[0], active: false }) } })
+        const registrationCtrl = setNewRegisterController(dbMock)
+        const { callbackJson, callbackStatus } = expectStatusAndJson(200,
+            { message: "active account Successfully , you can log in now" }, done);
+        registrationCtrl.verifyAccount(req, sendExpect(callbackStatus, callbackJson));
+    });
+    it('test the verifyAccount() return eroor 404 when user is not exist', (done) => {
+        SetReqBody(req, { id: undefined });
+        const { callbackJson, callbackStatus } = expectStatusAndJson(404,
+            { message: "User did not found" }, done);
+        registrationCtrl.verifyAccount(req, sendExpect(callbackStatus, callbackJson));
+    });
+    it('test the verifyAccount() return error 500 when catch error', (done) => {
+        const dbMock = mockService(db, { find: (table, key, value, callback) => { throw {} } })
+        const registrationCtrl = setNewRegisterController(dbMock)
+
+        expectErrorHandler(done, registrationCtrl.verifyAccount, req, sendExpect);
     });
 
 });
+
+function expectErrorHandler(done, action, req, sendExpect) {
+    const { callbackJson, callbackStatus } = expectStatusAndJson(500, "Internal Server Error", done);
+    action(req, sendExpect(callbackStatus, callbackJson));
+}
+
+function mockService(service, overrideObject) {
+    return {
+        ...service,
+        ...overrideObject
+    };
+}
+
+function setNewRegisterController(dbMock, mailerMock, bcryptMock, jwtMock) {
+    return RegisterController(
+        dbMock ? dbMock : db,
+        mailerMock ? mailerMock : mailer,
+        bcryptMock ? bcryptMock : bcrypt,
+        jwtMock ? jwtMock : jwt,
+        registrationHelper
+    )
+}
 
 function expectStatusAndJson(status, json, done) {
     callbackStatus = (code) => expect(code).to.equal(status);

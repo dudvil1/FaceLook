@@ -8,7 +8,7 @@ module.exports = {
     getResetCodePassword
 }
 function addUser(user, callback) {
-    if (users.find(u => u.id === user.id))
+    if (users.find(u => u._id === user._id))
         callback(undefined);
     else {
         users.push(user);
@@ -16,7 +16,7 @@ function addUser(user, callback) {
     }
 }
 function verifyAccount(userId, callback) {
-    const user = users.find(u => u.id === user.id)
+    const user = users.find(u => u._id === userId)
     if (user) {
         user.active = true
         callback('ok');
@@ -25,7 +25,7 @@ function verifyAccount(userId, callback) {
         callback(undefined);
 }
 function changePassword(user, newPassword, callback) {
-    if (users.find(u => u.id === user.id)) {
+    if (users.find(u => u._id === user._id)) {
         user.password = newPassword
         callback('ok');
     }
@@ -35,7 +35,7 @@ function changePassword(user, newPassword, callback) {
 function getUsers(callback, filter, userId) {
     if (filter)
         callback(users.filter(u => {
-            if (u.id == userId)
+            if (u._id == userId)
                 return false
             const keys = Object.keys(filter)
             const values = Object.values(filter)
@@ -52,7 +52,7 @@ function getUser(userId, callback) {
     callback(users.find(u => u._id == userId))
 }
 function getResetCodePassword(user, callback) {
-    if (users.find(u => u.id === user.id)) {
+    if (users.find(u => u._id === user._id)) {
         user.password = ''
         user.resetPasswordCode = 'resetPasswordCode'
         callback('ok');
