@@ -1,0 +1,74 @@
+version: "3.7"
+
+services:
+  elasticsearch:
+    image: elasticsearch:7.5.1
+    volumes:
+      - elasticDatabase:/usr/share/elasticsearch/data
+    ports:
+      - "9300:9300"
+      - "9200:9200"
+    networks:
+      somenetwork:
+        ipv4_address: 172.18.0.2
+    environment:
+      discovery.type: single-node
+
+  kibana:
+    depends_on:
+       - elasticsearch
+    image: kibana:7.5.1
+    ports:
+      - "5601:5601"
+    networks:
+      - somenetwork
+
+  server:
+    depends_on:
+       - mysql
+       - elasticsearch
+       - kibana
+    image: server:v1
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - server-logs:/usr/src/app/logs
+      - server-images:/usr/src/app/public
+    networks:
+      - somenetwork
+
+  mysql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    volumes:
+      - sqlvolume:/var/opt/mssql
+    restart: always
+    networks:
+      somenetwork:
+        ipv4_address: 172.18.0.3
+    ports:
+      - "1431:1433"
+    environment:
+      ACCEPT_EULA : Y
+      SA_PASSWORD : guy123456MIC!!!
+
+  client:
+    depends_on:
+       - server
+    image: facelookfront:v1
+    ports:
+      - "4200:80"
+    networks:
+      - somenetwork
+
+volumes:
+  sqlvolume:
+  elasticDatabase:
+  server-logs:
+  server-images:
+
+networks:
+    somenetwork:
+        external:
+            name: somenetwork
+            
