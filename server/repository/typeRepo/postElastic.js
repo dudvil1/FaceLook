@@ -10,7 +10,7 @@ module.exports = (sql, nodeServices, logger) => {
             post.date = formatDate(post.date);
 
             const newPost = new PostModule(post.user.name, post.user._id, post.post_id, post.title, post.date, post.locationLocationLat,
-                post.locationLocationLng, post.text, post.img, post.tags)
+                post.locationLocationLng, post.text, post.img, post.tags, post.imageTags)
 
             const query = {
                 index: 'posts',
@@ -118,14 +118,13 @@ function getQueryByFilters(filters) {
     let allFilters = [
         filters.fromFilter ? { "range": { "publishDate": { "gte": filters.fromFilter } } } : undefined,
         filters.toFilter ? { "range": { "publishDate": { "lte": filters.toFilter } } } : undefined,
-        (filters.userTags && Array.isArray(filters.userTags)) ? { "match": { "tags": filters.userTags[0] } } : (filters.userTags ? { "match": { "tags": filters.userTags } } : undefined),
-        (filters.imageTags && Array.isArray(filters.imageTags)) ? { "match": { "image.tags": filters.imageTags[0] } } : (filters.imageTags ? { "match": { "tags": filters.imageTags } } : undefined),
         filters.publisher ? { "has_parent": { "parent_type": 'user', "query": { "term": { "username": filters.publisher } } } } : undefined,
         (filters.location && filters.radiusFrom) ? { "geo_distance": { "distance": `${filters.radiusFrom}km`, "location": { "lat": filters.location.latitude, "lon": filters.location.longitude } } } : undefined
     ]
-    allArrayFilters = addTagsQuery(filters)
+
     allFilters = allFilters.filter(o => o != undefined)
-    allArrayFilters = allArrayFilters.filter(o => o != undefined)
+    allArrayFilters = addTagsQuery(filters)
+    allFilters = addTagQuery(filters, allFilters)
 
     return {
         "query": {
@@ -139,19 +138,33 @@ function getQueryByFilters(filters) {
 function addTagsQuery(filters) {
     let query = []
     if (filters.userTags && Array.isArray(filters.userTags)) {
-        query = query.concat(filters.userTags.map(tag => { return tag.length > 0 ? { "match": { "tags": tag } } : undefined }))
+        query = query.concat(filters.userTags
+            .filter(tag => tag.length > 0)
+            .map(tag => ({ "match": { "tags": tag } })))
     }
-    else if (filters.userTags && filters.userTags.length > 0) {
+    if (filters.imageTags && Array.isArray(filters.imageTags)) {
+        query = query.concat(filters.imageTags
+            .filter(tag => tag.length > 0)
+            .map(tag => ({ "match": { "image.tags": tag } })))
+    }
+    return query
+}
+function addTagQuery(filters, existQuery) {
+    let query = existQuery || []
+    if (filters.userTags && Array.isArray(filters.userTags)) {
+        if (filters.userTags.length > 0)
+            query.push({ "match": { "tags": filters.userTags[0] } })
+    }
+    else if (filters.userTags) {
         query.push({ "match": { "tags": filters.userTags } })
     }
-
     if (filters.imageTags && Array.isArray(filters.imageTags)) {
-        query = query.concat(filters.imageTags.map(tag => { return tag.length > 0 ? { "match": { "image.tags": tag } } : undefined }))
+        if (filters.imageTags.length > 0)
+            query.push({ "match": { "image.tags": filters.imageTags[0] } })
     }
-    else if (filters.imageTags && filters.imageTags.length > 0) {
+    else if (filters.imageTags) {
         query.push({ "match": { "image.tags": filters.imageTags } })
     }
-
     return query
 }
 function getBaseQuery(body, id = undefined, doc = undefined) {
