@@ -24,12 +24,12 @@ export class SharePostComponent implements OnInit {
     private location: LocationService,
     private navigateService: NavigatorService,
     private toastr: ToastrService,
-    private socket:SocketService
+    private socket: SocketService
   ) {
-    
+
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   handleFileInput(file: FileList) {
     this.fileToUpload = file.item(0);
@@ -48,7 +48,8 @@ export class SharePostComponent implements OnInit {
     formData.append("image", this.fileToUpload);
     formData.append("title", this.shareModel.sharePostsModel.title);
     formData.append("text", this.shareModel.sharePostsModel.text);
-    formData.append("tags", this.shareModel.sharePostsModel.tags);
+    formData.append("tags", (<any>this.shareModel.sharePostsModel.tags));
+    formData.append("imageTags", (<any>this.shareModel.sharePostsModel.imageTags));
     formData.append("locationLocationLat", postLocation.lat.toString());
     formData.append("locationLocationLng", postLocation.lng.toString());
     formData.append("date", new Date().toString());

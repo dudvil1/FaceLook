@@ -10,7 +10,7 @@ module.exports = (sql, nodeServices, logger) => {
             post.date = formatDate(post.date);
 
             const newPost = new PostModule(post.user.name, post.user._id, post.post_id, post.title, post.date, post.locationLocationLat,
-                post.locationLocationLng, post.text, post.img, post.tags)
+                post.locationLocationLng, post.text, post.img, post.tags, post.imageTags)
 
             const query = {
                 index: 'posts',

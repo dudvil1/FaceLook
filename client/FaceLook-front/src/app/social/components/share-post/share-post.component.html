@@ -1,40 +1,42 @@
-  <app-header></app-header>
-  <div class="container-fluid" class="main_wrap">
+<app-header></app-header>
+<div class="container-fluid" class="main_wrap">
 
-    <div *ngIf="!postCreated" class="login-form">
-      <form #imageForm="ngForm" method="POST" (ngSubmit)="(imageForm.form.valid)" enctype="multipart/form-data">
-        <!-- img preview -->
-        <h2 class="text-center">Share a post</h2>
+  <div *ngIf="!postCreated" class="login-form">
+    <form #imageForm="ngForm" method="POST" (ngSubmit)="(imageForm.form.valid)" enctype="multipart/form-data">
+      <!-- img preview -->
+      <h2 class="text-center">Share a post</h2>
 
-        <div class="user_img_wrap">
-          <img class="user_img" [src]="imageUrl?imageUrl:'../assets/img/anonym.png'" alt="Tempo User Image" />
-        </div>
-        <div class="form-group">
-          <input [(ngModel)]="this.shareModel.sharePostsModel.title" #title="ngModel" name="postTitle"
-            class="form-control" placeholder="Title" required />
-        </div>
-        <div class="form-group">
-          <textarea rows="5" [(ngModel)]="this.shareModel.sharePostsModel.text" #text="ngModel" name="postText" class="form-control"
-            placeholder="text here please" required></textarea>
-        </div>
-        <div class="form-group">
-          <!-- <img [src]="imageUrl" style="width:250px;height:200px" /> -->
-          <input type="file" #Image accept="image/*" (change)="handleFileInput($event.target.files)" />
-        </div>
-        <div class="form-group">
-          <input [(ngModel)]="this.shareModel.sharePostsModel.tags" #text="ngModel" name="postTags" class="form-control"
-            placeholder="tags for your posts" />
-        </div>
-        <button type="submit" class="btn-large btn-submit" [disabled]="!imageForm.valid"
-          (click)="createPost()">
-          share
-        </button>
-      </form>
-    </div>
-
-    <div *ngIf="postCreated" class="login-form">
-      SUCCESS creating a post. 
-      <br />
-      You are redirected in 2 seconds to the Posts page.
-    </div>
+      <div class="user_img_wrap">
+        <img class="user_img" [src]="imageUrl?imageUrl:'../assets/img/anonym.png'" alt="Tempo User Image" />
+      </div>
+      <div class="form-group" *ngIf="this.fileToUpload">
+        <app-tags-input [placeholder]="'image tags'" [tags]='this.shareModel.sharePostsModel.imageTags'>
+        </app-tags-input>
+      </div>
+      <div class=" form-group">
+        <input [(ngModel)]="this.shareModel.sharePostsModel.title" #title="ngModel" name="postTitle"
+          class="form-control" placeholder="Title" required />
+      </div>
+      <div class="form-group">
+        <textarea rows="5" [(ngModel)]="this.shareModel.sharePostsModel.text" #text="ngModel" name="postText"
+          class="form-control" placeholder="text here please" required></textarea>
+      </div>
+      <div class="form-group">
+        <!-- <img [src]="imageUrl" style="width:250px;height:200px" /> -->
+        <input type="file" #Image accept="image/*" (change)="handleFileInput($event.target.files)" />
+      </div>
+      <div class="form-group">
+        <app-tags-input [tags]='this.shareModel.sharePostsModel.tags'></app-tags-input>
+      </div>
+      <button type="submit" class="btn-large btn-submit" [disabled]="!imageForm.valid" (click)="createPost()">
+        share
+      </button>
+    </form>
   </div>
+
+  <div *ngIf="postCreated" class="login-form">
+    SUCCESS creating a post.
+    <br />
+    You are redirected in 2 seconds to the Posts page.
+  </div>
+</div>
