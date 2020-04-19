@@ -1,7 +1,6 @@
 .editor-tag {
     cursor: text;
-    font-size: 16px;
-    padding: 10px 0px 10px 10px;
+    padding: 5px 0px 5px 10px;
     border-radius: 5px;
     background: white;
     border: 1px #ccc solid;
@@ -10,7 +9,6 @@
     line-height: 20px;
     border-radius: 14px;
     height: 20px;
-    font-size: 14px;
     display: inline-block;
     background: greenyellow;
     padding-left: 5px;

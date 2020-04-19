@@ -1,6 +1,6 @@
 <div class="login-form">
 
-  <form  #f="ngForm" (ngSubmit)="(f.form.valid)" autocomplete="on" action="" method="post">
+  <form #f="ngForm" (ngSubmit)="(f.form.valid)" autocomplete="on" action="" method="post">
 
     <h3 class="text-center">Posts filters</h3>
 
@@ -21,51 +21,49 @@
       </span>
     </div>
 
-    <hr/>
+    <hr />
 
     <div class="form-group">
       <span>
         Publisher:
       </span>
       <span>
-        <input [(ngModel)]="postsFilterService.postsData.publisher" #publisherFilter="ngModel" name="publisherFilter" type="text"
-        class="form-control" placeholder="enter publisher name" />
+        <input [(ngModel)]="postsFilterService.postsData.publisher" #publisherFilter="ngModel" name="publisherFilter"
+          type="text" class="form-control" placeholder="enter publisher name" />
       </span>
     </div>
 
-    <hr/>
+    <hr />
 
     <div class="form-group">
       <span>
         Radius from current location:
       </span>
       <span>
-        <input [(ngModel)]="postsFilterService.postsData.radiusFrom" #radiusFrom="ngModel" name="radiusFrom" type="number"
-        class="form-control" placeholder="enter radius" />
+        <input [(ngModel)]="postsFilterService.postsData.radiusFrom" #radiusFrom="ngModel" name="radiusFrom"
+          type="number" class="form-control" placeholder="enter radius" />
       </span>
     </div>
 
-    <hr/>
+    <hr />
 
     <div class="form-group">
       <span>
         Image tags
       </span>
       <span>
-        <input [(ngModel)]="postsFilterService.postsData.imageTags" #imageTags="ngModel" name="imageTags" type="text"
-        class="form-control" placeholder="enter image Tags"/>
+        <app-tags-input [tags]='postsFilterService.postsData.imageTags'></app-tags-input>
       </span>
     </div>
 
-    <hr/>
+    <hr />
 
     <div class="form-group">
       <span>
         User tags
       </span>
       <span>
-        <input [(ngModel)]="postsFilterService.postsData.userTags" #userTags="ngModel" name="userTags" type="text"
-        class="form-control" placeholder="enter user Tags"/>
+        <app-tags-input [tags]='postsFilterService.postsData.userTags'></app-tags-input>
       </span>
     </div>
 
@@ -77,4 +75,3 @@
 
   </form>
 </div>
-

@@ -33,7 +33,9 @@ export class TagsInputComponent implements OnInit {
   onKeyUp(event: KeyboardEvent): void {
     const inputValue: string = this.form.controls.tag.value;
     if (event.code === 'Comma' || event.code === 'Enter') {
-      this.addTag(inputValue.substring(0, inputValue.length - 1));
+      const tag = inputValue[inputValue.length - 1] == ',' ?
+       inputValue.substring(0, inputValue.length - 1):inputValue
+      this.addTag(tag);
       this.form.controls.tag.setValue('');
     }
   }
