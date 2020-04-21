@@ -62,8 +62,9 @@ module.exports = (db, mailer, bcrypt, jwt, registrationHelper) => {
     function forgetPassword(req, res) {
         try {
             const { failChangeFassword, successChangeFassword, validateResteCodeInComplete } = forgetPasswordResponse
+            const resetCode = req.body.user.resetCode
             db.find("Users", "_id", req.body.id, user => {
-                if (user && bcrypt.checkPassword(req.body.user.resetCode, user.resetPasswordCode)) {
+                if (user && bcrypt.checkPassword(resetCode, user.resetPasswordCode)) {
                     db.changePassword(user, req.body.user.newPassword, success => {
                         success ? successChangeFassword(res, filename, req.body.id) : failChangeFassword(res, filename, req.body.id)
                     });
