@@ -10,7 +10,7 @@ services:
       - "9200:9200"
     networks:
       somenetwork:
-        ipv4_address: 172.18.0.2
+        ipv4_address: 172.18.0.3
     environment:
       discovery.type: single-node
 
@@ -45,7 +45,7 @@ services:
     restart: always
     networks:
       somenetwork:
-        ipv4_address: 172.18.0.3
+        ipv4_address: 172.18.0.2
     ports:
       - "1431:1433"
     environment:
