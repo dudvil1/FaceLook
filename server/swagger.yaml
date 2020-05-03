@@ -230,7 +230,15 @@ paths:
       parameters:
         - in: path
           name: filters
-          description: filters
+          description: "JSON string from object - {
+            fromFilter:Date -  'all post that created from this date',
+            toFilter:Date -  'all post that created after this date',
+            publisher:string -  'name of publisher',
+            location:{} - 'current user location',
+            radiusFrom:number - 'max distance for post',
+            userTags:[] - 'all tags that post should have',
+            imageTags:[] - 'all tags that post image should have',
+            }"
           required: true
           schema:
             type: string
