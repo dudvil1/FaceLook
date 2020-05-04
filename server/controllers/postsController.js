@@ -1,76 +1,62 @@
 
-module.exports = (db, logger) => {
+module.exports = (db, postsHelper) => {
+  const filename = __filename.slice(__dirname.length + 1);
+  const { addPostResponse, getPostsResponse, filterPostsResponse, addLikeResponse, removeLikeResponse, errorHandler } = postsHelper
 
   function addPost(req, res) {
-    console.log("postController: addPost call()");
-     req.body.user = req.user;
-     req.body.img = req.image;
+    req.body.user = req.user;
+    req.body.img = req.image || 'anonym.png';
 
     try {
       db.addPost(req.body, postResult => {
-        db.addTag(postResult, tagResult => {
-          console.log("tagResult", tagResult)
-          db.addPost_Tag(tagResult, result => {
-
-        console.log(postResult)
-            return res.status(201).json({
-              message: "post Created Successfully"
-            });
-          });
-        });
+        return addPostResponse.successAddPost(res, filename, req.body, postResult)
       });
     } catch (error) {
-      return res.status(500).json({
-        message: "Internal Server Error"
-
-      });
+      errorHandler(res, filename, error, "addPost")
     }
   }
   function getAllPosts(req, res) {
-    console.log("postController: getAllPosts call()");
-
     try {
       db.getAllPosts(posts => {
-        res.status(201).json(posts);
+        return getPostsResponse.successGetAllPosts(res, filename, req.body, posts)
       });
     } catch (error) {
-      return res.status(500).json({
-        message: "Internal Server Error"
-      });
+      errorHandler(res, filename, error, "getAllPosts")
     }
   }
   function getFilterPosts(req, res) {
     try {
-      console.log("postController: getFilterPosts call()");
       const filters = JSON.parse(req.params.filters);
       db.getFilterPosts(filters, posts => {
-        res.status(201).json(posts);
+        filterPostsResponse.successFilterPosts(res, filename, { filters }, posts)
       });
     } catch (error) {
-      return res.status(500).json({
-        message: "Internal Server Error"
-      });
+      errorHandler(res, filename, error, "getFilterPosts")
     }
   }
-  async function updateLikes(req, res) {
+  function addLike(req, res) {
     try {
-      console.log("postController: updateLikes call()");
-
-      await db.updateLikes(req.body.post, (data) => {
-        res.status(200).json({
-          message: "Post-Like updated successfuly"
-        })
+      db.addLike(req.body, (post) => {
+        return addLikeResponse.successAddLikePost(res, filename, req.body, post)
       })
     } catch (error) {
-      return res.status(500).json({
-        message: "Internal Server Error"
+      errorHandler(res, filename, error, "addLike")
+    }
+  }
+  function removeLike(req, res) {
+    try {
+      db.removeLike(req.body, (post) => {
+        return removeLikeResponse.successRemoveLikePost(res, filename, req.body, post)
       })
+    } catch (error) {
+      errorHandler(res, filename, error, "removeLike")
     }
   }
   return {
     addPost,
     getAllPosts,
-    updateLikes,
-    getFilterPosts
+    addLike,
+    getFilterPosts,
+    removeLike
   }
 }

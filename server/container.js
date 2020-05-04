@@ -162,13 +162,10 @@ var Container = {
   
   
     debug: function(){
-      console.log('** Container Modules **');
       var moduleKeys = Object.keys(this.modules);
       moduleKeys.forEach(function(key){
         var reg = this.modules[key];
-        console.log(reg.name, 'instance: ', reg.instance !== undefined ? 'Yes':'No', 'factory:', reg.factory !== undefined ? 'Yes' : 'No');
       }, this);
-      console.log('** Container finished **');
     }
   };
   

@@ -1,73 +1,152 @@
-
-module.exports = (nodeServices) => {
+module.exports = (logger, nodeServices) => {
     const { elasticsearch } = nodeServices
+
     const client = new elasticsearch.Client({
-        host: 'localhost:9200',
+        host: `${process.env.SQL_SERVER_Elastic}:9200`,
         apiVersion: '7.5'
     });
 
-    client.ping({
-        requestTimeout: 1000
-    }, function (error) {
-        if (error) {
-            console.trace('elasticsearch cluster is down!');
-        } else {
-            console.log('All is well');
-        }
+    client.ping({ requestTimeout: 1000 }, (error) => {
+        error ? logError(logger, error) : logInfo(logger, "connected !!!")
     });
+    function validScriptValue(value) {
+        return typeof (value) == "string" ? `'${value}'` : value
+    }
+    function setScript(script, inline) {
+        script.inline += inline;
+    }
+    function setScriptWithParams(script, inline, value) {
+        script.inline += inline;
+        script.params = {
+            ...script.params,
+            ...value
+        };
+    }
+    function getObjKeys(obj) {
+        if (typeof (obj) != "string" && Object.keys(obj).length > 0)
+            return { keys: Object.keys(obj) }
+        return {}
+    }
+    createScript = () => {
+        return {
+            script: {
+                lang: "painless",
+                inline: "",
+                params: {
 
-
-    async function add(query, callback) {
-        try {
-            const isExist = await client.exists(query)
-            if (!isExist) {
-                const response = await client.create(query)
-                if (response.result == 'created') {
-                    console.log(response.result == 'created')
-                    callback(response.result == 'created')
                 }
+            },
+            scriptAppendArray: function (field, value) {
+                const { keys } = getObjKeys(value)
+                if (keys) {
+                    setScriptWithParams(this.script, `ctx._source.${field}.add(params.${keys[0]});`, value);
+                }
+                else {
+                    setScript(this.script, `ctx._source.${field}.add(${validScriptValue(value)});`)
+                }
+                return this
+            },
+            scriptRemove: function (field, value) {
+                const { keys } = getObjKeys(value)
+                if (keys) {
+                    setScriptWithParams(this.script, `ctx._source.${field}.remove(ctx._source.${field}.indexOf(params.${keys[0]}));`, value);
+                }
+                else {
+                    setScript(this.script, `ctx._source.${field}.remove(ctx._source.${field}.indexOf(${validScriptValue(value)}));`)
+                }
+                return this
+            },
+            scriptIncrement: function (field, value) {
+                const { keys } = getObjKeys(value)
+                if (keys) {
+                    setScriptWithParams(this.script, `ctx._source.${field} += params.${keys[0]};`, value);
+                }
+                else {
+                    setScript(this.script, `ctx._source.${field} += ${validScriptValue(value)};`)
+                }
+                return this
+            },
+            scriptDecrement: function (field, value) {
+                const { keys } = getObjKeys(value)
+                if (keys) {
+                    setScriptWithParams(this.script, `ctx._source.${field} -= params.${keys[0]};`, value);
+                }
+                else {
+                    setScript(this.script, `ctx._source.${field} -= ${validScriptValue(value)};`)
+                }
+                return this
+            }
+        }
+    }
+    add = (query, callback) => {
+        client.create(query, (err, response) => {
+            if (err) {
+                logError(logger, err, "add", query)
+                callback(undefined)
             }
             else {
-                callback(isExist)
+                logInfo(logger, `create Success`,'add',query)
+                callback(response)
             }
-        } catch (error) {
-            console.log(error.message)
-        }
+        })
     }
-
-    async function getOne(query, callback) {
-        try {
-            const response = await client.search(query);
-
-            const result = response.hits.hits.map(hit => hit._source)[0]
-            if (result)
-                callback(result)
-            else
+    update = (query, callback) => {
+        client.update(query, (err, response) => {
+            if (err) {
+                logError(logger, err, "update", query)
                 callback(undefined)
-
-        } catch (error) {
-            console.log(error.message)
-        }
+            }
+            else {
+                logInfo(logger, `update Success`,'update',query)
+                callback(response)
+            }
+        })
     }
-
-    async function getMany(query, callback) {
-        try {
-            const response = await client.search(query);
-            const result = response.hits.hits.map(hit => hit._source)
-            if (result)
-                callback(result)
-            else
+    getOne = (query, callback) => {
+        client.get(query, (err, response) => {
+            if (err) {
+                logError(logger, err, "getOne", query)
                 callback(undefined)
-        } catch (error) {
-            console.log(error.message)
+            }
+            else {
+                logInfo(logger, `get one Success`,'getOne',query)
+                callback(response._source)
+            }
+        });
+    }
+    getMany = (query, callback) => {
+        const queryForMany = {
+            ...query,
+            size: query.size || 10000
         }
+        client.search(queryForMany, (err, response) => {
+            if (err) {
+                logError(logger, err, "getOne", query)
+                callback([])
+            }
+            else {
+                logInfo(logger, `get Many Success`,'getMany',query)
+                callback(response.hits.hits.map(hit => hit._source))
+            }
+        });
     }
 
     return {
         getMany,
         getOne,
-        add
+        update,
+        add,
+        createScript
     }
+}
+
+
+function logInfo(logger, message, funcName, query) {
+    logger.info("ElaticSerachService - " + message, { location: __filename, data: { function: funcName, query } });
+}
+
+function logError(logger, error, funcName, query) {
+    logger.error(`error in ElaticSerachService - ${error}`, { location: __filename, data: { function: funcName, query } });
 }
 
 

@@ -2,7 +2,7 @@ const { assert, should, expect, sinon } = require("../baseTest");
 
 const passwordGen = require("../../services/passwordGeneretor");
 
-describe.only("PasswordGeneretor tests", () => {
+describe("PasswordGeneretor tests", () => {
     let password = passwordGen.generatePassword();
     it('check the password is long enoght', () => {
         expect(password).to.be.a('string');

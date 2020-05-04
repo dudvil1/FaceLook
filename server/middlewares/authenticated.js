@@ -1,7 +1,6 @@
 module.exports = (jwtService) => {
 
   ensureAuth = (req, res, next) => {
-    console.log("ensureAuth call()");
 
     if (!req.headers.authorization) {
       return res.status(403).send({ message: "Auth failed" });

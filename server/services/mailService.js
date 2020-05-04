@@ -1,4 +1,5 @@
-module.exports = (nodemailer) => {
+module.exports = (nodeServices) => {
+  const { nodemailer } = nodeServices;
 
   ///set transporter
   let transporter = nodemailer.createTransport({
@@ -21,7 +22,7 @@ module.exports = (nodemailer) => {
         subject: "verfiy account for FaceLook",
         html: `<p>please verify your account in http://localhost:4200/login/${mailOptions._id}</p>`
       }
-      sendMail(mailOptions, data.subject, data.html)
+      await sendMail(mailOptions, data.subject, data.html)
     }
   }
 
@@ -32,7 +33,7 @@ module.exports = (nodemailer) => {
         html: `<p>your Reset Code To Your password is ${mailOptions.resetCode}</p> 
              <p>please Change it in: http://localhost:4200/forgetpassword/${mailOptions._id}</p>`
       }
-      sendMail(mailOptions, data.subject, data.html)
+      await sendMail(mailOptions, data.subject, data.html)
     }
   }
 

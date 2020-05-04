@@ -1,16 +1,17 @@
-module.exports = (bcrypt) => {
-  const hashKey = Number(process.env.BCRYPT_HASH_KEY) || 10;
-  
-  function checkPassword(reqPassword, userPassword) {
-    console.log("bycrptService: checkPassword call()");
+module.exports = (nodeServices) => {
+  const { bcryptjs } = nodeServices
 
-    return bcrypt.compareSync(reqPassword, userPassword);
+  const hashKey = Number(process.env.BCRYPT_HASH_KEY) || 10;
+
+  function checkPassword(reqPassword, userPassword) {
+    if (reqPassword && userPassword)
+      return bcryptjs.compareSync(reqPassword, userPassword);
+    else
+      return false
   }
 
   function createHashPassword(password) {
-    console.log("bycrptService: createHashPassword call()");
-
-    return bcrypt.hashSync(password, hashKey);
+    return bcryptjs.hashSync(password, hashKey);
   }
 
   return {

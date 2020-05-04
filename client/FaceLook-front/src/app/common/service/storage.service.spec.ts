@@ -30,4 +30,12 @@ describe("StorageService", () => {
 
     expect(localStorage.getItem(environment.tokenKey)).toEqual(service.getToken());
   });
+
+  it("removeToken() should remove the token from local storage", () => {
+    const token = "fake Token";
+    localStorage.setItem(environment.tokenKey,token)
+
+    expect(service.getToken()).toEqual(token);
+    expect(service.removeToken()).toEqual(undefined);
+  });
 });

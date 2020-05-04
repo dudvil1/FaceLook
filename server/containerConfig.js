@@ -1,66 +1,65 @@
 const container = require('./container')
 require('dotenv').config()
 
-//node_modules services
-container.registerModule('http', [], require('http'), true);
-container.registerModule('express', [], require('express'), true);
-container.registerModule('bodyParser', [], require('body-parser'), true);
-container.registerModule('morgan', [], require('morgan'), true);
-container.registerModule('cors', [], require('cors'), true);
-container.registerModule('path', [], require('path'));
-container.registerModule('mongoose', [], require('mongoose'), true);
-container.registerModule('bcryptjs', [], require('bcryptjs'), true);
-container.registerModule('jwt', [], require('jwt-simple'), true);
-container.registerModule('moment', [], require('moment'), true);
-container.registerModule('nodemailer', [], require('nodemailer'), true);
-container.registerModule('multer', [], require('multer'), true);
-container.registerModule('swaggerUi', [], require('swagger-ui-express'), true);
-container.registerModule('YAML', [], require('yamljs'), true);
+const appModuleAsync = new Promise(function (resolve, reject) {
+    try {
+        container.registerModule('nodeServices', [], require('./nodeModuleContainer'));
+        //simple services
+        container.registerModule('bcryptService', ['nodeServices'], require('./services/bcryptService'));
+        container.registerModule('loggerService', ['nodeServices'], require('./services/loggerService'));
+        container.registerModule('jwtService', ['nodeServices'], require('./services/jwtService'));
+        container.registerModule('multerService', ['nodeServices'], require('./services/multerService'));
+        container.registerModule('mailService', ['nodeServices'], require('./services/mailService'));
+        container.registerModule('passwordGeneretor', [], require('./services/passwordGeneretor'));
+        container.registerModule('sqlAsync', ['loggerService', 'nodeServices'], require('./services/sqlService'));
+        // container.registerModule('sql', [], sql);
+        container.registerModule('elasticsearchService', ["loggerService", 'nodeServices'], require('./services/elasticsearchService'));
+        container.registerModule('socketService', ["loggerService"], require('./services/socketService'));
+
+        //middlewares
+        container.registerModule('authenticated', ['jwtService'], require('./middlewares/authenticated'));
+
+        container.getModule('sqlAsync').then(sql => {
+            container.registerModule('sql', [], sql);
+            //base Repositories
+            container.registerModule('baseRepo', ['sql', 'loggerService'], require('./repository/typeRepo/base'));
+            container.registerModule('postRepo', ['elasticsearchService', 'nodeServices', 'loggerService'], require('./repository/typeRepo/postElastic'));
+            container.registerModule('userRepo', ['sql', "elasticsearchService", 'nodeServices', 'bcryptService', 'passwordGeneretor', 'loggerService'], require('./repository/typeRepo/userElastic'));
+            container.registerModule('userFriendRepo', ['sql', 'loggerService'], require('./repository/typeRepo/userFriend'));
+
+            //db manager
+            container.registerModule('dbManager', ['userRepo', 'baseRepo', 'postRepo', 'userFriendRepo'], require('./repository/dbmaneger'));
 
 
-//config services
-container.registerModule('dbConfig', [], require('./repository/DbConnection'));
-container.registerModule('nodeServices', [], require('./nodeModuleContainer'));
+            //controllersHelpers
+            container.registerModule('defaultHelper', ["loggerService"], require('./controllerHelper/defaultControllerHelper'));
+            container.registerModule('friendHelper', ["loggerService"], require('./controllerHelper/friendControllerHelper'));
+            container.registerModule('postsHelper', ["loggerService"], require('./controllerHelper/postsControllerHelper'));
+            container.registerModule('registrationHelper', ["loggerService"], require('./controllerHelper/registrationControllerHelper'));
 
+            //controllers
+            container.registerModule('defaultController', ["nodeServices", "defaultHelper"], require('./controllers/defaultController'));
+            container.registerModule('friendController', ["dbManager", "friendHelper"], require('./controllers/friendController'));
+            container.registerModule('postsController', ["dbManager", "postsHelper"], require('./controllers/postsController'));
+            container.registerModule('registrationController', ["dbManager", 'mailService', 'bcryptService', 'jwtService', "registrationHelper"], require('./controllers/registrationController'));
 
-//simple services
-container.registerModule('bcrypt', ['bcryptjs'], require('./services/bcryptService'));
-container.registerModule('loggerService', ["nodeServices"], require('./services/loggerService'));
-container.registerModule('jwtService', ['jwt', 'moment'], require('./services/jwtService'));
-container.registerModule('multerService', ['multer'], require('./services/multerService'));
-container.registerModule('mailService', ['nodemailer'], require('./services/mailService'));
-container.registerModule('passwordGeneretor', [], require('./services/passwordGeneretor'));
-container.registerModule('sql', [], require('./services/sqlService'));
-container.registerModule('elasticsearchService', ["nodeServices"], require('./services/elasticsearchService'));
-container.registerModule('socketService', ['dbManager'], require('./services/socketService'));
+            //routes
+            container.registerModule('defaultRoutes', ['nodeServices', 'defaultController'], require('./routes/default'));
+            container.registerModule('friendRoutes', ['nodeServices', 'friendController', 'authenticated'], require('./routes/friend'));
+            container.registerModule('registrationtRoutes', ['nodeServices', 'registrationController'], require('./routes/registration'));
+            container.registerModule('socialRoutes', ['nodeServices', 'postsController', 'authenticated', 'multerService'], require('./routes/social'));
 
-//middlewares
-container.registerModule('authenticated', ['jwtService'], require('./middlewares/authenticated'));
+            //app
+            container.registerModule("app", ['nodeServices', 'defaultRoutes', 'friendRoutes', 'registrationtRoutes', 'socialRoutes', 'loggerService'], require('./app'));
 
-//base Repositories
-container.registerModule('baseRepo', ['sql', 'dbConfig'], require('./repository/typeRepo/base'));
-container.registerModule('postRepo', ['sql', 'dbConfig', 'mongoose'], require('./repository/typeRepo/post'));
-container.registerModule('tagRepo', ['sql', 'dbConfig', 'mongoose', 'baseRepo'], require('./repository/typeRepo/tag'));
-container.registerModule('userRepo', ['sql', 'dbConfig', 'mongoose', 'bcrypt', 'passwordGeneretor'], require('./repository/typeRepo/user'));
-container.registerModule('userFriendRepo', ['sql', 'dbConfig'], require('./repository/typeRepo/userFriend'));
+            resolve(container)
+        })
+    } catch (err) {
+        reject(err)
+    }
+})
 
-//db manager
-container.registerModule('dbManager', ['userRepo', 'baseRepo', 'tagRepo', 'postRepo', 'userFriendRepo'], require('./repository/dbmaneger'));
-
-//controllers
-container.registerModule('defaultController', ["moment", 'loggerService'], require('./controllers/defaultController'));
-container.registerModule('friendController', ["dbManager", 'loggerService'], require('./controllers/friendController'));
-container.registerModule('postsController', ["dbManager", 'loggerService'], require('./controllers/postsController'));
-container.registerModule('registrationController', ["dbManager", 'mailService', 'bcrypt', 'jwtService', 'loggerService'], require('./controllers/registrationController'));
-
-//routes
-container.registerModule('defaultRoutes', ['express', 'defaultController'], require('./routes/default'));
-container.registerModule('friendRoutes', ['express', 'friendController', 'authenticated'], require('./routes/friend'));
-container.registerModule('registrationtRoutes', ['express', 'registrationController'], require('./routes/registration'));
-container.registerModule('socialRoutes', ['express', 'postsController', 'authenticated', 'multerService'], require('./routes/social'));
-
-
-//app
-container.registerModule("app", ['express', 'bodyParser', 'morgan', 'cors', 'path', 'defaultRoutes', 'friendRoutes', 'registrationtRoutes', 'socialRoutes', 'swaggerUi', 'YAML', 'loggerService'], require('./app'));
-
-module.exports = container
+module.exports = async () => {
+    return appModuleAsync
+}
+// module.exports = container

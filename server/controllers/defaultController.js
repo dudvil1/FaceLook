@@ -1,24 +1,16 @@
-module.exports = (moment, logger) => {
+
+module.exports = (nodeServices, defaultHelper) => {
+    const { moment } = nodeServices
     const version = '0.2.0';
     const filename = __filename.slice(__dirname.length + 1);
 
-    function help(req, res) {
-    logger.debug(`help call() -`, { location: filename }); 
-         res.status(200).send({
-            message: 'Welcome To FaceLook! API Methods In http://localhost:3000/api-docs '
-        });
-    }
+    const { helpResponse, statusResponse } = defaultHelper
 
+    function help(req, res) {
+        return helpResponse.successHelp(res, filename)
+    }
     function status(req, res) {
-         logger.debug(`status call() -`, { location: filename });
-         res.status(200).send({
-            message: {
-                api: 'social',
-                status: 'OK',
-                version: version,
-                time: moment().unix()
-            }
-        });
+        return statusResponse.successStatus(res, filename, moment, version)
     }
 
     return {

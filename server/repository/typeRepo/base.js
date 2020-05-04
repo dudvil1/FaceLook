@@ -1,16 +1,21 @@
-module.exports = (sql, connectionString) => {
+module.exports = (sql, logger) => {
 
   const find = (table, key, userKey, callback) => {
-    console.log("dbManeger: find call()");
-
     const query = `SELECT * FROM ${table} WHERE ${key} = '${userKey}'`;
-    console.log("from find",typeof connectionString);
-    
-    sql.getOne(connectionString,query,callback)
-
+    logInfo(logger, query, "find")
+    sql.getOne(query, callback)
   };
 
   return {
     find: find
   }
 }
+
+function logInfo(logger, query, funcName) {
+  logger.info(`Success in BaseRepo query ${query}`, { data: { function: funcName } });
+}
+
+function logError(logger, error, funcName) {
+  logger.error(`Error in BaseRepo `, { err: error, data: { function: funcName } });
+}
+

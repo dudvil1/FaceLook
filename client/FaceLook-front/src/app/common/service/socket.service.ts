@@ -6,8 +6,8 @@ import { IPost } from '../model/post';
 import { environment } from 'src/environments/environment';
 
 
-export interface ISocketService{
-  addPost(),
+export interface ISocketService {
+  addPost(post: IPost),
   updateLike(post: IPost)
 }
 
@@ -15,7 +15,7 @@ export interface ISocketService{
   providedIn: 'root'
 })
 
-export class SocketService extends Socket implements ISocketService{
+export class SocketService extends Socket implements ISocketService {
   constructor(
     private markerCollection: markerCollectionsService,
     private postsFilter: postsFilterService,
@@ -25,36 +25,55 @@ export class SocketService extends Socket implements ISocketService{
     this.listening()
   }
 
-  addPost() {
-    this.emit('addPost')
+  addPost(post: IPost) {
+    this.emit('addPost', post)
   }
 
   updateLike(post: IPost) {
-    debugger
     this.emit('updateLike', post)
   }
 
-  private listening() {
-    this.on('addPostChange', (posts) => {
-      let allPosts = posts
-      if (Object.keys(this.postsFilter.postsData)) {
-        allPosts = posts.filter(post => this.postsFilter.isPostMatch(post))
-      }
-      const markers = this.markerCollection.markers$.getValue()
-      if ((markers) != (allPosts)) {
-        this.markerCollection.markers$.next(allPosts)
-      }
-    })
-    this.on('updateLikeChange', (post) => {
-      debugger
-      console.log(this.markerCollection.markers$);
+  listening() {
+    this.listeningToPostAdded();
+    this.listeningToPostUpdated();
+  }
 
-      const markers = this.markerCollection.markers$.getValue()
-      const oldPost = markers.find(p => p.post_id = post.post_id)
-      if (oldPost) {
-        const newMarkers = markers.filter(p => p != oldPost)
-        this.markerCollection.markers$.next([...newMarkers, post])
-      }
-    })
+  listeningToPostUpdated() {
+    this.on('updateLikeChange', (post: IPost) => {
+      this.updatePostForMarkers(post);
+      this.updatePostForAllPosts(post);
+    });
+  }
+  listeningToPostAdded() {
+    this.on('addPostChange', (post: IPost) => {
+      this.addPostForMarkers(post);
+      this.addPostForAllPosts(post);
+    });
+  }
+
+  private updatePostForMarkers(post: IPost) {
+    const markers = this.markerCollection.markers$.getValue();
+    const oldPost = markers.find(p => p.postId = post.postId);
+    if (oldPost) {
+      const newMarkers = markers.filter(p => p != oldPost);
+      this.markerCollection.markers$.next([...newMarkers, post]);
+    }
+  }
+  private updatePostForAllPosts(post: IPost) {
+    const allPosts = this.markerCollection.allPost$.getValue();
+    this.markerCollection.allPost$.next([...allPosts.filter(p => p.postId != post.postId), post]);
+  }
+  private addPostForAllPosts(post: IPost) {
+    const allPosts = this.markerCollection.allPost$.getValue();
+    this.markerCollection.allPost$.next([...allPosts, post]);
+  }
+  private addPostForMarkers(post: IPost) {
+    const markers = this.markerCollection.markers$.getValue();
+    if (!Object.keys(this.postsFilter.postsData)) {
+      this.markerCollection.markers$.next([...markers, post]);
+    }
+    else if (this.postsFilter.isPostMatch(post)) {
+      this.markerCollection.markers$.next([...markers, post]);
+    }
   }
 }

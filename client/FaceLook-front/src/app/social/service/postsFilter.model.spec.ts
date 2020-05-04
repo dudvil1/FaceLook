@@ -19,12 +19,11 @@ describe("postsFilterService", () => {
 
   it("resetdata() should reset postsData to empty object", () => {
     service.postsData = {
-      id:"123",
-      name:"post"
+      fromFilter: "2020-10-02"
     }
 
     service.resetdata()
-    expect(service.postsData).toEqual({},"postsData to be an empty object")
+    expect(service.postsData).toEqual({}, "postsData to be an empty object")
   });
 
   it("postsData to be ofType any", () => {

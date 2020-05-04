@@ -1,4 +1,4 @@
 require("./mailService.spec");
 require("./bcryptService.spec");
 require('./jwtService.spec');
-require('./passwordGeneretorService.spec');
+require('./passwordGeneretorService.spec')

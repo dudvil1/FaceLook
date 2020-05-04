@@ -1,7 +1,7 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { AppRoutingModule } from "./app-routing.module";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ToastrModule } from "ngx-toastr";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -28,6 +28,7 @@ import { PostsComponent } from './social/components/posts/posts.component';
 import { PostComponent } from './social/components/post/post.component';
 import { FriendComponent } from './social/components/friend/friend.component';
 import { FriendApiService } from './social/service/friendApi.service';
+import { TagsInputComponent } from './common/components/tags-input/tags-input.component';
 
 function getToken() {
   return localStorage.getItem('token');
@@ -48,9 +49,11 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     HeaderComponent,
     PostsComponent,
     PostComponent,
-    FriendComponent
+    FriendComponent,
+    TagsInputComponent
   ],
   imports: [
+    ReactiveFormsModule,
     BrowserModule,
     FormsModule,
     ToastrModule.forRoot(),

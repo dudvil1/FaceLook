@@ -1,6 +1,9 @@
-module.exports = (express, bodyParser, morgan, cors, path, defaultRoute, friendRoute, registrationRoute, socialRoute, swaggerUi, YAML , loggerService) => {
+module.exports = (nodeServices, defaultRoute, friendRoute, registrationRoute, socialRoute, loggerService) => {
+
+  const { promMid, express, bodyParser, morgan, cors, path, swagger, yamljs } = nodeServices
+
   app = express();
-  const swaggerDocument = YAML.load('./swagger.yaml');
+  const swaggerDocument = yamljs.load('./swagger.yaml');
 
   app.use(cors());
   app.use(morgan("dev"));
@@ -9,20 +12,23 @@ module.exports = (express, bodyParser, morgan, cors, path, defaultRoute, friendR
   app.use(bodyParser.json());
 
   app.use(function (req, res, next) {
-    console.log("header-interceptor: Start setting headers.");
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "*");
     if (req.method === "OPTIONS") {
-      console.log("header-interceptor: ===OPTIONS.");
       var headers = {};
       headers["Access-Control-Allow-Methods"] =
         "POST, PATCH ,GET, PUT, DELETE, OPTIONS";
       res.writeHead(200, headers);
       res.end();
-      console.log("header-interceptor: Headers set.");
     }
     next();
   });
+
+  app.use(promMid({
+    metricsPath: '/metrics',
+    collectDefaultMetrics: true,
+    requestDurationBuckets: [0.1, 0.5, 1, 1.5]
+  }));
 
   // ROUTES
   app.use('/public', express.static(path.join(__dirname, 'public')));
@@ -30,7 +36,7 @@ module.exports = (express, bodyParser, morgan, cors, path, defaultRoute, friendR
   app.use("/registration", registrationRoute);
   app.use("/social", socialRoute);
   app.use("/friend", friendRoute);
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  app.use('/api-docs', swagger.serve, swagger.setup(swaggerDocument));
 
   // ERROR HANDLING
   app.use((req, res, next) => {
@@ -40,7 +46,6 @@ module.exports = (express, bodyParser, morgan, cors, path, defaultRoute, friendR
   });
 
   app.use((error, req, res, next) => {
-    console.log("header-interceptor: error 500.");
     res.status(error.status || 500);
     res.json({
       error: {

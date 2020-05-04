@@ -1,15 +1,17 @@
-module.exports = (jwt, moment) => {
-   let secret = process.env.JWT_SECRET || 'secret'; 
+module.exports = (nodeServices) => {
+  const { moment, jwtsimple } = nodeServices
+
+  let secret = process.env.JWT_SECRET || "secret";
 
   createToken = user => {
     user.expired = moment()
       .add(3, "days")
       .unix();
-    return jwt.encode(user, secret);
+    return jwtsimple.encode(user, secret);
   };
 
   decodeToken = token => {
-    return jwt.decode(token, secret);
+    return jwtsimple.decode(token, secret);
   };
 
   isTokenExpire = token => {

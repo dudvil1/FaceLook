@@ -10,5 +10,4 @@ export class NavigatorMockService implements INavigatorService {
   goToFriendsPage = () => { }
   goToSharePostPage = () => { }
   goToPostsPage = () => { }
-  goToForgetPassword = () => { }
 }

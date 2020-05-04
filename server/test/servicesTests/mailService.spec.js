@@ -27,11 +27,11 @@ describe('mailSevice Tests', function () {
     sendMailSpy = sinon.spy();
     nodemailerService = nodemailerWithSendMail(sendMailSpy)
 
-    mailService = mail(nodemailerService)
+    mailService = setMailService(nodemailerService);
   })
 
   it('test onInit createTransport with auth obj', function (done) {
-    nodemailerService = nodemailerWithTransport((params) => {      
+    nodemailerService = nodemailerWithTransport((params) => {
       const { auth } = params
 
       expect(auth).to.not.be.undefined
@@ -39,7 +39,7 @@ describe('mailSevice Tests', function () {
       expect(auth).to.be.haveOwnProperty('pass')
       done()
     })
-    mailService = mail(nodemailerService)
+    mailService = setMailService(nodemailerService);
   });
 
   it('test onInit createTransport with gmail service', function (done) {
@@ -48,7 +48,7 @@ describe('mailSevice Tests', function () {
       expect(service).to.equal('gmail')
       done()
     })
-    mailService = mail(nodemailerService)
+    mailService = setMailService(nodemailerService);
   });
 
   it('test sendMail() is called once for verifyAccountMail() with valid param (email && _id)', function () {
@@ -75,7 +75,7 @@ describe('mailSevice Tests', function () {
       expect(to).to.equal(obj.email)
       done()
     })
-    mailService = mail(nodemailerService)
+    mailService = setMailService(nodemailerService);
     mailService.verifyAccountMail(obj)
   });
 
@@ -88,7 +88,7 @@ describe('mailSevice Tests', function () {
       expect(to).to.equal(obj.email)
       done()
     })
-    mailService = mail(nodemailerService)
+    mailService = setMailService(nodemailerService);
     mailService.forgotPasswordMail(obj)
   });
 
@@ -108,3 +108,8 @@ describe('mailSevice Tests', function () {
   });
 
 });
+function setMailService(nodemailerService) {
+  const mailService = mail({ nodemailer: nodemailerService });
+  return mailService;
+}
+

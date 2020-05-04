@@ -8,7 +8,6 @@ export interface INavigatorService {
   goToFriendsPage(),
   goToSharePostPage(),
   goToPostsPage(),
-  goToForgetPassword(),
 }
 
 
@@ -36,8 +35,5 @@ export class NavigatorService implements INavigatorService {
   }
   goToPostsPage(){
     this.router.navigate(["posts"])
-  }
-  goToForgetPassword(){
-    this.router.navigate(["forgetpassword"])
   }
 }

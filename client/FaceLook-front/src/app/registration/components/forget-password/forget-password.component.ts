@@ -15,7 +15,7 @@ export class ForgetPasswordComponent implements OnInit, OnDestroy {
   subscriptionParams: Subscription;
 
   constructor(
-    private ApiService: registrationApiService,
+    private apiService: registrationApiService,
     public userService: UserService,
     private toastr: ToastrService,
     private route: ActivatedRoute,
@@ -29,13 +29,8 @@ export class ForgetPasswordComponent implements OnInit, OnDestroy {
 
   ngOnInit() { }
 
-  private confirmPassword() {
-    if (
-      this.userService.userData.newPassword ===
-      this.userService.userData.confirmPassword
-    )
-      return true;
-    return false;
+  confirmPassword() {
+    return this.userService.userData.newPassword === this.userService.userData.confirmPassword
   }
 
   forgetPassword() {
@@ -45,7 +40,7 @@ export class ForgetPasswordComponent implements OnInit, OnDestroy {
           ...params,
           user: this.userService.userData
         }
-        this.ApiService.updatePassword(result).subscribe(res => {
+        this.apiService.updatePassword(result).subscribe(res => {
           this.toastr.success("success to update your password");
           this.navigatorService.goToLogin();
         })

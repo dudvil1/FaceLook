@@ -16,7 +16,7 @@ interface Snapshot {
 export class ActivatedRouteMock implements IActivatedRouteMock {
     snapshot: Snapshot
     params: Observable<any>
-    private param: any
+    private param: any = {}
 
     setSnapshot(snapshot: Snapshot) {
         this.snapshot = snapshot
@@ -34,7 +34,7 @@ export class ActivatedRouteMock implements IActivatedRouteMock {
                 path: ''
             }
         }
-        this.params = of(this.param)
+        this.params = new Observable(subscriber => subscriber.next(this.param))
     }
 
 }

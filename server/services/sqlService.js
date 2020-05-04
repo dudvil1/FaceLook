@@ -1,62 +1,104 @@
-const sql = require('msnodesqlv8');
 
-exports.getOne = (connectionString, query, callback) => {
-    queryOne(connectionString, query, callback)
-}
 
-exports.getMany = (connectionString, query, callback) => {
-    queryMany(connectionString, query, callback)
-}
+module.exports = async (logger, nodeServices) => {
+    const { sql } = nodeServices
 
-exports.add = (connectionString, query, callback) => {
-    queryChangeSuccess(connectionString, query, callback)
-}
-
-exports.update = (connectionString, query, callback) => {
-    queryChangeSuccess(connectionString, query, callback)
-}
-
-exports.delete = (connectionString, query, callback) => {
-    queryChangeSuccess(connectionString, query, callback)
-}
-
-function queryOne(connectionString, query, callback) {
-    try {
-        sql.query(connectionString, query, (err, rows) => {
-            if (err) {
-                console.log(err)
-            }
-            callback((rows && rows[0] ? rows[0] : undefined));
-        });
-    } catch (error) {
-        console.log(error)
+    const config = {
+        user: process.env.SQL_USER,
+        password: process.env.SQL_PASSWORD,
+        server: process.env.SQL_SERVER,
+        database: 'FaceLook',
+        options: {
+            enableArithAbort: true
+        }
     }
+
+    try {
+        let pool = await sql.connect(config)
+        function getOne(query, callback) {
+            queryOne(query, callback)
+        }
+
+        function getMany(query, callback) {
+            queryMany(query, callback)
+        }
+
+        function add(query, callback) {
+            queryChangeSuccess(query, callback)
+        }
+
+        function update(query, callback) {
+            queryChangeSuccess(query, callback)
+        }
+
+        function remove(query, callback) {
+            queryChangeSuccess(query, callback)
+        }
+
+        function queryOne(query, callback) {
+            pool.request().query(query,
+                (err, res) => {
+                    if (err) {
+                        logError(logger, query, err, "queryOne")
+                        return callback(undefined)
+                    }
+                    else {
+                        callback(res.recordset[0])
+                        LogInfo(logger, query, "queryOne");
+                    }
+                })
+        }
+
+        function queryMany(query, callback) {
+            pool.request().query(query,
+                (err, res) => {
+                    if (err) {
+                        logError(logger, query, err, "queryMany")
+                        return callback([])
+                    }
+                    else {
+                        callback(res.recordset)
+                        LogInfo(logger, query, "queryMany");
+                    }
+                })
+        }
+
+        function queryChangeSuccess(query, callback) {
+            pool.request().query(query,
+                (err, res) => {
+                    if (err) {
+                        logError(logger, query, err, "queryChangeSuccess")
+                        return callback(false)
+                    }
+                    else {
+                        callback(res.rowsAffected.length > 0)
+                        LogInfo(logger, query, "queryChangeSuccess");
+                    }
+                })
+        }
+        return {
+            remove,
+            update,
+            add,
+            getOne,
+            getMany
+        }
+    } catch (err) {
+        console.log(err)
+        logger.error(err, { location: __filename, data: {} });
+    }
+};
+
+
+function LogInfo(logger, query, funcName) {
+    query = query.replace(/[\r\n|\n|\r]/gm, "")
+    logger.info(query, { location: __filename, data: { function: funcName } });
 }
 
-function queryMany(connectionString, query, callback) {
-    try {
-        sql.query(connectionString, query, (err, rows) => {
-            if (err) {
-                console.log(err)
-            }
-            callback(rows);
-        });
-    } catch (error) {
-        console.log(error)
-    }
+function logError(logger, query, error, funcName) {
+    query = query.replace(/[\r\n|\n|\r]/gm, "")
+    logger.error(`error in SqlService - query ${query} HAS Faild`, { location: __filename, err: error, data: { function: funcName } });
 }
 
-function queryChangeSuccess(connectionString, query, callback) {
-    try {
-        sql.query(connectionString, query, (err, rows) => {
-            if (err) {
-                console.log(err)
-            }
-            callback(err ? false : true);
-        });
-    } catch (error) {
-        console.log(error)
-    }
-}
 
 

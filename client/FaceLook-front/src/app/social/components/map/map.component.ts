@@ -31,7 +31,7 @@ export class MapComponent implements AfterViewInit {
       });
   }
 
-  myMap(postMarkers:IPost[]) {
+  myMap(postMarkers: IPost[]) {
     let mapProp = GoogleMapHandler.createMapProp(this.userCurrentLocation)
 
     //init the map and props
@@ -39,7 +39,6 @@ export class MapComponent implements AfterViewInit {
       document.getElementById("googleMap"),
       mapProp
     );
-
     let currentPositionMarker = GoogleMapHandler.createMapMarker(this.userCurrentLocation, "YOU!");
     //add the marker of user curr location
     currentPositionMarker.setMap(googleMap);
@@ -47,17 +46,17 @@ export class MapComponent implements AfterViewInit {
 
     postMarkers.forEach(post => {
       //create post location coordinates
-      let postLocation = { lat: +post.latitude, lng: +post.longitude };
+      let postLocation = { lat: +post.location.lat, lng: +post.location.lon };
       //create post props
       let postMarker = GoogleMapHandler.createMapMarker(postLocation,
         post.title,
         {
-          url: "http://localhost:3000/public/uploads/images/" + post.image,
+          url: "http://localhost:3000/public/uploads/images/" + post.image.url,
           scaledSize: new google.maps.Size(50, 50, "px", "px")
         })
       //add props to map
       postMarker.setMap(googleMap);
-      let bubbleDiv = GoogleMapHandler.createBubbleContent(post.title, post.text, post.post_id, post.likes)
+      let bubbleDiv = GoogleMapHandler.createBubbleContent(post)
 
       //add bubbles to the map
       let infowindow = new google.maps.InfoWindow({
@@ -76,8 +75,6 @@ export class MapComponent implements AfterViewInit {
           infowindow.open(googleMap, postMarker);
           isOpen = true;
         }
-
-
       });
     });
   }
@@ -108,32 +105,65 @@ class GoogleMapHandler {
     });
   }
 
-  static createBubbleContent(title, text, id, likes): string {
+  static createBubbleContent(post: IPost): string {
     let content =
-      `<div class="info_content">
-          <div class="header">
-             <h1>${title}</h1>
-          </div>
-          <p>${text}</p>
+      `<div class="info-content">
+           <div class="date info-content-child">
+               <span>Date: ${post.username}</span>
+            </div>
+            <div class="date info-content-child">
+               <span>Date: ${post.publishDate}</span>
+            </div>
+          <div class="content-body">
+            <div class="header">
+               <h3 class="header-content">${post.title}</h1>
+            </div>
+            <div>
+               <p>${post.text}</p>
+               ${post.tags.map(tag=>``)}
+            </div>
+            <div>
+            Tags:${post.tags.map(tag=>`<span>#${tag}</span>`)}
+            </div>
+            <div class="likes" onclick="myFunction()">
+               <span id="demo">${post.likes.amount}</span> Likes <img src="./assets/img/like.png" class="like_icon" title="Like me or die" />
+            </div>
           </div>
         </div>`
 
     return this.setBody(content);
   }
-
   private static getStyle(): string {
     return `
      <style>
-       .info_content {
-         background-color: black;
+       .info-content {
+        background-color: antiquewhite;
+        padding:10px
        }
-       h1 {
+       .info-content-child{
+         text-decoration: underline;
+         margin:10px
+       }
+       .header-content {
          color: red;
-         padding:10px;
        }
        p {
          color: blue;
          text-align:center;
+         word-break: break-all;
+       }
+       .content-body{
+         margin:10px;
+         border:solid 2px black;
+       }
+       .content-body > div{
+         margin:5px
+       }
+       .likes{
+         margin-top: 20px;
+         float: right;
+         color: blue;
+         margin-right: 20px;
        }
     </style>`
   }

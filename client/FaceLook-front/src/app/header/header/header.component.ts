@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { NavigatorService } from '../../common/service/navigator.service';
+import { StorageService } from 'src/app/common/service/storage.service';
 
 @Component({
   selector: 'app-header',
@@ -11,15 +12,15 @@ import { NavigatorService } from '../../common/service/navigator.service';
 export class HeaderComponent implements OnInit {
 
   constructor(
-    private navigateService: NavigatorService
+    private navigateService: NavigatorService,
+    private storageService: StorageService,
   ) { }
 
   ngOnInit(): void {
   }
   
   userLogout(){
-    // this.api.logout();
-    localStorage.removeItem("token");
+    this.storageService.removeToken()
     this.navigateService.goToLogin();
   }
   goToPosts(){

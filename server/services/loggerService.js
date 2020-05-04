@@ -1,5 +1,6 @@
 module.exports = (nodeServices) => {
   const { createLogger, format, transports } = nodeServices;
+
   require("winston-daily-rotate-file");
   const fs = require("fs");
   const path = require("path");
@@ -31,26 +32,30 @@ module.exports = (nodeServices) => {
     format.printf(info => {
       const { location, data, err } = info[Symbol.for("splat")][0];
       const locationString = location ? `Location - ${location}` : "";
-      const errString = err ? `error - ${err}` : "";
-      const objString = data ? `data - ${JSON.stringify(data)}` : "";
-      return `${info.timestamp}| ${info.level}: ${JSON.stringify(info.messag)} 
-                \t${locationString}\t${objString}\n${errString}`;
+      const dataString = data ? `data - ${JSON.stringify(data)}` : "";
+      const errorString = err ? `error - ${err}` : "";
+      const res = `${info.timestamp}| ${info.level}: ${info["message"]} 
+                \t${locationString}\t${dataString}\t${errorString}`;
+      return res;
     }),
   );
 
   const errorLogger = createLogger({
+    level: 'error',
     handleExceptions: true,
     format: baseFormat,
     transports: [dailyRotateFileTransport("-err")]
   });
 
   const infoLogger = createLogger({
+    level: 'info',
     handleExceptions: true,
     format: baseFormat,
     transports: [dailyRotateFileTransport("-info")]
   });
 
   const dubugLogger = createLogger({
+    level: 'debug',
     handleExceptions: true,
     format: baseFormat,
     transports: [dailyRotateFileTransport("-dubug")]
@@ -59,7 +64,7 @@ module.exports = (nodeServices) => {
   function stream() {
     errorLogger.stream = {
       write: message => {
-        errorLogger.info(message);
+        errorLogger.error(message);
       }
     };
   }

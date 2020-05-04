@@ -1,13 +1,23 @@
 export interface IPost {
-    post_id: string,
-    publisher_id: string,
-    image: string,
-    text: string,
-    date: string,
-    latitude: string,
-    longitude: string,
+    publishDate: Date,
+    postId: string,
     title: string,
-    likes: number,
-    name?: string,
-    tags?: string[],
+    image: {
+        url: string,
+        tags: string[]
+    },
+    likes: {
+        amount: number,
+        users: string[]
+    },
+    location: {
+        lat: string,
+        lon: string
+    },
+    text: string,
+    tags: string[],
+    username?: string,
+    userId?: string,
+    email?: string
 }
+

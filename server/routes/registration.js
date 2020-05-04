@@ -1,4 +1,5 @@
-module.exports = (express, registrationController) => {
+module.exports = (nodeServices, registrationController) => {
+    const {express} = nodeServices
     const api = express.Router();
 
     api.post("/register", registrationController.register);
