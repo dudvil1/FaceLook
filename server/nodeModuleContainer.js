@@ -15,8 +15,10 @@ const multer = require('multer')
 const swagger = require('swagger-ui-express')
 const yamljs = require('yamljs')
 const sql = require('mssql')
+const promMid = require('express-prometheus-middleware');
 
 module.exports = {
+    promMid,
     createLogger,
     format,
     transports,

@@ -2,6 +2,7 @@ version: "3.7"
 
 services:
   elasticsearch:
+    container_name: elasticsearch
     image: elasticsearch:7.5.1
     volumes:
       - elasticDatabase:/usr/share/elasticsearch/data
@@ -11,10 +12,8 @@ services:
     networks:
       somenetwork:
         ipv4_address: 172.19.0.11
-    container_name: elasticsearch
     environment:
       discovery.type: single-node
-
   kibana:
     container_name: kibana
     image: kibana:7.5.1
@@ -22,7 +21,6 @@ services:
       - "5601:5601"
     networks:
       - somenetwork
-
   server:
     depends_on:
        - mysql
@@ -36,7 +34,6 @@ services:
       - server-images:/usr/src/app/public
     networks:
       - somenetwork
-
   mysql:
     image: mcr.microsoft.com/mssql/server:2019-latest
     volumes:
@@ -51,7 +48,6 @@ services:
     environment:
       ACCEPT_EULA : Y
       SA_PASSWORD : guy123456MIC!!!
-
   client:
     container_name: client
     depends_on:
@@ -61,14 +57,26 @@ services:
       - "4200:80"
     networks:
       - somenetwork
-
+  prometheus:
+    image: "prom/prometheus:v2.16.0"
+    container_name: prometheus
+    hostname: localhost
+    restart: unless-stopped
+    ports:
+     - "9090:9090"
+    command:
+     - '--config.file=/etc/prometheus/prometheus.yml'
+    volumes:
+     - "./prometheus/:/etc/prometheus/"
+     - "prometheus_data:/prometheus"
+    networks:
+     - "somenetwork"
 volumes:
   sqlvolume:
   elasticDatabase:
   server-logs:
   server-images:
   prometheus_data:
-
 networks:
     somenetwork:
       external:

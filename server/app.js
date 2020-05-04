@@ -1,6 +1,6 @@
 module.exports = (nodeServices, defaultRoute, friendRoute, registrationRoute, socialRoute, loggerService) => {
 
-  const { express, bodyParser, morgan, cors, path, swagger, yamljs } = nodeServices
+  const { promMid, express, bodyParser, morgan, cors, path, swagger, yamljs } = nodeServices
 
   app = express();
   const swaggerDocument = yamljs.load('./swagger.yaml');
@@ -23,6 +23,12 @@ module.exports = (nodeServices, defaultRoute, friendRoute, registrationRoute, so
     }
     next();
   });
+
+  app.use(promMid({
+    metricsPath: '/metrics',
+    collectDefaultMetrics: true,
+    requestDurationBuckets: [0.1, 0.5, 1, 1.5]
+  }));
 
   // ROUTES
   app.use('/public', express.static(path.join(__dirname, 'public')));
