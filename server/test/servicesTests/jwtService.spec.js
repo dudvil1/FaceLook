@@ -1,9 +1,8 @@
-
 const { assert, should, expect, sinon } = require('../baseTest')
 
-const JWT = require('jwt-simple');
-const moment = require('moment');
-const jwtService = require('../../services/jwtService');
+const JWT = require("jwt-simple");
+const moment = require("moment");
+const jwtService = require("../../services/jwtService");
 
 describe('jwtService tests', function () {
    let token;

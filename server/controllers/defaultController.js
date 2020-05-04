@@ -9,7 +9,6 @@ module.exports = (nodeServices, defaultHelper) => {
     function help(req, res) {
         return helpResponse.successHelp(res, filename)
     }
-
     function status(req, res) {
         return statusResponse.successStatus(res, filename, moment, version)
     }

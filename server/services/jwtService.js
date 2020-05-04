@@ -15,11 +15,11 @@ module.exports = (nodeServices) => {
   };
 
   isTokenExpire = token => {
-    if (token) {
-      const payload = decodeToken(token);
-      return payload.expired <= moment().unix();
-    }
-    return true;
+      if (token) {
+        const payload = decodeToken(token);
+        return payload.expired <= moment().unix();
+      }
+      return true;
   };
 
   return {

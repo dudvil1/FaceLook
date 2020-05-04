@@ -533,7 +533,7 @@ ResponseDefinitions:
         type: object
         properties:
           token:
-            type: string
+            type: string  
 
   PostChangeResponse:
     type: object

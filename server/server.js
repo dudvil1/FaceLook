@@ -15,5 +15,4 @@ require('./containerConfig')()
     io.on("connection", socket => {
       socketService(socket)
     })
-  }
-  )
+  })

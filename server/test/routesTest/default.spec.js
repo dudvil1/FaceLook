@@ -36,4 +36,3 @@ function expectStatus(err, res) {
    expect(res.body.message).to.be.a('object');
    expect(res.body.message).to.haveOwnProperty('status');
 }
-
