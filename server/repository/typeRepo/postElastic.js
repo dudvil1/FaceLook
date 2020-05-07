@@ -66,8 +66,8 @@ module.exports = (sql, nodeServices, logger) => {
     function addLike(data, callback) {
         try {
             const body = {
-                script: sql.createScript().scriptAppendArray('likes.users', { userId: data.userId })
-                    .scriptIncrement('likes.amount', { amount: 1 }).script
+                script: sql.createScript().pushToArray('likes.users', data.userId)
+                    .increment('likes.amount', 1).script
             }
             const query = getBaseQuery(body, data.post.postId, '_doc')
             logInfo(logger, query, "addLike")
@@ -83,8 +83,8 @@ module.exports = (sql, nodeServices, logger) => {
     function removeLike(data, callback) {
         try {
             const body = {
-                script: sql.createScript().scriptRemove('likes.users', { userId: data.userId })
-                    .scriptDecrement('likes.amount', { amount: 1 }).script
+                script: sql.createScript().popFromArray('likes.users', data.userId)
+                    .decrement('likes.amount', 1).script
             }
             const query = getBaseQuery(body, data.post.postId, '_doc')
             logInfo(logger, query, "removeLike")
