@@ -15,65 +15,26 @@ module.exports = (logger, nodeServices) => {
     function setScript(script, inline) {
         script.inline += inline;
     }
-    function setScriptWithParams(script, inline, value) {
-        script.inline += inline;
-        script.params = {
-            ...script.params,
-            ...value
-        };
-    }
-    function getObjKeys(obj) {
-        if (typeof (obj) != "string" && Object.keys(obj).length > 0)
-            return { keys: Object.keys(obj) }
-        return {}
-    }
     createScript = () => {
         return {
             script: {
                 lang: "painless",
-                inline: "",
-                params: {
-
-                }
+                inline: ""
             },
-            scriptAppendArray: function (field, value) {
-                const { keys } = getObjKeys(value)
-                if (keys) {
-                    setScriptWithParams(this.script, `ctx._source.${field}.add(params.${keys[0]});`, value);
-                }
-                else {
-                    setScript(this.script, `ctx._source.${field}.add(${validScriptValue(value)});`)
-                }
+            pushToArray: function (field, value) {
+                setScript(this.script, `ctx._source.${field}.add(${validScriptValue(value)});`)
                 return this
             },
-            scriptRemove: function (field, value) {
-                const { keys } = getObjKeys(value)
-                if (keys) {
-                    setScriptWithParams(this.script, `ctx._source.${field}.remove(ctx._source.${field}.indexOf(params.${keys[0]}));`, value);
-                }
-                else {
-                    setScript(this.script, `ctx._source.${field}.remove(ctx._source.${field}.indexOf(${validScriptValue(value)}));`)
-                }
+            popFromArray: function (field, value) {
+                setScript(this.script, `ctx._source.${field}.remove(ctx._source.${field}.indexOf(${validScriptValue(value)}));`)
                 return this
             },
-            scriptIncrement: function (field, value) {
-                const { keys } = getObjKeys(value)
-                if (keys) {
-                    setScriptWithParams(this.script, `ctx._source.${field} += params.${keys[0]};`, value);
-                }
-                else {
-                    setScript(this.script, `ctx._source.${field} += ${validScriptValue(value)};`)
-                }
+            increment: function (field, value) {
+                setScript(this.script, `ctx._source.${field} += ${validScriptValue(value)};`)
                 return this
             },
-            scriptDecrement: function (field, value) {
-                const { keys } = getObjKeys(value)
-                if (keys) {
-                    setScriptWithParams(this.script, `ctx._source.${field} -= params.${keys[0]};`, value);
-                }
-                else {
-                    setScript(this.script, `ctx._source.${field} -= ${validScriptValue(value)};`)
-                }
+            decrement: function (field, value) {
+                setScript(this.script, `ctx._source.${field} -= ${validScriptValue(value)};`)
                 return this
             }
         }
@@ -85,7 +46,7 @@ module.exports = (logger, nodeServices) => {
                 callback(undefined)
             }
             else {
-                logInfo(logger, `create Success`,'add',query)
+                logInfo(logger, `create Success`, 'add', query)
                 callback(response)
             }
         })
@@ -97,7 +58,7 @@ module.exports = (logger, nodeServices) => {
                 callback(undefined)
             }
             else {
-                logInfo(logger, `update Success`,'update',query)
+                logInfo(logger, `update Success`, 'update', query)
                 callback(response)
             }
         })
@@ -109,7 +70,7 @@ module.exports = (logger, nodeServices) => {
                 callback(undefined)
             }
             else {
-                logInfo(logger, `get one Success`,'getOne',query)
+                logInfo(logger, `get one Success`, 'getOne', query)
                 callback(response._source)
             }
         });
@@ -125,7 +86,7 @@ module.exports = (logger, nodeServices) => {
                 callback([])
             }
             else {
-                logInfo(logger, `get Many Success`,'getMany',query)
+                logInfo(logger, `get Many Success`, 'getMany', query)
                 callback(response.hits.hits.map(hit => hit._source))
             }
         });

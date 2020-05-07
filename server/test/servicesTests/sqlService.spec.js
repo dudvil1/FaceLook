@@ -3,7 +3,7 @@ const { assert, should, expect, sinon } = require('../baseTest');
 const sqlService = require('../../services/sqlService');
 const logger = require('../mocks/loggerServiceMock')
 
-describe('bcryptService Tests', function () {
+describe('sqlService Tests', function () {
   let sql
   let service
 
